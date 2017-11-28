@@ -1,0 +1,7 @@
+*.iml
+*.log
+*.gz
+.idea/*
+!.idea/runConfigurations/
+src/frontend/node_modules/
+target/
