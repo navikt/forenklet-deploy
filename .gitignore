@@ -1,0 +1,6 @@
+*.iml
+*.log
+*.gz
+.idea/*
+!.idea/runConfigurations/
+target/
