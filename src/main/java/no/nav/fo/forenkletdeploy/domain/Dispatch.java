@@ -1,0 +1,88 @@
+package no.nav.fo.forenkletdeploy.domain;
+
+import no.nav.fo.forenkletdeploy.database.Database;
+import no.nav.sbl.util.EnumUtils;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+
+import static no.nav.fo.forenkletdeploy.util.AsyncUtils.asyncStream;
+import static org.slf4j.LoggerFactory.getLogger;
+
+@Component
+public class Dispatch {
+
+    private static final Logger LOG = getLogger(Dispatch.class);
+
+    private Map<ActionType, BiConsumer<Action, ActionContext>> actionMap = new HashMap<>();
+
+    private final Database database;
+    private final StatusProvider statusProvider;
+
+    @Inject
+    public Dispatch(Database database, StatusProvider statusProvider) {
+        this.database = database;
+        this.statusProvider = statusProvider;
+        this.actionMap.put(ActionType.REQUEST_EVENTS, this::requestEvents);
+        this.actionMap.put(ActionType.REQUEST_STATUS, this::requestStatus);
+    }
+
+    private void requestEvents(@SuppressWarnings("unused") Action action, ActionContext actionContext) {
+        this.database.lesEventer(e -> actionContext.dispatch(Action.event(e)));
+        actionContext.dispatch(Action.eventsProvided());
+    }
+
+    private void requestStatus(@SuppressWarnings("unused") Action action, ActionContext actionContext) {
+        Set<String> relevantApplications = new HashSet<>();
+        this.database.lesEventer(e -> relevantApplications.add(e.getApplication()));
+
+        List<Event> veraDeploys = statusProvider.getVeraDeploys()
+                .filter(e -> relevantApplications.contains(e.getApplication()))
+                .collect(Collectors.toList());
+
+        veraDeploys.stream().map(Action::event).forEach(actionContext::dispatch);
+
+        List<Status> userStories = statusProvider.getUserStories().collect(Collectors.toList());
+
+        userStories.stream()
+                .map(Action::status)
+                .forEach(actionContext::dispatch);
+
+//        asyncStream(userStories, statusProvider::getDevStatus)
+//                .flatMap(s -> s)
+//                .map(Action::status)
+//                .forEach(actionContext::dispatch);
+
+
+        asyncStream(relevantApplications, statusProvider::getCommits)
+                .flatMap(s -> s)
+                .map(Action::status)
+                .forEach(actionContext::dispatch);
+
+        asyncStream(relevantApplications, statusProvider::getTags)
+                .flatMap(s -> s)
+                .map(Action::status)
+                .forEach(actionContext::dispatch);
+
+        actionContext.dispatch(Action.statusProvided());
+    }
+
+    public void dispatch(Action action, ActionContext actionContext) {
+        LOG.info("{}", action);
+        EnumUtils.valueOf(ActionType.class, action.type)
+                .map(actionType -> actionMap.get(actionType))
+                .ifPresent(c -> {
+                    try {
+                        c.accept(action, actionContext);
+                    } catch (Throwable t) {
+                        LOG.error(t.getMessage(), t);
+                        actionContext.dispatch(Action.error(t));
+                    }
+                });
+    }
+
+}

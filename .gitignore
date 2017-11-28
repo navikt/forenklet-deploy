@@ -1,0 +1,11 @@
+*.iml
+*.log
+*.gz
+.idea/*
+!.idea/runConfigurations/
+
+src/frontend/node_modules/
+src/frontend/build/
+src/frontend/coverage/
+
+target/
