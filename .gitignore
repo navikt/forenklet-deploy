@@ -1,6 +1,7 @@
 *.iml
 *.log
 *.gz
+.idea
 .idea/*
 !.idea/runConfigurations/
 
@@ -9,3 +10,4 @@ src/frontend/build/
 src/frontend/coverage/
 
 target/
+node_modules/
