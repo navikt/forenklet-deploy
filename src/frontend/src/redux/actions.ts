@@ -6,20 +6,20 @@ import Commit from "../dev/commit";
 import Tag from "../dev/tag";
 
 export enum ActionType {
-    ERROR,
+    ERROR = "ERROR",
 
-    REQUEST_EVENTS,
-    EVENT,
-    EVENTS_PROVIDED,
+    REQUEST_EVENTS = "REQUEST_EVENTS",
+    EVENT = "EVENT",
+    EVENTS_PROVIDED = "EVENTS_PROVIDED",
 
-    REQUEST_STATUS,
-    STATUS,
-    USER_STORY,
-    COMMIT,
-    TAG,
-    STATUS_PROVIDED,
+    REQUEST_STATUS = "REQUEST_STATUS",
+    STATUS = "STATUS",
+    USER_STORY = "USER_STORY",
+    COMMIT = "COMMIT",
+    TAG = "TAG",
+    STATUS_PROVIDED = "STATUS_PROVIDED",
 
-    CHANGE_MODE
+    CHANGE_MODE = "CHANGE_MODE"
 }
 
 export interface RequestEventsAction {

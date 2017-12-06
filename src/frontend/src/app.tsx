@@ -6,8 +6,13 @@ import routerHistory from './router-history';
 import Routing from './routing';
 import Loader from './view/loader';
 import Header from './view/header';
+import {setupMockWS} from './mock/mock-ws';
 
 const store = getStore();
+
+if (process.env.REACT_APP_MOCK === 'true') {
+    setupMockWS();
+}
 
 function App() {
     return (

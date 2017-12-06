@@ -1,7 +1,7 @@
 
 export default interface AppEvent {
     id: string;
-    eventType: number;
+    eventType: string;
     timestamp: number;
     application: string;
     environment: string;

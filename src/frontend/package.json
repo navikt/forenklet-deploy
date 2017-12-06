@@ -12,6 +12,7 @@
     "start:less": "autoless --source-map --intervall 100 ./src ./public",
     "build:less": "node ./node_modules/less/bin/lessc/ src/index.less ./public/index.css",
     "start": "npm-run-all -p start:*",
+    "start-mock": "REACT_APP_MOCK=true npm run start",
     "build": "npm run build:less && npm run build:ts"
   },
   "dependencies": {
@@ -67,6 +68,7 @@
     "autoless": "0.1.7",
     "cross-env": "5.1.1",
     "less": "2.7.3",
+    "mock-socket": "^7.1.0",
     "node-fetch": "1.7.3",
     "npm-run-all": "4.0.2",
     "promise": "7.1.1",
