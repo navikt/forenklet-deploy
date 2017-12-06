@@ -1,4 +1,4 @@
-import {ActionType, Action} from '../redux/actions';
+import { ActionType, Action } from '../redux/actions';
 import UserStory from './user-story';
 
 export interface UserStoryState {

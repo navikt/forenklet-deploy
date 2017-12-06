@@ -1,6 +1,6 @@
-import {Action, ActionType} from '../redux/actions';
-import Commit from "./commit";
-import Tag from "./tag";
+import { Action, ActionType } from '../redux/actions';
+import Commit from './commit';
+import Tag from './tag';
 
 export interface Commits {
     [id: string]: Commit;
@@ -19,7 +19,7 @@ const initialState = {
     commits: {},
     tags: {},
 };
-const tagIdPrefixLength = "refs/tags/".length;
+const tagIdPrefixLength = 'refs/tags/'.length;
 
 export default function reducer(state: DevState = initialState,
                                 action: Action): DevState {

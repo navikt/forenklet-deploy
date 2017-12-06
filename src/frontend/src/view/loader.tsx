@@ -1,14 +1,12 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
-import {Dispatch} from '../types';
-import {requestEvents} from '../app-event/app-event-duck';
-import {requestStatus} from "../status/status-duck";
-
+import { connect } from 'react-redux';
+import { Dispatch } from '../types';
+import { requestEvents } from '../app-event/app-event-duck';
+import { requestStatus } from '../status/status-duck';
 
 interface DashboardProps {
-    requestDashboardData: Function;
+    requestDashboardData: () => void;
 }
-
 
 class Dashboard extends React.Component<DashboardProps> {
 
@@ -19,7 +17,7 @@ class Dashboard extends React.Component<DashboardProps> {
     render() {
         return (
             <div>{this.props.children}</div>
-        )
+        );
     }
 }
 

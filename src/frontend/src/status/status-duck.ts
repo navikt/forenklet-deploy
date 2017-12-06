@@ -1,4 +1,4 @@
-import {ActionType, RequestStatusAction} from '../redux/actions';
+import { ActionType, RequestStatusAction } from '../redux/actions';
 
 export function requestStatus(): RequestStatusAction {
     return {

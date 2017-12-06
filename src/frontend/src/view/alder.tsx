@@ -11,7 +11,7 @@ interface AlderProps {
 function Alder({
                         alder,
                     }: AlderProps) {
-    return <span>{moment(alder).fromNow(true)}</span>
+    return <span>{moment(alder).fromNow(true)}</span>;
 }
 
 export default Alder;

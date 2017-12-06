@@ -1,4 +1,4 @@
-import {Action, ActionType, ChangeModeAction} from '../redux/actions';
+import { Action, ActionType, ChangeModeAction } from '../redux/actions';
 import DashboardMode from './dashboard-mode';
 
 export interface ViewState {
@@ -27,7 +27,6 @@ export default function reducer(state: ViewState = initialState,
             return state;
     }
 }
-
 
 export function changeMode(mode: DashboardMode): ChangeModeAction {
     return {

@@ -23,7 +23,7 @@ function send(action: Action) {
 
 function onOpen() {
     websocketState = WebsocketState.OPEN;
-    actionQueue.forEach(a => send(a));
+    actionQueue.forEach((a) => send(a));
     actionQueue = [];
 }
 
@@ -48,8 +48,8 @@ function onMessage(dispatch: Dispatch) {
 }
 
 function websocketDispatch(action: Action, dispatch: Dispatch) {
-    if (!window["WebSocket"]) {
-        return
+    if (!(window as any).WebSocket) {
+        return;
     }
 
     switch (websocketState) {
@@ -71,11 +71,11 @@ function websocketDispatch(action: Action, dispatch: Dispatch) {
             send(action);
             break;
         default:
-            throw 'unknown state';
+            throw new Error('unknown state');
     }
 }
 
-const websocketMiddleware: Middleware = store => next => <A extends Action>(action: A) => {
+const websocketMiddleware: Middleware = (store) => (next) => <A extends Action>(action: A) => {
     const dispatch = store.dispatch;
     switch (action.type) {
         case ActionType.REQUEST_EVENTS:

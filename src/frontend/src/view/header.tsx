@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {Undertittel} from 'nav-frontend-typografi';
+import { Undertittel } from 'nav-frontend-typografi';
 import ModeToggle from './mode-toggle';
-import {connect} from "react-redux";
-import AppState from "../redux/app-state";
-import {selectError} from "./view-selector";
+import { connect } from 'react-redux';
+import AppState from '../redux/app-state';
+import { selectError } from './view-selector';
 
-interface HeaderProps{
-    error?: string
+interface HeaderProps {
+    error?: string;
 }
 
 function Header({error}: HeaderProps) {
@@ -19,11 +19,8 @@ function Header({error}: HeaderProps) {
     );
 }
 
-
 const mapStateToProps = (state: AppState): HeaderProps => ({
     error: selectError(state)
 });
 
 export default connect(mapStateToProps)(Header);
-
-

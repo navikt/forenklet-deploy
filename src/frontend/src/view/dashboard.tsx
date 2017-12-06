@@ -1,20 +1,19 @@
 import * as React from 'react';
 import AppState from '../redux/app-state';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Application from '../application/application';
-import {selectApplications} from '../application/application-selector';
-import {selectEnvironments} from '../environment/environment-selector';
+import { selectApplications } from '../application/application-selector';
+import { selectEnvironments } from '../environment/environment-selector';
 import Environment from '../environment/environment';
 import Deployment from './deployment';
 import UserStoryDeployment from './user-story-deployment';
 import PromoteButton from './promote-button';
-import UserStory from "../user-story/user-story";
-import {selectUserStories} from '../user-story/user-story-selector';
-import DashboardMode from "./dashboard-mode";
-import {selectDashboardMode} from "./view-selector";
-import {selectIsLoadingInitialData} from "../app-event/app-event-selector";
-import NavFrontendSpinner from "nav-frontend-spinner";
-
+import UserStory from '../user-story/user-story';
+import { selectUserStories } from '../user-story/user-story-selector';
+import DashboardMode from './dashboard-mode';
+import { selectDashboardMode } from './view-selector';
+import { selectIsLoadingInitialData } from '../app-event/app-event-selector';
+import NavFrontendSpinner from 'nav-frontend-spinner';
 
 interface ApplicationRowProps {
     application: Application;
@@ -28,7 +27,7 @@ function ApplicationRow({
     return (
         <tr>
             <td className="left">{application.name}</td>
-            {environments.map(environment =>
+            {environments.map((environment) =>
                 [
                     <td key={`${environment.name}-promote`}>
                         <PromoteButton application={application} environment={environment}/>
@@ -44,7 +43,6 @@ function ApplicationRow({
         </tr>
     );
 }
-
 
 interface UserStoryRowProps {
     userStory: UserStory;
@@ -69,7 +67,7 @@ function UserStoryRow({
             </td>
             <td>{assignee && assignee.displayName}</td>
             <td>{userStory.status.name}</td>
-            {environments.map(environment =>
+            {environments.map((environment) =>
                 [
                     <td key={environment.name}>
                         <UserStoryDeployment
@@ -92,19 +90,18 @@ interface StateProps {
 }
 
 interface DispatchProps {
-    requestDashboardData: Function;
+    requestDashboardData: () => void;
 }
 
 type DashboardProps = StateProps & DispatchProps;
 
 function environmentHeaders(environment: Environment, mode: DashboardMode) {
-    let name = environment.name;
+    const name = environment.name;
     return [
-        mode == DashboardMode.APPLICATION && <th key={`${name}-deploy`}/>,
+        mode === DashboardMode.APPLICATION && <th key={`${name}-deploy`}/>,
         <th key={name}>{name}</th>
     ];
 }
-
 
 function Dashboard({
                        applications,
@@ -115,9 +112,9 @@ function Dashboard({
                    }: DashboardProps) {
 
     let rader;
-    let userStoryMode = mode == DashboardMode.USER_STORY;
+    const userStoryMode = mode === DashboardMode.USER_STORY;
     if (userStoryMode) {
-        rader = userStories.map(a => (
+        rader = userStories.map((a) => (
             <UserStoryRow
                 key={a.key}
                 userStory={a}
@@ -125,7 +122,7 @@ function Dashboard({
             />
         ));
     } else {
-        rader = applications.map(a => (
+        rader = applications.map((a) => (
             <ApplicationRow
                 key={a.name}
                 application={a}
@@ -143,7 +140,7 @@ function Dashboard({
                     {userStoryMode && <th>ID</th>}
                     {userStoryMode && <th>Ansvarlig</th>}
                     {userStoryMode && <th>Status</th>}
-                    {environments.map(e => environmentHeaders(e, mode))}
+                    {environments.map((e) => environmentHeaders(e, mode))}
                 </tr>
                 </thead>
                 <tbody>
@@ -166,6 +163,5 @@ const mapStateToProps = (state: AppState): StateProps => ({
     environments: selectEnvironments(state),
     mode: selectDashboardMode(state)
 });
-
 
 export default connect(mapStateToProps)(Dashboard);

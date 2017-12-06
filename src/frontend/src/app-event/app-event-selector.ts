@@ -1,14 +1,14 @@
 import AppState from '../redux/app-state';
-import {createSelector} from "reselect";
-import Application from "../application/application";
-import AppEvent from "./app-event";
-import Environment from "../environment/environment";
+import { createSelector } from 'reselect';
+import Application from '../application/application';
+import AppEvent from './app-event';
+import Environment from '../environment/environment';
 
-function events(state: AppState) {
+function getEvents(state: AppState) {
     return state.events.data;
 }
 
-export const selectEvents = createSelector(events, (e) => e);
+export const selectEvents = createSelector(getEvents, (e) => e);
 
 export function selectIsLoadingInitialData(state: AppState): boolean {
     const events = state.events;
@@ -16,8 +16,8 @@ export function selectIsLoadingInitialData(state: AppState): boolean {
 }
 
 export function selectApplicationEnvironmentEvents(state: AppState, application: Application, environment: Environment): AppEvent[] {
-    return selectEvents(state).filter(e =>
+    return selectEvents(state).filter((e) =>
         e.application === application.name
         && e.environment === environment.name
-    )
+    );
 }

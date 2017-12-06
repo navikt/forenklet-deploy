@@ -1,16 +1,16 @@
 import * as React from 'react';
 import AppState from '../redux/app-state';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Deployment from '../deployment/deployment';
 import Application from '../application/application';
 import Environment from '../environment/environment';
-import {selectApplicationEnvironmentDeployment} from '../deployment/deployment-selector';
-import {selectCommitsForApplication, selectTags} from "../dev/dev-selector";
-import Commit from "../dev/commit";
-import AppEvent from "../app-event/app-event";
+import { selectApplicationEnvironmentDeployment } from '../deployment/deployment-selector';
+import { selectCommitsForApplication, selectTags } from '../dev/dev-selector';
+import Commit from '../dev/commit';
+import AppEvent from '../app-event/app-event';
 import Tag from '../dev/tag';
-import Alder from "./alder";
-import {selectApplicationEnvironmentEvents} from '../app-event/app-event-selector';
+import Alder from './alder';
+import { selectApplicationEnvironmentEvents } from '../app-event/app-event-selector';
 
 export interface OwnProps {
     application: Application;
@@ -35,7 +35,7 @@ function CommitView({commit}: CommitProps) {
             <td>{commit.message}</td>
             <td><Alder alder={commit.committerTimestamp}/></td>
         </tr>
-    )
+    );
 }
 
 interface TagProps {
@@ -48,7 +48,7 @@ function TagView({tag}: TagProps) {
             <td>{tag.id}</td>
             <td>{tag.latestCommit}</td>
         </tr>
-    )
+    );
 }
 
 interface EventProps {
@@ -64,7 +64,7 @@ function EventView({event}: EventProps) {
             <td>{event.environment}</td>
             <td>{event.description}</td>
         </tr>
-    )
+    );
 }
 
 function DeploymentDetails({
@@ -90,7 +90,7 @@ function DeploymentDetails({
                     </tr>
                     </thead>
                     <tbody>
-                    {commits.map(c => <CommitView key={c.id} commit={c}/>)}
+                    {commits.map((c) => <CommitView key={c.id} commit={c}/>)}
                     </tbody>
                 </table>
             </div>
@@ -106,7 +106,7 @@ function DeploymentDetails({
                     </tr>
                     </thead>
                     <tbody>
-                    {events.map(c => <EventView key={c.id} event={c}/>)}
+                    {events.map((c) => <EventView key={c.id} event={c}/>)}
                     </tbody>
                 </table>
             </div>
@@ -119,7 +119,7 @@ function DeploymentDetails({
                     </tr>
                     </thead>
                     <tbody>
-                    {tags.map(t => <TagView key={t.id} tag={t}/>)}
+                    {tags.map((t) => <TagView key={t.id} tag={t}/>)}
                     </tbody>
                 </table>
             </div>

@@ -1,13 +1,13 @@
-import Environment from "../environment/environment";
-import Application from "../application/application";
-import Deployment from "../deployment/deployment";
+import Environment from '../environment/environment';
+import Application from '../application/application';
+import Deployment from '../deployment/deployment';
 
 export interface UserStoryStatus {
     name: string;
 }
 
 interface Assignee {
-    displayName: string
+    displayName: string;
 }
 
 export default interface UserStory {
@@ -18,7 +18,6 @@ export default interface UserStory {
     assignee?: Assignee;
     status: UserStoryStatus;
 }
-
 
 export interface UserStoryDeploymentInfo {
     userStory: UserStory;

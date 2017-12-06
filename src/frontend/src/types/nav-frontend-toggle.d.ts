@@ -1,6 +1,6 @@
 declare module 'nav-frontend-toggle' {
     import * as React from 'react';
-    import {ChangeEventHandler} from "react";
+    import { ChangeEventHandler } from 'react';
 
     export interface ElementProps {
         className?: string;
@@ -19,7 +19,6 @@ declare module 'nav-frontend-toggle' {
         // tag?: String;
         // role?: String;
     }
-
 
     export class ToggleGruppe extends React.Component<ElementProps, {}> {}
     export class ToggleKnapp extends React.Component<ElementProps2, {}> {}

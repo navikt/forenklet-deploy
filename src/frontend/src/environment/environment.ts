@@ -6,5 +6,5 @@ export enum DeployType {
 
 export default interface Environment {
     name: string;
-    deployType: DeployType
+    deployType: DeployType;
 }

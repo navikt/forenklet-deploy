@@ -1,5 +1,5 @@
-import UserStory from "./user-story";
-import Commit from "../dev/commit";
+import UserStory from './user-story';
+import Commit from '../dev/commit';
 
 const statusNames = [
     'Test 2',
@@ -13,7 +13,7 @@ function statusIndex(userStory: UserStory) {
 }
 
 function nullsafeCompare(a: string, b: string) {
-    return (a || "").localeCompare(b || "");
+    return (a || '').localeCompare(b || '');
 }
 
 export function comparator(a: UserStory, b: UserStory) {
@@ -28,6 +28,6 @@ export function comparator(a: UserStory, b: UserStory) {
     return nullsafeCompare(a.created, b.created);
 }
 
-export function commitBelongToUserStory(commit: Commit, userStory: UserStory){
+export function commitBelongToUserStory(commit: Commit, userStory: UserStory) {
     return commit.message.startsWith(userStory.key);
 }

@@ -4,4 +4,4 @@ enum DashboardMode {
     APPLICATION
 }
 
-export default DashboardMode
+export default DashboardMode;
