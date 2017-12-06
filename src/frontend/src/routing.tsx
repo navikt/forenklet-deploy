@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Route, RouteProps, Switch } from 'react-router';
-import Dashboard from './view/dashboard';
+import { Route, RouteComponentProps, Switch } from 'react-router';
+import Dashboard from './view/dashboard/dashboard';
+import Promote from './view/promote/promote';
 
-function Routing({location}: RouteProps) {
+function Routing(props: RouteComponentProps<{}>) {
     return (
-        <Switch location={location}>
+        <Switch location={props.location}>
+            <Route path="/promote/:app/:env" component={Promote}/>
             <Route component={Dashboard}/>
         </Switch>
     );
 }
 
-export default withRouter(Routing);
+export default withRouter<{}>(Routing);

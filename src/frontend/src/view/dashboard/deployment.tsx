@@ -1,14 +1,14 @@
 import * as React from 'react';
-import AppState from '../redux/app-state';
+import AppState from '../../redux/app-state';
 import { connect } from 'react-redux';
-import Applikasjon from '../application/application';
-import { selectApplicationEnvironmentDeployment } from '../deployment/deployment-selector';
-import Deployment from '../deployment/deployment';
+import Applikasjon from '../../application/application';
+import { selectApplicationEnvironmentDeployment } from '../../deployment/deployment-selector';
+import Deployment from '../../deployment/deployment';
 import { EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
-import Environment from '../environment/environment';
-import { selectIsLoadingInitialData } from '../app-event/app-event-selector';
+import Environment from '../../environment/environment';
+import { selectIsLoadingInitialData } from '../../app-event/app-event-selector';
 import NavFrontendSpinner from 'nav-frontend-spinner';
-import Alder from './alder';
+import Alder from '../alder';
 
 interface OwnProps {
     application: Applikasjon;

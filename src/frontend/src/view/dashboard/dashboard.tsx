@@ -1,13 +1,13 @@
 import * as React from 'react';
-import AppState from '../redux/app-state';
+import AppState from '../../redux/app-state';
 import { connect } from 'react-redux';
-import Application from '../application/application';
-import { selectApplications } from '../application/application-selector';
-import { selectEnvironments } from '../environment/environment-selector';
-import Environment from '../environment/environment';
+import Application from '../../application/application';
+import { selectApplications } from '../../application/application-selector';
+import { selectEnvironments } from '../../environment/environment-selector';
+import Environment from '../../environment/environment';
 import Deployment from './deployment';
 import PromoteButton from './promote-button';
-import { selectIsLoadingInitialData } from '../app-event/app-event-selector';
+import { selectIsLoadingInitialData } from '../../app-event/app-event-selector';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
 interface ApplicationRowProps {

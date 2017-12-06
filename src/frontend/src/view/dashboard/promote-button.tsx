@@ -1,10 +1,10 @@
 import * as React from 'react';
-import Application from '../application/application';
-import Environment, { DeployType } from '../environment/environment';
-import { Knapp } from 'nav-frontend-knapper';
-import { selectApplicationEnvironmentDeployment } from '../deployment/deployment-selector';
-import AppState from '../redux/app-state';
+import Application from '../../application/application';
+import Environment, { DeployType } from '../../environment/environment';
+import { selectApplicationEnvironmentDeployment } from '../../deployment/deployment-selector';
+import AppState from '../../redux/app-state';
 import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
 interface OwnProps {
     application: Application;
@@ -17,17 +17,14 @@ interface StateProps {
 
 type PromoteButtonProps = OwnProps & StateProps;
 
-function PromoteButton({
-                           harDeployment,
-                           application,
-                           environment
-                       }: PromoteButtonProps) {
+function PromoteButton({harDeployment, application, environment}: PromoteButtonProps) {
 
     const deployType = environment.deployType;
     if (!harDeployment || deployType === DeployType.AUTOMATIC) {
         return null;
     }
 
+    /* TODO: Trekk ut til deploysiden
     function promote() {
         if (deployType === DeployType.PROMOTE) {
             window.open(`http://bekkci.devillo.no/job/forenklet_oppfolging/job/${application.name}/job/-promotering-${environment.name}-/`);
@@ -35,9 +32,15 @@ function PromoteButton({
             window.open(`http://bekkci.devillo.no/job/forenklet_oppfolging/job/${application.name}/job/-release-/`);
         }
     }
+    */
 
     return (
-        <Knapp type="standard" onClick={promote}>&gt;</Knapp>
+        <NavLink
+            className="knapp"
+            to={`/promote/${application.name}/${environment.name}`}
+        >
+            &gt;
+        </NavLink>
     );
 }
 

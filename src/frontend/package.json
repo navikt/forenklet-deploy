@@ -6,7 +6,7 @@
     "start:ts": "react-scripts-ts start",
     "build:ts": "react-scripts-ts build",
     "test": "cross-env CI=true react-scripts-ts test --env=jsdom",
-    "lint": "tslint ./**/*.ts* --fix",
+    "lint": "tslint src/**/*.ts{,x} --fix",
     "test:coverage": "npm test -- --coverage",
     "eject": "react-scripts-ts eject",
     "start:less": "autoless --source-map --intervall 100 ./src ./public",

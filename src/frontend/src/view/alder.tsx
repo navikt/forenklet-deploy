@@ -8,9 +8,7 @@ interface AlderProps {
     alder: number;
 }
 
-function Alder({
-                        alder,
-                    }: AlderProps) {
+function Alder({alder}: AlderProps) {
     return <span>{moment(alder).fromNow(true)}</span>;
 }
 
