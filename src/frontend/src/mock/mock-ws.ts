@@ -32,10 +32,12 @@ export function setupMockWS() {
     mockServer.on('connection', (server: {}) => {
         mockServer.send(JSON.stringify(createEvent('mockapp', 't6', '102.20170201.1224')));
         mockServer.send(JSON.stringify(createEvent('mockapp', 'q6', '98.20170128.1043')));
+        mockServer.send(JSON.stringify(createEvent('mockapp', 'q0', '98.20170128.1043')));
         mockServer.send(JSON.stringify(createEvent('mockapp', 'p', '98.20170128.1043')));
 
         mockServer.send(JSON.stringify(createEvent('demoapp', 't6', '202.20170202.1356')));
         mockServer.send(JSON.stringify(createEvent('demoapp', 'q6', '202.20170202.1356')));
+        mockServer.send(JSON.stringify(createEvent('demoapp', 'q0', '202.20170202.1356')));
         mockServer.send(JSON.stringify(createEvent('demoapp', 'p', '202.20170202.1356')));
 
         mockServer.send(JSON.stringify({ type: 'EVENTS_PROVIDED', data: null}));

@@ -1,7 +1,5 @@
 import AppEvent from '../app-event/app-event';
-import UserStory from '../user-story/user-story';
 import Status from '../status/status';
-import DashboardMode from '../view/dashboard-mode';
 import Commit from '../dev/commit';
 import Tag from '../dev/tag';
 
@@ -14,12 +12,9 @@ export enum ActionType {
 
     REQUEST_STATUS = 'REQUEST_STATUS',
     STATUS = 'STATUS',
-    USER_STORY = 'USER_STORY',
     COMMIT = 'COMMIT',
     TAG = 'TAG',
     STATUS_PROVIDED = 'STATUS_PROVIDED',
-
-    CHANGE_MODE = 'CHANGE_MODE'
 }
 
 export interface RequestEventsAction {
@@ -44,18 +39,8 @@ export interface StatusAction {
     data: AppEvent;
 }
 
-export interface UserStoryAction {
-    type: ActionType.USER_STORY;
-    data: Status<UserStory>;
-}
-
 export interface StatusProvidedAction {
     type: ActionType.STATUS_PROVIDED;
-}
-
-export interface ChangeModeAction {
-    type: ActionType.CHANGE_MODE;
-    newMode: DashboardMode;
 }
 
 export interface CommitAction {
@@ -79,9 +64,7 @@ export type Action =
     | EventsProvidedAction
     | RequestStatusAction
     | StatusAction
-    | UserStoryAction
     | StatusProvidedAction
-    | ChangeModeAction
     | CommitAction
     | TagAction
     | ErrorAction

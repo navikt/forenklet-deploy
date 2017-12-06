@@ -8,11 +8,11 @@ import Loader from './view/loader';
 import Header from './view/header';
 import { setupMockWS } from './mock/mock-ws';
 
-const store = getStore();
-
 if (process.env.REACT_APP_MOCK === 'true') {
     setupMockWS();
 }
+
+const store = getStore();
 
 function App() {
     return (

@@ -6,12 +6,7 @@ import { selectApplications } from '../application/application-selector';
 import { selectEnvironments } from '../environment/environment-selector';
 import Environment from '../environment/environment';
 import Deployment from './deployment';
-import UserStoryDeployment from './user-story-deployment';
 import PromoteButton from './promote-button';
-import UserStory from '../user-story/user-story';
-import { selectUserStories } from '../user-story/user-story-selector';
-import DashboardMode from './dashboard-mode';
-import { selectDashboardMode } from './view-selector';
 import { selectIsLoadingInitialData } from '../app-event/app-event-selector';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
@@ -20,10 +15,7 @@ interface ApplicationRowProps {
     environments: Environment[];
 }
 
-function ApplicationRow({
-                            application,
-                            environments
-                        }: ApplicationRowProps) {
+function ApplicationRow({ application, environments }: ApplicationRowProps) {
     return (
         <tr>
             <td className="left">{application.name}</td>
@@ -44,49 +36,10 @@ function ApplicationRow({
     );
 }
 
-interface UserStoryRowProps {
-    userStory: UserStory;
-    environments: Environment[];
-}
-
-function UserStoryRow({
-                          userStory,
-                          environments
-                      }: UserStoryRowProps) {
-
-    const key = userStory.key;
-    const url = `https://jira.adeo.no/browse/${key}`;
-    const assignee = userStory.assignee;
-    return (
-        <tr>
-            <td className="left">
-                <a href={url} target="_blank">{userStory.summary}</a>
-            </td>
-            <td>
-                <a href={url} target="_blank">{key}</a>
-            </td>
-            <td>{assignee && assignee.displayName}</td>
-            <td>{userStory.status.name}</td>
-            {environments.map((environment) =>
-                [
-                    <td key={environment.name}>
-                        <UserStoryDeployment
-                            userStory={userStory}
-                            environment={environment}
-                        />
-                    </td>,
-                ]
-            )}
-        </tr>
-    );
-}
-
 interface StateProps {
     isLoadingData: boolean;
     applications: Application[];
-    userStories: UserStory[];
     environments: Environment[];
-    mode: DashboardMode;
 }
 
 interface DispatchProps {
@@ -95,41 +48,22 @@ interface DispatchProps {
 
 type DashboardProps = StateProps & DispatchProps;
 
-function environmentHeaders(environment: Environment, mode: DashboardMode) {
+function environmentHeaders(environment: Environment) {
     const name = environment.name;
     return [
-        mode === DashboardMode.APPLICATION && <th key={`${name}-deploy`}/>,
+        <th key={`${name}-deploy`}/>,
         <th key={name}>{name}</th>
     ];
 }
 
-function Dashboard({
-                       applications,
-                       userStories,
-                       environments,
-                       isLoadingData,
-                       mode
-                   }: DashboardProps) {
-
-    let rader;
-    const userStoryMode = mode === DashboardMode.USER_STORY;
-    if (userStoryMode) {
-        rader = userStories.map((a) => (
-            <UserStoryRow
-                key={a.key}
-                userStory={a}
-                environments={environments}
-            />
-        ));
-    } else {
-        rader = applications.map((a) => (
-            <ApplicationRow
-                key={a.name}
-                application={a}
-                environments={environments}
-            />
-        ));
-    }
+function Dashboard({ applications, environments, isLoadingData}: DashboardProps) {
+    const rader = applications.map((a) => (
+        <ApplicationRow
+            key={a.name}
+            application={a}
+            environments={environments}
+        />
+    ));
 
     return (
         <div className="dashboard__wrapper">
@@ -137,10 +71,7 @@ function Dashboard({
                 <thead>
                 <tr>
                     <th>Navn</th>
-                    {userStoryMode && <th>ID</th>}
-                    {userStoryMode && <th>Ansvarlig</th>}
-                    {userStoryMode && <th>Status</th>}
-                    {environments.map((e) => environmentHeaders(e, mode))}
+                    {environments.map((e) => environmentHeaders(e))}
                 </tr>
                 </thead>
                 <tbody>
@@ -159,9 +90,7 @@ function Dashboard({
 const mapStateToProps = (state: AppState): StateProps => ({
     isLoadingData: selectIsLoadingInitialData(state),
     applications: selectApplications(state),
-    userStories: selectUserStories(state),
-    environments: selectEnvironments(state),
-    mode: selectDashboardMode(state)
+    environments: selectEnvironments(state)
 });
 
 export default connect(mapStateToProps)(Dashboard);

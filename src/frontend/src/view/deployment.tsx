@@ -6,7 +6,6 @@ import { selectApplicationEnvironmentDeployment } from '../deployment/deployment
 import Deployment from '../deployment/deployment';
 import { EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
 import Environment from '../environment/environment';
-import { Link } from 'react-router-dom';
 import { selectIsLoadingInitialData } from '../app-event/app-event-selector';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import Alder from './alder';
@@ -34,12 +33,10 @@ function Deployment({
 
     const Etikett = true ? EtikettSuksess : EtikettFokus;
     return (
-        <Link to={`/${deployment.application}/${deployment.environment}`}>
-            <Etikett className="deployment">
-                <p>{deployment.version}</p>
-                <p><Alder alder={deployment.timestamp}/></p>
-            </Etikett>
-        </Link>
+        <Etikett className="deployment">
+            <p>{deployment.version}</p>
+            <p><Alder alder={deployment.timestamp}/></p>
+        </Etikett>
     );
 }
 
