@@ -1352,46 +1352,6 @@ body .blokk-xl {
   border-radius: 2px;
   background-color: #b7b1a9;
 }
-.toggle {
-  display: flex;
-}
-.toggle > :first-child .toggle__label {
-  border-radius: 2px 0 0 2px;
-}
-.toggle > :last-child .toggle__label {
-  border-radius: 0 2px 2px 0;
-  border-right: 1px solid #3e3832;
-  margin-left: -1px;
-}
-.toggle__label {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffffff;
-  border: 1px solid #3e3832;
-  border-right: 0;
-  color: #3e3832;
-  cursor: pointer;
-  min-width: 6.25rem;
-  height: 2rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-radius: 0;
-}
-.toggle__label:hover {
-  border-color: #0067c5;
-  color: #0067c5;
-}
-.toggle__input:checked + label {
-  background-color: #005b82;
-  color: #ffffff;
-  border-color: #005b82;
-}
-.toggle__input:focus + label {
-  position: relative;
-  z-index: 999;
-  box-shadow: 0 0 0 3px #ffbd66;
-}
 .header {
   background-color: #19548a;
   color: #ffffff;
@@ -1422,21 +1382,6 @@ body .blokk-xl {
   box-sizing: border-box;
   border: 1px solid transparent;
   color: black !important;
-}
-.deployment:hover {
-  cursor: pointer;
-  border: 1px solid #3e3832;
-}
-.mode-toggle .toggle__input:checked + label {
-  background-color: #cce1f3;
-  color: #3e3832;
-}
-.user-story-deployment {
-  display: block;
-  height: 2.5rem;
-}
-.user-story-deployment__etikett {
-  width: 13rem;
 }
 a {
   color: #0067c5;
