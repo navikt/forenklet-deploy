@@ -8,7 +8,6 @@
     "test": "cross-env CI=true react-scripts-ts test --env=jsdom",
     "lint": "tslint ./src/**/*.ts* --fix",
     "test:coverage": "npm test -- --coverage",
-    "prettier": "prettier --write --single-quote --tab-width 4 src/**/*.ts src/**/*.tsx src/**/*.less",
     "eject": "react-scripts-ts eject",
     "start:less": "autoless --source-map --intervall 100 ./src ./public",
     "build:less": "node ./node_modules/less/bin/lessc/ src/index.less ./public/index.css",
@@ -70,7 +69,6 @@
     "less": "2.7.3",
     "node-fetch": "1.7.3",
     "npm-run-all": "4.0.2",
-    "prettier": "1.7.4",
     "promise": "7.1.1",
     "raf": "3.4.0"
   }
