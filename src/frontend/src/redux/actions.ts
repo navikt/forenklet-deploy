@@ -1,6 +1,5 @@
 import AppEvent from '../app-event/app-event';
 import Status from '../status/status';
-import Commit from '../dev/commit';
 import Tag from '../dev/tag';
 
 export enum ActionType {
@@ -43,11 +42,6 @@ export interface StatusProvidedAction {
     type: ActionType.STATUS_PROVIDED;
 }
 
-export interface CommitAction {
-    type: ActionType.COMMIT;
-    data: Status<Commit>;
-}
-
 export interface TagAction {
     type: ActionType.TAG;
     data: Status<Tag>;
@@ -65,7 +59,6 @@ export type Action =
     | RequestStatusAction
     | StatusAction
     | StatusProvidedAction
-    | CommitAction
     | TagAction
     | ErrorAction
     ;

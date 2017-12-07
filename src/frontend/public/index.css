@@ -1383,6 +1383,21 @@ body .blokk-xl {
   border: 1px solid transparent;
   color: black !important;
 }
+.commits-table {
+  width: 100%;
+  text-align: left;
+}
+.commits-table td,
+.commits-table th {
+  padding: 0.5rem;
+}
+.commits-table tr:nth-of-type(2n),
+.commits-table th {
+  background: #c6c2bf;
+}
+.knapperad-promoter .knapp {
+  margin-right: 1rem;
+}
 a {
   color: #0067c5;
   background: none;

@@ -1,7 +1,8 @@
 export default interface Commit {
-    id: string;
+    hash: string;
     application: string;
     message: string;
     timestamp: number;
-    committerTimestamp: number;
+    author: string;
+    mergecommit: boolean;
 }
