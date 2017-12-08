@@ -1,7 +1,11 @@
 import * as React from 'react';
 import Commit from '../../dev/commit';
 
-const CommitRow = (commit: Commit) => (
+interface CommitRowProps {
+    commit: Commit;
+}
+
+const CommitRow = ({commit}: CommitRowProps) => (
     <tr>
         <td>{commit.hash.slice(0,6)}</td>
         <td>{commit.message}</td>
@@ -27,7 +31,7 @@ function CommitsForRelease(props: CommitsForReleaseProps) {
                 </tr>
             </thead>
             <tbody>
-                { props.commits.filter((commit) => !commit.mergecommit).map(CommitRow) }
+                { props.commits.filter((commit) => !commit.mergecommit).map((commit) => <CommitRow key={commit.hash} commit={commit} />) }
             </tbody>
         </table>
     );
