@@ -1,5 +1,5 @@
 import { Server } from 'mock-socket';
-import { ActionType, EventAction } from '../redux/actions';
+import { Action, ActionType, EventAction } from '../redux/actions';
 
 function getRandomInt(min: number, max: number): number {
     min = Math.ceil(min);
@@ -42,20 +42,31 @@ function createEvent(application: string, environment: string, version: string, 
     };
 }
 
+function sendEvents(mockServer: any) {
+    mockServer.send(JSON.stringify(createEvent('mockapp', 't6', '102.20170201.1224', timeNow())));
+    mockServer.send(JSON.stringify(createEvent('mockapp', 'q6', '98.20170128.1043', timeMinutesAgo(30, 50))));
+    mockServer.send(JSON.stringify(createEvent('mockapp', 'q0', '98.20170128.1043', timeMinutesAgo(3, 25))));
+    mockServer.send(JSON.stringify(createEvent('mockapp', 'p', '97.20170127.1134', timeHoursAgo())));
+
+    mockServer.send(JSON.stringify(createEvent('demoapp', 't6', '202.20170202.1356', timeNow())));
+    mockServer.send(JSON.stringify(createEvent('demoapp', 'q6', '202.20170202.1356', timeMinutesAgo(30, 50))));
+    mockServer.send(JSON.stringify(createEvent('demoapp', 'q0', '202.20170202.1356', timeMinutesAgo(3, 25))));
+    mockServer.send(JSON.stringify(createEvent('demoapp', 'p', '199.20170201.1206', timeHoursAgo())));
+
+    mockServer.send(JSON.stringify({ type: 'EVENTS_PROVIDED', data: null}));
+}
+
 export function setupMockWS() {
     const mockServer = new Server('ws://localhost:8800/ws');
 
-    mockServer.on('connection', (server: {}) => {
-        mockServer.send(JSON.stringify(createEvent('mockapp', 't6', '102.20170201.1224', timeNow())));
-        mockServer.send(JSON.stringify(createEvent('mockapp', 'q6', '98.20170128.1043', timeMinutesAgo(30, 50))));
-        mockServer.send(JSON.stringify(createEvent('mockapp', 'q0', '98.20170128.1043', timeMinutesAgo(3, 25))));
-        mockServer.send(JSON.stringify(createEvent('mockapp', 'p', '97.20170127.1134', timeHoursAgo())));
-
-        mockServer.send(JSON.stringify(createEvent('demoapp', 't6', '202.20170202.1356', timeNow())));
-        mockServer.send(JSON.stringify(createEvent('demoapp', 'q6', '202.20170202.1356', timeMinutesAgo(30, 50))));
-        mockServer.send(JSON.stringify(createEvent('demoapp', 'q0', '202.20170202.1356', timeMinutesAgo(3, 25))));
-        mockServer.send(JSON.stringify(createEvent('demoapp', 'p', '199.20170201.1206', timeHoursAgo())));
-
-        mockServer.send(JSON.stringify({ type: 'EVENTS_PROVIDED', data: null}));
+    mockServer.on('message', (message: any) => {
+        const event: Action = JSON.parse(message);
+        switch(event.type) {
+            case ActionType.REQUEST_EVENTS:
+                sendEvents(mockServer);
+                break;
+            default:
+                // NOOP
+        }
     });
 }
