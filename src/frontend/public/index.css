@@ -1363,25 +1363,33 @@ body .blokk-xl {
 .header__mode-toggle {
   float: right;
 }
-.dashboard__table {
+.dashboard--applicationrow {
   width: 100%;
-  table-layout: fixed;
 }
-.dashboard__table th,
-.dashboard__table td {
-  padding: 0.5rem;
-  text-align: center;
-}
-.dashboard__table th.left,
-.dashboard__table td.left {
-  text-align: left;
+.dashboard--deployments {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  margin: -1rem;
 }
 .deployment {
-  width: 200px;
-  text-align: center;
+  height: 175px;
+  flex: 1 100%;
+  margin: 1rem;
   box-sizing: border-box;
+  text-align: center;
   border: 1px solid transparent;
   color: black !important;
+}
+@media all and (min-width: 700px) {
+  .deployment {
+    flex: 2 40%;
+  }
+}
+@media all and (min-width: 1300px) {
+  .deployment {
+    flex: 4 20%;
+  }
 }
 .commits-table {
   width: 100%;

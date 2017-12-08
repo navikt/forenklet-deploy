@@ -1,14 +1,16 @@
 import * as React from 'react';
-import AppState from '../../redux/app-state';
 import { connect } from 'react-redux';
+import AppState from '../../redux/app-state';
+import { Element, Normaltekst } from 'nav-frontend-typografi';
+import { EtikettSuksess } from 'nav-frontend-etiketter';
+import NavFrontendSpinner from 'nav-frontend-spinner';
 import Applikasjon from '../../application/application';
 import { selectApplicationEnvironmentDeployment } from '../../deployment/deployment-selector';
 import Deployment from '../../deployment/deployment';
-import { EtikettFokus, EtikettSuksess } from 'nav-frontend-etiketter';
 import Environment from '../../environment/environment';
 import { selectIsLoadingInitialData } from '../../app-event/app-event-selector';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import Alder from '../alder';
+import PromoteButton from './promote-button';
 
 interface OwnProps {
     application: Applikasjon;
@@ -20,23 +22,21 @@ interface DeploymentProps {
     isLoadingData: boolean;
 }
 
-function Deployment({
-                        deployment,
-                        isLoadingData
-                    }: DeploymentProps) {
-    if (isLoadingData) {
+function Deployment(props: DeploymentProps & OwnProps) {
+    if (props.isLoadingData) {
         return <NavFrontendSpinner/>;
     }
-    if (!deployment) {
+    if (!props.deployment) {
         return null;
     }
 
-    const Etikett = true ? EtikettSuksess : EtikettFokus;
     return (
-        <Etikett className="deployment">
-            <p>{deployment.version}</p>
-            <p><Alder alder={deployment.timestamp}/></p>
-        </Etikett>
+        <EtikettSuksess className="deployment">
+            <Element className="blokk-s">{props.environment.name.toUpperCase()}</Element>
+            <Normaltekst className="blokk-xxs">{props.deployment.version}</Normaltekst>
+            <Normaltekst className="blokk-s"><Alder alder={props.deployment.timestamp}/></Normaltekst>
+            { props.environment.promotesTo && <PromoteButton application={props.application} environment={props.environment }/>}
+        </EtikettSuksess>
     );
 }
 
