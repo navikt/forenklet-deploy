@@ -3,6 +3,7 @@ package no.nav.fo.forenkletdeploy.domain;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import static java.util.Optional.ofNullable;
 import static no.nav.fo.forenkletdeploy.domain.ActionType.*;
 
 @Data
@@ -45,6 +46,8 @@ public class Action {
     }
 
     public static Action error(Throwable t) {
-        return new Action().setType(ActionType.ERROR).setData(t.getMessage());
+        return new Action()
+                .setType(ERROR)
+                .setData(ofNullable(t.getMessage()).orElse(t.getClass().getSimpleName()));
     }
 }
