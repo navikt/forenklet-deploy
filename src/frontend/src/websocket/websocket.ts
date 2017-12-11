@@ -35,7 +35,13 @@ function onMessage(dispatch: Dispatch) {
     return (messageEvent: MessageEvent) => {
         const rawData = messageEvent.data;
         const data = JSON.parse(rawData);
-        const actionType = ActionType[data.type];
+        const type = data.type;
+        const actionType = ActionType[type];
+        if (!actionType) {
+            /* tslint:disable-next-line */
+            console && console.error && console.error('unknown action: ' + type);
+            return;
+        }
         const action = {
             ...data,
             type: actionType

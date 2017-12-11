@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from '../types';
 import { requestEvents } from '../app-event/app-event-duck';
+import { requestStatus } from '../status/status-duck';
 
 interface DashboardProps {
     requestDashboardData: () => void;
@@ -23,6 +24,7 @@ class Dashboard extends React.Component<DashboardProps> {
 const mapDispatchToProps = (dispatch: Dispatch): DashboardProps => ({
     requestDashboardData: () => {
         dispatch(requestEvents());
+        dispatch(requestStatus());
     }
 });
 
