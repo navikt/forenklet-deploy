@@ -1,10 +1,5 @@
 import { ActionType, EventAction } from '../redux/actions';
-
-function getRandomInt(min: number, max: number): number {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
-}
+import { getRandomInt } from './mock-utils';
 
 function createId(): string {
     return getRandomInt(1, 100000).toString();
