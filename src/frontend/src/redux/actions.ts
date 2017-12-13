@@ -1,6 +1,7 @@
 import AppEvent from '../app-event/app-event';
 import Status from '../status/status';
 import Tag from '../dev/tag';
+import Commit from '../dev/commit';
 
 export enum ActionType {
     ERROR = 'ERROR',
@@ -11,9 +12,12 @@ export enum ActionType {
 
     REQUEST_STATUS = 'REQUEST_STATUS',
     STATUS = 'STATUS',
-    COMMIT = 'COMMIT',
     TAG = 'TAG',
     STATUS_PROVIDED = 'STATUS_PROVIDED',
+
+    REQUEST_COMMITS = 'REQUEST_COMMITS',
+    COMMIT = 'COMMIT',
+    COMMITS_PROVIDED = 'COMMITS_PROVIDED'
 }
 
 export interface RequestEventsAction {
@@ -52,6 +56,24 @@ export interface ErrorAction {
     data: string;
 }
 
+export interface RequestCommitsAction {
+    type: ActionType.REQUEST_COMMITS;
+    data: {
+        application: string;
+        fromTag: string;
+        toTag: string;
+    };
+}
+
+export interface CommitsProvidedAction {
+    type: ActionType.COMMITS_PROVIDED;
+}
+
+export interface CommitAction {
+    type: ActionType.COMMIT;
+    data: Commit;
+}
+
 export type Action =
     RequestEventsAction
     | EventAction
@@ -61,4 +83,7 @@ export type Action =
     | StatusProvidedAction
     | TagAction
     | ErrorAction
+    | RequestCommitsAction
+    | CommitsProvidedAction
+    | CommitAction
     ;

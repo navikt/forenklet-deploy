@@ -1,4 +1,5 @@
 import Commit from '../dev/commit';
+import { ActionType, CommitAction } from '../redux/actions';
 
 export function getMockCommitsForApp(appname: string): Commit[] {
     return [
@@ -43,4 +44,11 @@ export function getMockCommitsForApp(appname: string): Commit[] {
             mergecommit: false
         }
     ];
+}
+
+export function commitToEvent(commit: Commit): CommitAction {
+    return {
+        type: ActionType.COMMIT,
+        data: commit
+    };
 }
