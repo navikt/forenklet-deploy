@@ -38,8 +38,10 @@ public class Dispatch {
     }
 
     private void requestCommits(@SuppressWarnings("unused") Action action, ActionContext actionContext) {
-        CommitProvider.getProviderForRepo("myrepo")
-                .getCommitsForRelease("repouri", "fromTag", "toTag")
+        CommitActionData data = CommitActionData.fromActionData((LinkedHashMap<String, String>) action.data);
+
+        CommitProvider.getProviderForRepo(data.application)
+                .getCommitsForRelease(data.application, data.fromTag, data.toTag)
                 .forEach(commit -> actionContext.dispatch(Action.commit(commit)));
 
         actionContext.dispatch(Action.commitsProvided());
