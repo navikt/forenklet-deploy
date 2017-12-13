@@ -15,9 +15,6 @@ public class Socket implements WebSocketListener, ActionContext {
 
     private static final Logger LOG = getLogger(Socket.class);
 
-//    private static final Set<WSSocket> sockets = new HashSet<>();
-//    private static final ObjectMapper objectMapper = JsonProvider.createObjectMapper();
-
     private final Dispatch dispatch;
     private final WebsocketContext websocketContext;
 
@@ -28,12 +25,6 @@ public class Socket implements WebSocketListener, ActionContext {
         this.dispatch = dispatch;
         this.websocketContext = websocketContext;
     }
-
-//    public static Set<Query> getQueries() {
-//        return sockets.stream()
-//                .map(s -> s.query)
-//                .collect(Collectors.toSet());
-//    }
 
     @Override
     public void onWebSocketBinary(byte[] bytes, int i, int i1) {

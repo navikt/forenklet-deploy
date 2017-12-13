@@ -30,11 +30,21 @@ public class Action {
                 .setData(status);
     }
 
+    public static Action commit(Commit commit){
+        return new Action()
+                .setType(COMMIT)
+                .setData(commit);
+    }
+
     public static Action version(Version version) {
         return new Action()
                 .setType(VERSION)
                 .setData(version)
                 ;
+    }
+
+    public static Action commitsProvided() {
+        return new Action().setType(COMMITS_PROVIDED);
     }
 
     public static Action eventsProvided() {

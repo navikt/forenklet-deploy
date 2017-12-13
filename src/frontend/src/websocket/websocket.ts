@@ -86,6 +86,7 @@ const websocketMiddleware: Middleware = (store) => (next) => <A extends Action>(
     switch (action.type) {
         case ActionType.REQUEST_EVENTS:
         case ActionType.REQUEST_STATUS:
+        case ActionType.REQUEST_COMMITS:
             websocketDispatch(action, dispatch);
             break;
         default:

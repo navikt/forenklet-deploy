@@ -7,11 +7,13 @@ public enum ActionType {
     EVENT,
     EVENTS_PROVIDED,
 
+    REQUEST_COMMITS,
+    COMMIT,
+    COMMITS_PROVIDED,
+
     REQUEST_STATUS,
     VERSION,
-    COMMIT,
     TAG,
     USER_STORY,
     STATUS_PROVIDED
-
 }
