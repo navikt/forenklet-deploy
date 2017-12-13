@@ -39,9 +39,10 @@ public class Dispatch {
 
     private void requestCommits(@SuppressWarnings("unused") Action action, ActionContext actionContext) {
         CommitActionData data = CommitActionData.fromActionData((LinkedHashMap<String, String>) action.data);
+        String gitUri = statusProvider.getAppByName(data.application).gitUrl;
 
-        CommitProvider.getProviderForRepo(data.application)
-                .getCommitsForRelease(data.application, data.fromTag, data.toTag)
+        CommitProvider.getProviderForRepo(gitUri)
+                .getCommitsForRelease(gitUri, data.fromTag, data.toTag)
                 .forEach(commit -> actionContext.dispatch(Action.commit(commit)));
 
         actionContext.dispatch(Action.commitsProvided());
@@ -49,6 +50,8 @@ public class Dispatch {
 
     private void requestStatus(@SuppressWarnings("unused") Action action, ActionContext actionContext) {
         List<ApplicationConfig> relevantApplications = statusProvider.getApps();
+
+
         List<String> relevantApplicationNames = relevantApplications.stream()
                 .map(r -> r.name)
                 .collect(Collectors.toList());
@@ -84,5 +87,4 @@ public class Dispatch {
                     }
                 });
     }
-
 }

@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
+import { connect, Dispatch } from 'react-redux';
 import { Innholdstittel, Undertittel } from 'nav-frontend-typografi';
+import NavFrontendSpinner from 'nav-frontend-spinner';
 import ConmmitsForRelease from './commits-for-release';
 import { NavLink } from 'react-router-dom';
 import Commit from '../../dev/commit';
 import AppState from '../../redux/app-state';
 import { getCommitsForRelease, selectCommits, selectIsLoadingCommits } from '../../redux/commit-duck';
-import { connect, Dispatch } from 'react-redux';
+import { selectReleaseForApplication, Release } from '../../deployment/deployment-selector';
+import { selectIsLoadingInitialData } from '../../app-event/app-event-selector';
 import { Action } from '../../redux/actions';
 
 interface PromoteRouteProps {
@@ -15,7 +18,9 @@ interface PromoteRouteProps {
 }
 
 interface PromoteStateProps {
-    isLoading: boolean;
+    isLoadingInitialData: boolean;
+    isLoadingCommits: boolean;
+    release: Release;
     commits: Commit[];
 }
 
@@ -23,20 +28,38 @@ interface PromoteDispatchProps {
     getCommits: (app: string, fromVersion: string, toVersion: string) => void;
 }
 
-class Promote extends React.PureComponent<RouteComponentProps<PromoteRouteProps> & PromoteStateProps & PromoteDispatchProps> {
-    componentDidMount() {
-        const app = this.props.match.params.app;
+type PromoteProps = RouteComponentProps<PromoteRouteProps> & PromoteStateProps & PromoteDispatchProps;
 
-        this.props.getCommits(app, 'test', 'test');
+class Promote extends React.PureComponent<PromoteProps> {
+    componentDidMount() {
+        if (!this.props.isLoadingInitialData) {
+            const app = this.props.match.params.app;
+            this.props.getCommits(app, this.props.release.fromVersion, this.props.release.toVersion);
+        }
+    }
+
+    componentWillReceiveProps(nextProps: PromoteProps) {
+        if (nextProps.isLoadingInitialData !== this.props.isLoadingInitialData) {
+            const app = this.props.match.params.app;
+            this.props.getCommits(app, this.props.release.fromVersion, this.props.release.toVersion);            
+        }
     }
 
     render() {
         const props = this.props;
+        if (props.isLoadingInitialData || props.isLoadingCommits) {
+            return (
+                <div>
+                    <NavFrontendSpinner />
+                </div>
+            );
+        }
+
         return (
             <section>
-                <Innholdstittel className="blokk-m">Promoter {props.match.params.app} til {props.match.params.env}</Innholdstittel>
-                <Undertittel className="blokk-xs">Endringer fra 124.20170205.1213 til 127.20170207.1457</Undertittel>
-                <ConmmitsForRelease className="blokk-m" isLoading={props.isLoading} commits={props.commits} />
+                <Innholdstittel className="blokk-m">Promoter {props.match.params.app} til {props.release.toEnvironment}</Innholdstittel>
+                <Undertittel className="blokk-xs">Endringer fra {props.release.fromVersion} til {props.release.toVersion}</Undertittel>
+                <ConmmitsForRelease className="blokk-m" commits={props.commits} />
                 <div className="knapperad-promoter">
                     <NavLink className="knapp knapp--hoved" to={``}>
                         Promoter
@@ -56,9 +79,11 @@ function mapDispatchToProps(dispatch: Dispatch<Action>): PromoteDispatchProps {
     };
 }
 
-function mapStateToProps(state: AppState): PromoteStateProps {
+function mapStateToProps(state: AppState, ownProps: RouteComponentProps<PromoteRouteProps>): PromoteStateProps {
     return {
-        isLoading: selectIsLoadingCommits(state),
+        isLoadingCommits: selectIsLoadingCommits(state),
+        isLoadingInitialData: selectIsLoadingInitialData(state),
+        release: selectReleaseForApplication(state, ownProps.match.params.app, ownProps.match.params.env),
         commits: selectCommits(state)
     };
 }

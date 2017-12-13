@@ -19,7 +19,7 @@ function PromoteButton({application, environment}: PromoteButtonProps) {
     return (
         <NavLink
             className="knapp"
-            to={`/promote/${application.name}/${environment.promotesTo}`}
+            to={`/promote/${application.name}/${environment.name}`}
         >
             Promoter til {environment.promotesTo}
         </NavLink>

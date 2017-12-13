@@ -15,5 +15,7 @@ public class TestUtils {
         TestUser bekkciJiraDeploy = FasitUtils.getTestUser("bekkci_jira_deploy");
         setProperty(JIRA_USERNAME_PROPERTY_NAME, bekkciJiraDeploy.username);
         setProperty(JIRA_PASSWORD_PROPERTY_NAME, bekkciJiraDeploy.password);
+        setProperty(JIRA_PASSWORD_PROPERTY_NAME, bekkciJiraDeploy.password);
+        setProperty(JIRA_PASSWORD_PROPERTY_NAME, bekkciJiraDeploy.password);
     }
 }

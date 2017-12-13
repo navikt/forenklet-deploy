@@ -32,6 +32,8 @@ public class StatusProvider {
     public static final String JIRA_PASSWORD_PROPERTY_NAME = "jira.password";
     public static final int LIMIT = 50;
 
+    List<ApplicationConfig> relevantApplications = null;
+
     @SuppressWarnings("unchecked")
     Stream<Event> getVeraDeploys() {
         return withClient(c -> c.target("https://vera.adeo.no/api/v1/deploylog?onlyLatest=true&filterUndeployed=true")
@@ -82,14 +84,36 @@ public class StatusProvider {
 
     @SuppressWarnings("unchecked")
     public List<ApplicationConfig> getApps() {
-        String json = withClient(c -> c.target("http://stash.devillo.no/projects/BEKKCI/repos/jenkins-dsl-scripts/raw/forenklet_oppfolging/config.json").request().get(String.class));
-        Map<String, Map<String, String>> map = fromJson(json, Map.class);
-        return map.entrySet().stream().map(e -> ApplicationConfig.builder()
-                .name(e.getKey())
-                .gitUrl(e.getValue().get("gitUrl"))
-                .build()
-        ).collect(toList());
+        // TODO: Bytte ut med ordentlig caching som invalideres?
+        if (relevantApplications == null) {
+            relevantApplications = getAppsFromDSLConfig();
+        }
+        return relevantApplications;
     }
 
+    public ApplicationConfig getAppByName(String name) {
+        return getApps().stream()
+                .filter(app -> app.name.equalsIgnoreCase(name))
+                .findFirst()
+                .get();
+    }
+
+
+    private List<ApplicationConfig> getAppsFromDSLConfig() {
+        String json = withClient(c -> c.target("https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json").request().get(String.class));
+        Map<String, Map<String, String>> map = fromJson(json, Map.class);
+        return map.entrySet().stream()
+                .map(e -> ApplicationConfig.builder()
+                        .name(e.getKey())
+                        .gitUrl(e.getValue().get("gitUrl"))
+                        .build()
+                )
+                .filter(StatusProvider::isNotTextApplication)
+                .collect(toList());
+    }
+
+    private static boolean isNotTextApplication(ApplicationConfig app) {
+        return !(app.name.endsWith("-tekster") || app.name.endsWith("-vilkar"));
+    }
 }
 
