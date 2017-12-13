@@ -29,20 +29,9 @@ public class StatusProviderTest {
         assertThat(statusProvider.getUserStories()).isNotEmpty();
     }
 
-//    @Test
-//    public void getDevStatus() {
-//        Status status = Status.builder().id(ISSUE_ID).build();
-//        assertThat(statusProvider.getDevStatus(status)).isNotEmpty();
-//    }
-
     @Test
-    public void getDeploymentDiff() {
-        assertThat(statusProvider.getCommits(APPLICATION)).isNotEmpty();
-    }
-
-    @Test
-    public void getTags() {
-        assertThat(statusProvider.getTags(APPLICATION)).isNotEmpty();
+    public void getApps() {
+        assertThat(statusProvider.getApps()).isNotEmpty();
     }
 
 }

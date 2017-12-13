@@ -1,9 +1,7 @@
 import AppEvent from '../app-event/app-event';
-import UserStory from '../user-story/user-story';
 import Status from '../status/status';
-import DashboardMode from '../view/dashboard-mode';
-import Commit from '../dev/commit';
 import Tag from '../dev/tag';
+import Commit from '../dev/commit';
 
 export enum ActionType {
     ERROR = 'ERROR',
@@ -14,12 +12,12 @@ export enum ActionType {
 
     REQUEST_STATUS = 'REQUEST_STATUS',
     STATUS = 'STATUS',
-    USER_STORY = 'USER_STORY',
-    COMMIT = 'COMMIT',
     TAG = 'TAG',
     STATUS_PROVIDED = 'STATUS_PROVIDED',
 
-    CHANGE_MODE = 'CHANGE_MODE'
+    REQUEST_COMMITS = 'REQUEST_COMMITS',
+    COMMIT = 'COMMIT',
+    COMMITS_PROVIDED = 'COMMITS_PROVIDED'
 }
 
 export interface RequestEventsAction {
@@ -44,23 +42,8 @@ export interface StatusAction {
     data: AppEvent;
 }
 
-export interface UserStoryAction {
-    type: ActionType.USER_STORY;
-    data: Status<UserStory>;
-}
-
 export interface StatusProvidedAction {
     type: ActionType.STATUS_PROVIDED;
-}
-
-export interface ChangeModeAction {
-    type: ActionType.CHANGE_MODE;
-    newMode: DashboardMode;
-}
-
-export interface CommitAction {
-    type: ActionType.COMMIT;
-    data: Status<Commit>;
 }
 
 export interface TagAction {
@@ -73,16 +56,34 @@ export interface ErrorAction {
     data: string;
 }
 
+export interface RequestCommitsAction {
+    type: ActionType.REQUEST_COMMITS;
+    data: {
+        application: string;
+        fromTag: string;
+        toTag: string;
+    };
+}
+
+export interface CommitsProvidedAction {
+    type: ActionType.COMMITS_PROVIDED;
+}
+
+export interface CommitAction {
+    type: ActionType.COMMIT;
+    data: Commit;
+}
+
 export type Action =
     RequestEventsAction
     | EventAction
     | EventsProvidedAction
     | RequestStatusAction
     | StatusAction
-    | UserStoryAction
     | StatusProvidedAction
-    | ChangeModeAction
-    | CommitAction
     | TagAction
     | ErrorAction
+    | RequestCommitsAction
+    | CommitsProvidedAction
+    | CommitAction
     ;

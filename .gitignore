@@ -8,6 +8,7 @@
 src/frontend/node_modules/
 src/frontend/build/
 src/frontend/coverage/
+src/frontend/public/index.css*
 
 target/
 node_modules/

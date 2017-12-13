@@ -12,7 +12,7 @@ export const selectEvents = createSelector(getEvents, (e) => e);
 
 export function selectIsLoadingInitialData(state: AppState): boolean {
     const events = state.events;
-    return !events.eventsLoaded || !events.statusLoaded;
+    return !events.eventsLoaded;
 }
 
 export function selectApplicationEnvironmentEvents(state: AppState, application: Application, environment: Environment): AppEvent[] {

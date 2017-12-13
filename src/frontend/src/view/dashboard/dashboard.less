@@ -1,0 +1,32 @@
+.dashboard--applicationrow {
+  width: 100%;
+}
+
+.dashboard--deployments {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  margin: -1rem;
+}
+
+.deployment {
+  height: 175px;
+  flex: 1 100%;
+  margin: 1rem;
+  box-sizing: border-box;
+  text-align: center;
+  border: 1px solid transparent;
+  color: black !important;
+}
+
+@media all and (min-width: 700px) {
+  .deployment {
+    flex: 2 40%;
+  }
+}
+
+@media all and (min-width: 1300px) {
+  .deployment {
+    flex: 4 20%;
+  }
+}

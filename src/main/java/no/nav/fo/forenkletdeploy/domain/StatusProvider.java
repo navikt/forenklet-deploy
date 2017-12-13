@@ -1,7 +1,6 @@
 package no.nav.fo.forenkletdeploy.domain;
 
 import no.nav.fo.forenkletdeploy.jira.*;
-import no.nav.fo.forenkletdeploy.stash.StashCommits;
 import no.nav.fo.forenkletdeploy.vera.VeraDeploy;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +10,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static no.nav.fo.forenkletdeploy.domain.ActionType.COMMIT;
+import static java.util.stream.Collectors.toList;
+import static no.nav.json.JsonUtils.fromJson;
 import static no.nav.sbl.rest.RestUtils.withClient;
-import static no.nav.sbl.util.EnvironmentUtils.getRequiredProperty;
-import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.basic;
 
 @Component
 public class StatusProvider {
@@ -82,87 +80,16 @@ public class StatusProvider {
                 .build();
     }
 
-//    public Stream<Status> getDevStatus(Status status) {
-//        return withClient(c -> {
-//            c.register(basic(getRequiredProperty(JIRA_USERNAME_PROPERTY_NAME), getRequiredProperty(JIRA_PASSWORD_PROPERTY_NAME)));
-//            return c.target(String.format("https://jira.adeo.no/rest/dev-status/latest/issue/detail?issueId=%s&applicationType=stash&dataType=repository", status.id))
-//                    .request()
-//                    .get(DevStatusDetails.class);
-//        }).detail.stream().flatMap(this::detailToStatuses);
-//    }
-
-//    private Stream<Status> detailToStatuses(DevStatusDetail devStatusDetail) {
-//        return devStatusDetail.repositories
-//                .stream()
-//                .flatMap(r -> r.commits.stream().map(commit -> jiraCommitToStatus(commit, r)));
-//    }
-
-//    private Status jiraCommitToStatus(Map<String, Object> commitData, DevStatusRepository devStatusRepository) {
-//        commitData.put("application", devStatusRepository.name);
-//        return Status.builder()
-//                .id((String) commitData.get("id"))
-//                .type(COMMIT)
-//                .data(commitData)
-//                .build();
-//    }
-
-    public Stream<Status> getCommits(String application) {
-        // TODO GITHUB!
-        if("veilarbjobbsokerkompetanse".equals(application)){
-            return Stream.empty();
-        }
-
-        String url = String.format("http://stash.devillo.no/rest/api/1.0/projects/fo/repos/%s/commits", application);
-        try {
-            Stream<Status> limit = withClient(c -> c.target(url)
-                    .queryParam("limit", LIMIT)
-                    .request()
-                    .get(StashCommits.class)
-            ).values.stream().map(devStatusDetail -> commitToStatus(devStatusDetail, application));
-            return limit;
-        } catch (Throwable t) {
-            throw t;
-        }
-    }
-
-    private Status commitToStatus(Map<String, Object> commitData, String application) {
-        commitData.put("application", application);
-
-        // TODO testing!
-        Object message = commitData.get("message");
-        commitData.put("message", String.format("FO-%s %s", Math.abs(message.hashCode() % 100), message));
-
-        return Status.builder()
-                .id((String) commitData.get("id"))
-                .type(COMMIT)
-                .data(commitData)
-                .build();
-    }
-
-    public Stream<Status> getTags(String application) {
-        // TODO GITHUB!
-        if("veilarbjobbsokerkompetanse".equals(application)){
-            return Stream.empty();
-        }
-
-
-
-        return withClient(c -> c.target(String.format("http://stash.devillo.no/rest/api/1.0/projects/fo/repos/%s/tags", application))
-                .queryParam("limit", LIMIT)
-                .request()
-                .get(StashCommits.class)
-        ).values.stream().map(devStatusDetail -> tagToStatus(devStatusDetail, application));
-    }
-
-    private Status tagToStatus(Map<String, Object> devStatusDetail, String application) {
-        devStatusDetail.put("application", application);
-        return Status.builder()
-                .id((String) devStatusDetail.get("id"))
-                .type(ActionType.TAG)
-                .data(devStatusDetail)
+    @SuppressWarnings("unchecked")
+    public List<ApplicationConfig> getApps() {
+        String json = withClient(c -> c.target("http://stash.devillo.no/projects/BEKKCI/repos/jenkins-dsl-scripts/raw/forenklet_oppfolging/config.json").request().get(String.class));
+        Map<String, Map<String, String>> map = fromJson(json, Map.class);
+        return map.entrySet().stream().map(e -> ApplicationConfig.builder()
+                .name(e.getKey())
+                .gitUrl(e.getValue().get("gitUrl"))
                 .build()
-                ;
+        ).collect(toList());
     }
-
 
 }
+

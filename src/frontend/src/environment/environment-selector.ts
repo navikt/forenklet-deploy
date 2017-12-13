@@ -1,22 +1,25 @@
 import Environment, { DeployType } from './environment';
 import AppState from '../redux/app-state';
 
-const environments = [
+const environments: Environment[] = [
     {
         name: 't6',
-        deployType: DeployType.AUTOMATIC
+        deployType: DeployType.PROMOTE,
+        promotesTo: 'q6'
     },
     {
         name: 'q6',
-        deployType: DeployType.PROMOTE
+        deployType: DeployType.PROMOTE,
+        promotesTo: 'q0'
     },
     {
         name: 'q0',
-        deployType: DeployType.PROMOTE
+        deployType: DeployType.RELEASE,
+        promotesTo: 'p'
     },
     {
         name: 'p',
-        deployType: DeployType.RELEASE
+        deployType: DeployType.NONE
     }
 ];
 

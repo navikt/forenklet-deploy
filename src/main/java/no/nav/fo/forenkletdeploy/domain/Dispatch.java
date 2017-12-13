@@ -1,5 +1,6 @@
 package no.nav.fo.forenkletdeploy.domain;
 
+import no.nav.fo.forenkletdeploy.commits.CommitProvider;
 import no.nav.fo.forenkletdeploy.database.Database;
 import no.nav.sbl.util.EnumUtils;
 import org.slf4j.Logger;
@@ -10,7 +11,6 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import static no.nav.fo.forenkletdeploy.util.AsyncUtils.asyncStream;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
@@ -29,6 +29,7 @@ public class Dispatch {
         this.statusProvider = statusProvider;
         this.actionMap.put(ActionType.REQUEST_EVENTS, this::requestEvents);
         this.actionMap.put(ActionType.REQUEST_STATUS, this::requestStatus);
+        this.actionMap.put(ActionType.REQUEST_COMMITS, this::requestCommits);
     }
 
     private void requestEvents(@SuppressWarnings("unused") Action action, ActionContext actionContext) {
@@ -36,37 +37,36 @@ public class Dispatch {
         actionContext.dispatch(Action.eventsProvided());
     }
 
+    private void requestCommits(@SuppressWarnings("unused") Action action, ActionContext actionContext) {
+        CommitActionData data = CommitActionData.fromActionData((LinkedHashMap<String, String>) action.data);
+
+        CommitProvider.getProviderForRepo(data.application)
+                .getCommitsForRelease(data.application, data.fromTag, data.toTag)
+                .forEach(commit -> actionContext.dispatch(Action.commit(commit)));
+
+        actionContext.dispatch(Action.commitsProvided());
+    }
+
     private void requestStatus(@SuppressWarnings("unused") Action action, ActionContext actionContext) {
-        Set<String> relevantApplications = new HashSet<>();
-        this.database.lesEventer(e -> relevantApplications.add(e.getApplication()));
+        List<ApplicationConfig> relevantApplications = statusProvider.getApps();
+        List<String> relevantApplicationNames = relevantApplications.stream()
+                .map(r -> r.name)
+                .collect(Collectors.toList());
+
+        relevantApplications.forEach((v) -> {
+            Status build = Status.builder()
+                    .id(v.name)
+                    .type(ActionType.APP)
+                    .data(v)
+                    .build();
+            actionContext.dispatch(Action.status(build));
+        });
 
         List<Event> veraDeploys = statusProvider.getVeraDeploys()
-                .filter(e -> relevantApplications.contains(e.getApplication()))
+                .filter(e -> relevantApplicationNames.contains(e.getApplication()))
                 .collect(Collectors.toList());
 
         veraDeploys.stream().map(Action::event).forEach(actionContext::dispatch);
-
-        List<Status> userStories = statusProvider.getUserStories().collect(Collectors.toList());
-
-        userStories.stream()
-                .map(Action::status)
-                .forEach(actionContext::dispatch);
-
-//        asyncStream(userStories, statusProvider::getDevStatus)
-//                .flatMap(s -> s)
-//                .map(Action::status)
-//                .forEach(actionContext::dispatch);
-
-
-        asyncStream(relevantApplications, statusProvider::getCommits)
-                .flatMap(s -> s)
-                .map(Action::status)
-                .forEach(actionContext::dispatch);
-
-        asyncStream(relevantApplications, statusProvider::getTags)
-                .flatMap(s -> s)
-                .map(Action::status)
-                .forEach(actionContext::dispatch);
 
         actionContext.dispatch(Action.statusProvided());
     }

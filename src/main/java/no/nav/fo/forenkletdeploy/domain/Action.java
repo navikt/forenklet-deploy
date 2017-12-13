@@ -3,6 +3,7 @@ package no.nav.fo.forenkletdeploy.domain;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import static java.util.Optional.ofNullable;
 import static no.nav.fo.forenkletdeploy.domain.ActionType.*;
 
 @Data
@@ -29,11 +30,21 @@ public class Action {
                 .setData(status);
     }
 
+    public static Action commit(Commit commit){
+        return new Action()
+                .setType(COMMIT)
+                .setData(commit);
+    }
+
     public static Action version(Version version) {
         return new Action()
                 .setType(VERSION)
                 .setData(version)
                 ;
+    }
+
+    public static Action commitsProvided() {
+        return new Action().setType(COMMITS_PROVIDED);
     }
 
     public static Action eventsProvided() {
@@ -45,6 +56,8 @@ public class Action {
     }
 
     public static Action error(Throwable t) {
-        return new Action().setType(ActionType.ERROR).setData(t.getMessage());
+        return new Action()
+                .setType(ERROR)
+                .setData(ofNullable(t.getMessage()).orElse(t.getClass().getSimpleName()));
     }
 }

@@ -6,7 +6,7 @@
     "start:ts": "react-scripts-ts start",
     "build:ts": "react-scripts-ts build",
     "test": "cross-env CI=true react-scripts-ts test --env=jsdom",
-    "lint": "tslint ./**/*.ts* --fix",
+    "lint": "tslint src/**/*.ts{,x} --fix",
     "test:coverage": "npm test -- --coverage",
     "eject": "react-scripts-ts eject",
     "start:less": "autoless --source-map --intervall 100 ./src ./public",
@@ -51,10 +51,12 @@
     "react-router-dom": "^4.2.2",
     "react-scripts-ts": "2.8.0",
     "redux": "3.7.2",
-    "redux-thunk": "2.2.0"
+    "redux-thunk": "2.2.0",
+    "reselect": "3.0.1"
   },
   "homepage": "./",
   "devDependencies": {
+    "@types/classnames": "2.2.3",
     "@types/history": "4.6.2",
     "@types/jest": "21.1.4",
     "@types/lodash.throttle": "4.1.3",
@@ -64,7 +66,6 @@
     "@types/react-redux": "5.0.10",
     "@types/react-router": "4.0.18",
     "@types/react-router-dom": "4.2.2",
-    "@types/classnames": "2.2.3",
     "autoless": "0.1.7",
     "cross-env": "5.1.1",
     "less": "2.7.3",

@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Undertittel } from 'nav-frontend-typografi';
-import ModeToggle from './mode-toggle';
 import { connect } from 'react-redux';
 import AppState from '../redux/app-state';
-import { selectError } from './view-selector';
+import { selectError } from '../redux/error-duck';
 
 interface HeaderProps {
     error?: string;
@@ -12,9 +11,8 @@ interface HeaderProps {
 function Header({error}: HeaderProps) {
     return (
         <div className="header">
-            <ModeToggle className="header__mode-toggle" />
             <Undertittel>Forenklet Deploy</Undertittel>
-            {error}
+            {error && <div className="header__error">{error}</div>}
         </div>
     );
 }
