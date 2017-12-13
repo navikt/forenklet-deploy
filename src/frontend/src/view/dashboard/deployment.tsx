@@ -34,7 +34,7 @@ function Deployment(props: DeploymentProps & OwnProps) {
         <EtikettSuksess className="deployment">
             <Element className="blokk-s">{props.environment.name.toUpperCase()}</Element>
             <Normaltekst className="blokk-xxs">{props.deployment.version}</Normaltekst>
-            <Normaltekst className="blokk-s"><Alder alder={props.deployment.timestamp}/></Normaltekst>
+            <Normaltekst className="blokk-s">Deployet for <Alder alder={props.deployment.timestamp}/> siden</Normaltekst>
             { props.environment.promotesTo && <PromoteButton application={props.application} environment={props.environment }/>}
         </EtikettSuksess>
     );
