@@ -12,8 +12,8 @@ public enum ActionType {
     COMMITS_PROVIDED,
 
     REQUEST_STATUS,
+    APP,
     VERSION,
-    TAG,
     USER_STORY,
     STATUS_PROVIDED
 }

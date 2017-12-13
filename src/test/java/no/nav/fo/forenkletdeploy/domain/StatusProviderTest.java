@@ -28,4 +28,10 @@ public class StatusProviderTest {
     public void getUserStories() {
         assertThat(statusProvider.getUserStories()).isNotEmpty();
     }
+
+    @Test
+    public void getApps() {
+        assertThat(statusProvider.getApps()).isNotEmpty();
+    }
+
 }

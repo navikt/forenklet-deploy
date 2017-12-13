@@ -46,11 +46,22 @@ public class Dispatch {
     }
 
     private void requestStatus(@SuppressWarnings("unused") Action action, ActionContext actionContext) {
-        Set<String> relevantApplications = new HashSet<>();
-        this.database.lesEventer(e -> relevantApplications.add(e.getApplication()));
+        List<ApplicationConfig> relevantApplications = statusProvider.getApps();
+        List<String> relevantApplicationNames = relevantApplications.stream()
+                .map(r -> r.name)
+                .collect(Collectors.toList());
+
+        relevantApplications.forEach((v) -> {
+            Status build = Status.builder()
+                    .id(v.name)
+                    .type(ActionType.APP)
+                    .data(v)
+                    .build();
+            actionContext.dispatch(Action.status(build));
+        });
 
         List<Event> veraDeploys = statusProvider.getVeraDeploys()
-                .filter(e -> relevantApplications.contains(e.getApplication()))
+                .filter(e -> relevantApplicationNames.contains(e.getApplication()))
                 .collect(Collectors.toList());
 
         veraDeploys.stream().map(Action::event).forEach(actionContext::dispatch);

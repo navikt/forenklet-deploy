@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+import static no.nav.json.JsonUtils.fromJson;
 import static no.nav.sbl.rest.RestUtils.withClient;
 
 @Component
@@ -77,4 +79,17 @@ public class StatusProvider {
                 .data(fields)
                 .build();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<ApplicationConfig> getApps() {
+        String json = withClient(c -> c.target("http://stash.devillo.no/projects/BEKKCI/repos/jenkins-dsl-scripts/raw/forenklet_oppfolging/config.json").request().get(String.class));
+        Map<String, Map<String, String>> map = fromJson(json, Map.class);
+        return map.entrySet().stream().map(e -> ApplicationConfig.builder()
+                .name(e.getKey())
+                .gitUrl(e.getValue().get("gitUrl"))
+                .build()
+        ).collect(toList());
+    }
+
 }
+
