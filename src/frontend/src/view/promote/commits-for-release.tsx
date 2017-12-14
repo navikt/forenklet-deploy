@@ -35,7 +35,7 @@ function CommitsForRelease(props: CommitsForReleaseProps) {
                 </tr>
             </thead>
             <tbody>
-                { 
+                {
                     props.commits
                         .sort(sortByTimestamp)
                         .filter(filterMergeCommits)

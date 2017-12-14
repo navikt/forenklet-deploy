@@ -17,8 +17,8 @@ interface ApplicationRowProps {
 
 function ApplicationRow({ application, environments }: ApplicationRowProps) {
     return (
-        <section className="dashboard--applicationrow blokk-l">
-            <Undertittel className="blokk-xs">{application.name}</Undertittel>
+        <section className="dashboard--applicationrow blokk-m">
+            <Undertittel className="blokk-xxs">{application.name}</Undertittel>
 
             <div className="dashboard--deployments">
                 {environments.map((environment) => (

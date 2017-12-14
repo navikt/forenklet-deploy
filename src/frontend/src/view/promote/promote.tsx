@@ -41,7 +41,7 @@ class Promote extends React.PureComponent<PromoteProps> {
     componentWillReceiveProps(nextProps: PromoteProps) {
         if (nextProps.isLoadingInitialData !== this.props.isLoadingInitialData) {
             const app = this.props.match.params.app;
-            this.props.getCommits(app, this.props.release.fromVersion, this.props.release.toVersion);            
+            this.props.getCommits(app, this.props.release.fromVersion, this.props.release.toVersion);
         }
     }
 
@@ -55,15 +55,17 @@ class Promote extends React.PureComponent<PromoteProps> {
             );
         }
 
+        const linkUrl = `http://bekkci.devillo.no/job/forenklet_oppfolging/job/${props.release.application}/job/-promotering-${props.release.toEnvironment}-/`;
+
         return (
             <section>
                 <Innholdstittel className="blokk-m">Promoter {props.match.params.app} til {props.release.toEnvironment}</Innholdstittel>
                 <Undertittel className="blokk-xs">Endringer fra {props.release.fromVersion} til {props.release.toVersion}</Undertittel>
                 <ConmmitsForRelease className="blokk-m" commits={props.commits} />
                 <div className="knapperad-promoter">
-                    <NavLink className="knapp knapp--hoved" to={``}>
+                    <a className="knapp knapp--hoved" href={linkUrl}>
                         Promoter
-                    </NavLink>
+                    </a>
                     <NavLink className="knapp" to="/">
                         Avbryt
                     </NavLink>

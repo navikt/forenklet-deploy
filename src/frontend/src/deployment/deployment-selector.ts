@@ -35,18 +35,36 @@ export interface Release {
     toVersion: string;
 }
 
+function getApplicationVersion(state: AppState, app: Application, environment: string): string {
+    if (environment == null) {
+        return '';
+    }
+    const application = selectApplicationEnvironmentDeployment(state, app, selectEnvironment(environment));
+    return application == null ? '' : application.version;
+}
+
 export function selectReleaseForApplication(state: AppState, application: string, fromEnvironment: string): Release {
     const toEnvironment = selectEnvironment(fromEnvironment).promotesTo!;
     const app = selectApplication(state, application);
 
-    const toApp = selectApplicationEnvironmentDeployment(state, app, selectEnvironment(fromEnvironment));
-    const fromApp = selectApplicationEnvironmentDeployment(state, app, selectEnvironment(toEnvironment));
+    if (fromEnvironment == null || toEnvironment == null) {
+        return {
+            application,
+            fromEnvironment,
+            toEnvironment,
+            fromVersion:  '',
+            toVersion: ''
+        };
+    }
+
+    const toVersion = getApplicationVersion(state, app, fromEnvironment);
+    const fromVersion = getApplicationVersion(state, app, toEnvironment);
 
     return {
         application,
         fromEnvironment,
         toEnvironment,
-        fromVersion: fromApp ? fromApp.version : '',
-        toVersion: toApp ? toApp.version : ''
+        fromVersion,
+        toVersion
     };
 }
