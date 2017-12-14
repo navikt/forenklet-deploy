@@ -21,6 +21,9 @@ interface CommitsForReleaseProps {
 }
 
 function CommitsForRelease(props: CommitsForReleaseProps) {
+    const filterMergeCommits = (commit: Commit) => !commit.mergecommit;
+    const sortByTimestamp = (a: Commit, b: Commit) => b.timestamp - a.timestamp;
+
     return (
         <table className={`commits-table ${props.className}`}>
             <thead>
@@ -32,7 +35,12 @@ function CommitsForRelease(props: CommitsForReleaseProps) {
                 </tr>
             </thead>
             <tbody>
-                { props.commits.filter((commit) => !commit.mergecommit).map((commit) => <CommitRow key={commit.hash} commit={commit} />) }
+                { 
+                    props.commits
+                        .sort(sortByTimestamp)
+                        .filter(filterMergeCommits)
+                        .map((commit) => <CommitRow key={commit.hash} commit={commit} />)
+                }
             </tbody>
         </table>
     );
