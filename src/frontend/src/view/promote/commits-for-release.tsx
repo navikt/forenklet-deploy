@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Commit from '../../dev/commit';
 import Alder from '../alder';
+import CommitMessage from './commit-message';
 
 interface CommitRowProps {
     commit: Commit;
@@ -9,7 +10,7 @@ interface CommitRowProps {
 const CommitRow = ({commit}: CommitRowProps) => (
     <tr>
         <td>{commit.hash.slice(0,8)}</td>
-        <td>{commit.message}</td>
+        <td><CommitMessage message={commit.message}/></td>
         <td>{commit.author}</td>
         <td><Alder alder={commit.timestamp}/> siden</td>
     </tr>
