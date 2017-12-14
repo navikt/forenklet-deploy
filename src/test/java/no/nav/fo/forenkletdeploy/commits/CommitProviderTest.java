@@ -1,5 +1,6 @@
 package no.nav.fo.forenkletdeploy.commits;
 
+import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -17,7 +18,9 @@ public class CommitProviderTest {
                 "git@GITHUB.COM:navikt/veilarbportefoljeflatefs.git"
         );
 
-        validGitHubUri.forEach(uri -> assertEquals(GithubCommitProvider.class, CommitProvider.getProviderForRepo(uri).getClass()));
+        validGitHubUri.forEach(uri ->
+                assertEquals(GithubCommitProvider.class, CommitProvider.getProviderForApplication(applicationConfigForRepo(uri)).getClass())
+        );
     }
 
     @Test
@@ -28,6 +31,15 @@ public class CommitProviderTest {
                 "https://STASH.DEVILLO.NO/scm/bekkci/jenkins-dsl-scripts.git"
         );
 
-        validStashUri.forEach(uri -> assertEquals(StashCommitProvider.class, CommitProvider.getProviderForRepo(uri).getClass()));
+        validStashUri.forEach(uri ->
+                assertEquals(StashCommitProvider.class, CommitProvider.getProviderForApplication(applicationConfigForRepo(uri)).getClass())
+        );
+    }
+
+    private ApplicationConfig applicationConfigForRepo(String repo) {
+        return ApplicationConfig.builder()
+                .gitUrl(repo)
+                .name("MOCK-REPO")
+                .build();
     }
 }

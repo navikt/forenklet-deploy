@@ -1,5 +1,6 @@
 package no.nav.fo.forenkletdeploy.commits;
 
+import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 import no.nav.fo.forenkletdeploy.domain.Commit;
 
 import java.util.Arrays;
@@ -11,7 +12,9 @@ public class MockCommitProvider implements CommitProvider {
     }
 
     @Override
-    public List<Commit> getCommitsForRelease(String repo, String fromTag, String toTag) {
+    public List<Commit> getCommitsForRelease(ApplicationConfig application, String fromTag, String toTag) {
+        String repo = application.getGitUrl();
+
         return Arrays.asList(
                 Commit.builder()
                         .hash("1402a360346aefd")

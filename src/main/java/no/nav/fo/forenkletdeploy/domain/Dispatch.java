@@ -39,10 +39,10 @@ public class Dispatch {
 
     private void requestCommits(@SuppressWarnings("unused") Action action, ActionContext actionContext) {
         CommitActionData data = CommitActionData.fromActionData((LinkedHashMap<String, String>) action.data);
-        String gitUri = statusProvider.getAppByName(data.application).gitUrl;
+        ApplicationConfig application = statusProvider.getAppByName(data.application);
 
-        CommitProvider.getProviderForRepo(gitUri)
-                .getCommitsForRelease(gitUri, data.fromTag, data.toTag)
+        CommitProvider.getProviderForApplication(application)
+                .getCommitsForRelease(application, data.fromTag, data.toTag)
                 .forEach(commit -> actionContext.dispatch(Action.commit(commit)));
 
         actionContext.dispatch(Action.commitsProvided());

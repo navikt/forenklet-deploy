@@ -113,7 +113,7 @@ public class StatusProvider {
     }
 
     private static boolean isNotTextApplication(ApplicationConfig app) {
-        return !(app.name.endsWith("-tekster") || app.name.endsWith("-vilkar"));
+        return !(app.name.endsWith("tekster") || app.name.endsWith("-vilkar"));
     }
 }
 

@@ -39,8 +39,8 @@ export function selectReleaseForApplication(state: AppState, application: string
     const toEnvironment = selectEnvironment(fromEnvironment).promotesTo!;
     const app = selectApplication(state, application);
 
-    const fromApp = selectApplicationEnvironmentDeployment(state, app, selectEnvironment(fromEnvironment));
-    const toApp = selectApplicationEnvironmentDeployment(state, app, selectEnvironment(toEnvironment));
+    const toApp = selectApplicationEnvironmentDeployment(state, app, selectEnvironment(fromEnvironment));
+    const fromApp = selectApplicationEnvironmentDeployment(state, app, selectEnvironment(toEnvironment));
 
     return {
         application,
