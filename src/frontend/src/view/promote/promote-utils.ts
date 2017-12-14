@@ -19,7 +19,7 @@ export function getIssuesFromMessage(message: string): JiraIssue[] {
     do {
         match =  matchPattern.exec(message);
         if (match != null) {
-            results.push(match[1]);            
+            results.push(match[1]);
         }
     } while(match != null);
 
