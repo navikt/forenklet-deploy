@@ -15,5 +15,5 @@ export default function CommitMessage(props: CommitMessageProps) {
         );
     }
 
-    return <span>{ parts }</span>;
+    return <span className="commit-message">{ parts }</span>;
 }

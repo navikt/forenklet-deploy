@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -58,10 +59,14 @@ public class StashCommitProvider implements CommitProvider {
         return "refs%2Ftags%2F" + tag;
     }
 
+    private static String getNameForCommit(StashCommit commit) {
+        return commit.author.displayName != null ? commit.author.displayName : commit.author.name;
+    }
+
     private static Commit mapToCommit(StashCommit stashCommit, ApplicationConfig application) {
         return Commit.builder()
                 .timestamp(stashCommit.committerTimestamp)
-                .author(stashCommit.author.displayName)
+                .author(getNameForCommit(stashCommit))
                 .message(stashCommit.message)
                 .hash(stashCommit.id)
                 .mergecommit(stashCommit.parents.size() > 1)

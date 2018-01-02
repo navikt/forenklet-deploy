@@ -1,24 +1,38 @@
 import * as React from 'react';
+import { Action } from 'redux';
 import { Undertittel } from 'nav-frontend-typografi';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import AppState from '../redux/app-state';
 import { selectError } from '../redux/error-duck';
+import { changeShowAll } from '../redux/view-duck';
+import { Checkbox } from 'nav-frontend-skjema';
 
-interface HeaderProps {
+interface HeaderStateProps {
     error?: string;
+    showAll: boolean;
 }
 
-function Header({error}: HeaderProps) {
+interface HeaderDispatchProps {
+    changeShowAll: (showAll: boolean) => void;
+}
+
+function Header({error, showAll, changeShowAll}: HeaderStateProps & HeaderDispatchProps) {
     return (
         <div className="header">
             <Undertittel>Forenklet Deploy</Undertittel>
+            <Checkbox onChange={() => changeShowAll(!showAll)} label="Vis alle applikasjoner" checked={showAll} />
             {error && <div className="header__error">{error}</div>}
         </div>
     );
 }
 
-const mapStateToProps = (state: AppState): HeaderProps => ({
-    error: selectError(state)
+const mapStateToProps = (state: AppState): HeaderStateProps => ({
+    error: selectError(state),
+    showAll: state.view.showAll
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = (dispatch: Dispatch<Action>): HeaderDispatchProps => ({
+    changeShowAll: (showAll: boolean) => dispatch(changeShowAll(showAll))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

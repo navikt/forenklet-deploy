@@ -38,6 +38,7 @@ interface StateProps {
     isLoadingData: boolean;
     applications: Application[];
     environments: Environment[];
+    showAll: boolean;
 }
 
 interface DispatchProps {
@@ -46,12 +47,25 @@ interface DispatchProps {
 
 type DashboardProps = StateProps & DispatchProps;
 
-function Dashboard({ applications, environments, isLoadingData}: DashboardProps) {
+function sortApplication(a: Application, b: Application): number {
+    if(a.hasChanges != b.hasChanges) {
+        return a.hasChanges ? -1 : 1;
+    }
+    return a.name.localeCompare(b.name);
+}
+
+function Dashboard({ applications, environments, isLoadingData, showAll}: DashboardProps) {
+    const applicationsToDisplay = applications
+        .filter((app) => app.hasChanges || showAll)
+        .sort(sortApplication);
+
+    if (isLoadingData) {
+        return <NavFrontendSpinner />;
+    }
+
     return (
         <div className="dashboard__wrapper">
-            {isLoadingData && <NavFrontendSpinner/> }
-
-            {applications.map((a) => (
+            {applicationsToDisplay.map((a) => (
                 <ApplicationRow
                     key={a.name}
                     application={a}
@@ -65,7 +79,8 @@ function Dashboard({ applications, environments, isLoadingData}: DashboardProps)
 const mapStateToProps = (state: AppState): StateProps => ({
     isLoadingData: selectIsLoadingInitialData(state),
     applications: selectApplications(state),
-    environments: selectEnvironments(state)
+    environments: selectEnvironments(state),
+    showAll: state.view.showAll
 });
 
 export default connect(mapStateToProps)(Dashboard);
