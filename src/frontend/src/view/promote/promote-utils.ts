@@ -3,7 +3,7 @@ export interface JiraIssue {
     uri: string;
 }
 
-export const matchPattern = /\[?([a-zA-Z]{1,3}\-\d+)[ :\-\]]?/g;
+export const matchPattern = /\[?([a-zA-Z]{1,3}\d*\-\d+)[ :\-\]]?/g;
 
 export function getUrlForIssue(issue: string): string {
     return `https://jira.adeo.no/browse/${issue}`;

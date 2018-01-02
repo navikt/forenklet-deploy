@@ -35,4 +35,11 @@ describe('promote-utils', () => {
         expect(issues[0].name).toBe("FO-01");
         expect(issues[1].name).toBe("FO-02");
     });
+
+    it("should find long issue-tags", () => {
+        const issues = getIssuesFromMessage("AAP2018-26 [AAP2018-27] et langt issuenavn");
+        expect(issues).toHaveLength(2);
+        expect(issues[0].name).toBe("AAP2018-26");
+        expect(issues[1].name).toBe("AAP2018-27");
+    });
 });
