@@ -10,7 +10,7 @@ export default function CommitMessage(props: CommitMessageProps) {
     for(let i=1; i<parts.length; i+=2) {
         parts[i] = (
             <a href={getUrlForIssue(parts[i])} key={parts[i]} target="_blank" rel="noopener noreferrer">
-                { parts[i].toUpperCase() }
+                { parts[i].toUpperCase() + ' ' }
             </a>
         );
     }
