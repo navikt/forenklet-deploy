@@ -55,6 +55,17 @@ public class StashCommitProvider implements CommitProvider {
         return "";
     }
 
+    public static String getLinkUriForCommit(ApplicationConfig application, String commit) {
+        Pattern pattern = Pattern.compile("7999/([a-zA-Z]+)/");
+        Matcher matcher = pattern.matcher(application.getGitUrl());
+
+        if(matcher.find()) {
+            String project = matcher.group(1).toLowerCase();
+            return String.format("http://stash.devillo.no/projects/%s/repos/%s/commits/%s", project, application.name, commit);
+        }
+        return "";
+    }
+
     private static String tagRef(String tag) {
         return "refs%2Ftags%2F" + tag;
     }
@@ -67,6 +78,7 @@ public class StashCommitProvider implements CommitProvider {
         return Commit.builder()
                 .timestamp(stashCommit.committerTimestamp)
                 .author(getNameForCommit(stashCommit))
+                .url(getLinkUriForCommit(application, stashCommit.id))
                 .message(stashCommit.message)
                 .hash(stashCommit.id)
                 .mergecommit(stashCommit.parents.size() > 1)

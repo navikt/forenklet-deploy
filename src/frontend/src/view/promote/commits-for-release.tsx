@@ -9,7 +9,7 @@ interface CommitRowProps {
 
 const CommitRow = ({commit}: CommitRowProps) => (
     <tr>
-        <td>{commit.hash.slice(0,8)}</td>
+        <td><a href={commit.url}>{commit.hash.slice(0,8)}</a></td>
         <td><CommitMessage message={commit.message}/></td>
         <td>{commit.author}</td>
         <td><Alder alder={commit.timestamp}/> siden</td>

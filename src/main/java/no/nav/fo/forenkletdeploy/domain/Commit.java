@@ -9,6 +9,7 @@ public class Commit {
     String hash;
     String application;
     String message;
+    String url;
     Long timestamp;
     String author;
     boolean mergecommit;
