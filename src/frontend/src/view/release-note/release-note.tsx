@@ -4,6 +4,7 @@ import IssuesTable from './issues-table';
 import ApplicationRelease from './application-release';
 import { getMockCommitsForApp } from '../../mock/commit-for-release-mock';
 import { Release } from '../../deployment/deployment-selector';
+import './release-note.less';
 
 export class ReleaseNote extends React.Component<{}> {
     render() {
@@ -13,7 +14,6 @@ export class ReleaseNote extends React.Component<{}> {
             { application: 'veilaroppfolging', fromEnvironment: 'q6', toEnvironment: 'p', fromVersion: '205.20180101.1025', toVersion: '207.20180303.1017'},
             { application: 'veilarbaktivitet', fromEnvironment: 'q6', toEnvironment: 'p', fromVersion: '312.20180101.1025', toVersion: '3.20180303.1017'},
         ];
-
 
         return (
             <article className="release-note">
@@ -25,11 +25,17 @@ export class ReleaseNote extends React.Component<{}> {
                 <section className="release-note--issues blokk-l">
                     <Innholdstittel className="blokk-s">Brukerhistorier i leveransen</Innholdstittel>
                     <IssuesTable />
-                    
+
                 </section>
                 <section className="release-note--applications">
                     <Innholdstittel className="blokk-s">Applikasjoner i leveransen</Innholdstittel>
-                    { releases.map(release => <ApplicationRelease release={release} commits={getMockCommitsForApp(release.application)} />)}
+                    { releases.map((release) => (
+                        <ApplicationRelease
+                            release={release}
+                            key={release.application}
+                            commits={getMockCommitsForApp(release.application)}
+                        />))
+                    }
                 </section>
             </article>
         );

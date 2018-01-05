@@ -27,7 +27,7 @@ function JiraIssueRow({ issue }: JiraIssueRowProps) {
             </td>
             <td className="status">{issue.status}</td>
             <td className="assigned">{issue.assignedTo}</td>
-            <td className="title">{issue.title}</td>            
+            <td className="title">{issue.title}</td>
         </tr>
     );
 }
@@ -41,13 +41,13 @@ export class IssuesTable extends React.Component<{}> {
                         <th className="issue">Issue</th>
                         <th className="status">Status</th>
                         <th className="assigned">Tildelt</th>
-                        <th className="title">Tittel</th>                            
+                        <th className="title">Tittel</th>
                     </tr>
                 </thead>
                 <tbody>
                     { issues.map((issue) => <JiraIssueRow issue={issue} key={issue.id} />) }
                 </tbody>
-            </table>        
+            </table>
         );
     }
 }

@@ -16,5 +16,5 @@ export default function ApplicationRelease(props: ApplicationReleaseProps) {
             <UndertekstBold className="blokk-xs">{props.release.fromVersion} til {props.release.toVersion}</UndertekstBold>
             <CommitsForRelease commits={props.commits} />
         </section>
-    )
+    );
 }
