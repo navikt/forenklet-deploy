@@ -19,3 +19,14 @@ a {
 .content__wrapper {
   margin: 3rem;
 }
+
+
+@media print {
+  .header {
+      display: none;
+  }
+  
+  a[href]:after {
+      content: none !important;
+  }
+}

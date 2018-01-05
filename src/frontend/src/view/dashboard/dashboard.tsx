@@ -48,7 +48,7 @@ interface DispatchProps {
 type DashboardProps = StateProps & DispatchProps;
 
 function sortApplication(a: Application, b: Application): number {
-    if(a.hasChanges != b.hasChanges) {
+    if(a.hasChanges !== b.hasChanges) {
         return a.hasChanges ? -1 : 1;
     }
     return a.name.localeCompare(b.name);

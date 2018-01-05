@@ -11,11 +11,11 @@ enum actionNames {
 }
 
 export interface ChangeShowAll {
-    type: actionNames.CHANGE_SHOW_ALL,
+    type: actionNames.CHANGE_SHOW_ALL;
     showAll: boolean;
 }
 
-type ViewActions = 
+type ViewActions =
     | ChangeShowAll
     ;
 
@@ -31,6 +31,3 @@ export default function reducer(state: ViewState = initialState, action: ViewAct
 export function changeShowAll(showAll: boolean): ChangeShowAll {
     return { type: actionNames.CHANGE_SHOW_ALL, showAll };
 }
-
-
-

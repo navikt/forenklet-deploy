@@ -13,14 +13,14 @@ interface HeaderStateProps {
 }
 
 interface HeaderDispatchProps {
-    changeShowAll: (showAll: boolean) => void;
+    doChangeShowAll: (showAll: boolean) => void;
 }
 
-function Header({error, showAll, changeShowAll}: HeaderStateProps & HeaderDispatchProps) {
+function Header({error, showAll, doChangeShowAll}: HeaderStateProps & HeaderDispatchProps) {
     return (
         <div className="header">
             <Undertittel>Forenklet Deploy</Undertittel>
-            <Checkbox onChange={() => changeShowAll(!showAll)} label="Vis alle applikasjoner" checked={showAll} />
+            <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle applikasjoner" checked={showAll} />
             {error && <div className="header__error">{error}</div>}
         </div>
     );
@@ -32,7 +32,7 @@ const mapStateToProps = (state: AppState): HeaderStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>): HeaderDispatchProps => ({
-    changeShowAll: (showAll: boolean) => dispatch(changeShowAll(showAll))
+    doChangeShowAll: (showAll: boolean) => dispatch(changeShowAll(showAll))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
