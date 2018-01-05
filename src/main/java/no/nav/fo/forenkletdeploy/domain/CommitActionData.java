@@ -3,7 +3,7 @@ package no.nav.fo.forenkletdeploy.domain;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Data
 @Builder
@@ -12,7 +12,7 @@ public class CommitActionData extends Action {
     String fromTag;
     String toTag;
 
-    public static CommitActionData fromActionData(LinkedHashMap<String, String> data) {
+    public static CommitActionData fromActionData(Map<String, String> data) {
         return new CommitActionData(data.get("application"), data.get("fromTag"), data.get("toTag"));
     }
 }
