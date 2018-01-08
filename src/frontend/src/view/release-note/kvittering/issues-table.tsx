@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getUrlForIssue } from '../promote/promote-utils';
+import { getUrlForIssue } from '../../promote/promote-utils';
 
 interface JiraIssue {
     id: string;
