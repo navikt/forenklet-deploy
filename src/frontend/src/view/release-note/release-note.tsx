@@ -19,7 +19,7 @@ export class ReleaseNote extends React.Component<{}> {
             <article className="release-note">
                 <div className="blokk-m">
                     <Sidetittel className="blokk-xxs">Utrullingsoversikt Forenklet Oppfølging</Sidetittel>
-                    <Normaltekst>Team Kartlegging, SiB og Oppfølging | Dato: 4. Januar 2018</Normaltekst>
+                    <Normaltekst>Team Kartlegging, registrering og oppfølging | Dato: 4. Januar 2018</Normaltekst>
                 </div>
 
                 <section className="release-note--issues blokk-l">
