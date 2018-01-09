@@ -5,13 +5,17 @@ import { getMockCommitsForApp } from '../../../mock/commit-for-release-mock';
 import CommitsForRelease from '../../promote/commits-for-release';
 import IssuesTable from '../kvittering/issues-table';
 
-interface ApplicationProps {
+interface GoNogoApplicationProps {
     application: string;
     onSelectGo: () => void;
     onSelectNogo: () => void;
 }
 
-export class Application extends React.Component<ApplicationProps> {
+export class GoNogoApplication extends React.Component<GoNogoApplicationProps> {
+    componentDidMount() {
+        console.log("mounted", this.props.application);
+    }
+
     render() {
         return (
             <section>
@@ -33,4 +37,4 @@ export class Application extends React.Component<ApplicationProps> {
     }
 }
 
-export default Application;
+export default GoNogoApplication;

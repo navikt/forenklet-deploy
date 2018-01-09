@@ -1,43 +1,81 @@
 import * as React from 'react';
 import { Sidetittel, Normaltekst } from 'nav-frontend-typografi';
-import { Application } from './application';
+import NavFrontendSpinner from 'nav-frontend-spinner';
 import { EkspanderbartpanelPure } from 'nav-frontend-ekspanderbartpanel';
+import { Action } from 'redux';
+import { connect, Dispatch } from 'react-redux';
+import { GoNogoApplication } from './application';
+import { reset, openApplication, addGoApplication, addNogoApplication } from '../../../redux/gonogo-duck';
+import AppState from '../../../redux/app-state';
+import Application from '../../../application/application';
+import { selectApplicationsForRelease } from '../../../application/application-selector';
+import { selectIsLoadingInitialData } from '../../../app-event/app-event-selector';
+import { selectIsLoadingCommits } from '../../../redux/commit-duck';
 
-const mockAppNames = [
-    'veilarbdialog',
-    'veilarboppfolging',
-    'veilarbaktivitet',
-    'veilarblogin'
-];
+interface DispatchProps {
+    doReset: () => void;
+    doAddGoApplication: (app: string) => void;
+    doAddNogoApplication: (app: string) => void;
+    doOpenApplication: (app: string) => void;
+}
 
-export class Kvittering extends React.Component<{}, {apen: string}> {
-    constructor() {
-        super();
-        this.state = {apen: 'veilarbdialog'};
+interface StateProps {
+    openApplication: string;
+    goApplications: string[];
+    nogoApplications: string[];
+    applications: Application[];
+    isLoading: boolean;
+}
+
+export class GoNogo extends React.Component<DispatchProps & StateProps> {
+    componentDidMount() {
+        this.props.doReset();
+    }
+
+    selectGo(application: string) {
+        this.props.doAddGoApplication(application);
+        this.openNextApplication(application);
+    }
+
+    selectNogo(application: string) {
+        this.props.doAddNogoApplication(application);
+        this.openNextApplication(application);
     }
 
     openNextApplication(application: string) {
-        const nextApplicationIndex = mockAppNames.indexOf(application) + 1;
-        const nextApplicationName = nextApplicationIndex >= mockAppNames.length ? '' : mockAppNames[nextApplicationIndex];
-        this.setState({ apen: nextApplicationName });
+        const nextApplicationIndex = this.props.applications.findIndex(app => app.name === application) + 1;
+        const nextApplicationName = nextApplicationIndex >= this.props.applications.length ? '' : this.props.applications[nextApplicationIndex].name;
+        this.props.doOpenApplication(nextApplicationName);
+    }
+
+    toggleOpen(application: string) {
+        const applicationToOpen = this.props.openApplication === application ? '' : application;
+        this.props.doOpenApplication(applicationToOpen);
+    }
+
+    isApplicationOpen(application: string) {
+        return this.props.openApplication === application;
     }
 
     createApplicationRow(application: string) {
-
         return (
-            <div className="release-note--application" key={application}>
-                <EkspanderbartpanelPure tittel={application} apen={this.state.apen === application} onClick={() => this.setState({apen: application})}>
-                    <Application 
+            <div className="release-note--application blokk-xs" key={application}>
+                <EkspanderbartpanelPure tittel={application} apen={this.isApplicationOpen(application)} onClick={() => this.toggleOpen(application)}>
+                    <GoNogoApplication
                         application={application}
-                        onSelectGo={() => this.openNextApplication(application)}
-                        onSelectNogo={() => this.openNextApplication(application)}
+                        onSelectGo={() => this.selectGo(application)}
+                        onSelectNogo={() => this.selectNogo(application)}
                     />
                 </EkspanderbartpanelPure>
             </div>
-        )
+        );
     }
 
     render() {
+        if (this.props.isLoading) {
+            return <NavFrontendSpinner />;
+        }
+
         return (
             <article className="release-note">
                 <div className="blokk-m">
@@ -45,10 +83,29 @@ export class Kvittering extends React.Component<{}, {apen: string}> {
                     <Normaltekst>Team Kartlegging, registrering og oppfølging | Dato: 4. Januar 2018</Normaltekst>
                 </div>
 
-                { mockAppNames.map((app) => this.createApplicationRow(app)) }
+                { this.props.applications.map((app: Application) => this.createApplicationRow(app.name)) }
             </article>
         );
     }
 }
 
-export default Kvittering;
+function mapDispatchToProps(dispatch: Dispatch<Action>): DispatchProps {
+    return {
+        doReset: () => dispatch(reset()),
+        doAddGoApplication: (app: string) => dispatch(addGoApplication(app)),
+        doAddNogoApplication: (app: string) => dispatch(addNogoApplication(app)),
+        doOpenApplication: (app: string) => dispatch(openApplication(app))
+    }
+}
+
+function mapStateToProps(state: AppState): StateProps {
+    return {
+        isLoading: (selectIsLoadingCommits(state) && false) || selectIsLoadingInitialData(state),
+        openApplication: state.gonogo.openApplication,
+        goApplications: state.gonogo.goApplications,
+        nogoApplications: state.gonogo.nogoApplications,
+        applications: selectApplicationsForRelease(state)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GoNogo);

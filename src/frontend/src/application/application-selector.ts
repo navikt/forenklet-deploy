@@ -9,10 +9,14 @@ interface ApplicationByName {
     [name: string]: Application;
 }
 
+function appHasChangesForEnvironments(applicationName: string, events: AppEvent[], environments: string[]): boolean {
+    const deploysForApp = events.filter((event) => event.application === applicationName && environments.includes(event.environment));
+    return (new Set(deploysForApp.map((deploy) => deploy.version))).size > 1;
+}
+
 function appHasChanges(applicationName: string, events: AppEvent[]): boolean {
     const environmentstack = ['t6' , 'q6', 'q0', 'p'];
-    const deploysForApp = events.filter((event) => event.application === applicationName && environmentstack.includes(event.environment));
-    return (new Set(deploysForApp.map((deploy) => deploy.version))).size > 1;
+    return appHasChangesForEnvironments(applicationName, events, environmentstack);
 }
 
 export const selectApplications = createSelector(selectEvents, selectAllDeploymentEvents, (events, deploys): Application[] => {
@@ -40,4 +44,11 @@ export const selectApplication = createSelector(selectApplicationMap, name, (app
     return applications[applicationName] || {
         name: applicationName
     };
+});
+
+export const selectApplicationsForRelease = createSelector(selectEvents, selectAllDeploymentEvents, (events, deploys): Application[] => {
+    const applicationNames = new Set(events.map((e) => e.application));
+    return Array.from(applicationNames)
+        .filter((app: string) => appHasChangesForEnvironments(app, events, ['q6', 'p']))
+        .map((app: string) => ({ name: app, hasChanges: true }));
 });
