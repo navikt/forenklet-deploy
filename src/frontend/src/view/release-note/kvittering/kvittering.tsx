@@ -3,16 +3,18 @@ import { Sidetittel, Normaltekst, Innholdstittel } from 'nav-frontend-typografi'
 import IssuesTable from './issues-table';
 import ApplicationRelease from './application-release';
 import { getMockCommitsForApp } from '../../../mock/commit-for-release-mock';
-import { Release } from '../../../deployment/deployment-selector';
+import { Release } from '../../../models/release';
+import { getEnvironmentByName } from '../../../utils/environment';
 import '../release-note.less';
 
 export class Kvittering extends React.Component<{}> {
     render() {
+        const environment = getEnvironmentByName('q6');
         const releases: Release[] = [
-            { application: 'veilarbdialog', fromEnvironment: 'q6', toEnvironment: 'p', fromVersion: '102.20180101.1025', toVersion: '105.20180303.1017'},
-            { application: 'aktivitetsplan', fromEnvironment: 'q6', toEnvironment: 'p', fromVersion: '1024.20180101.1025', toVersion: '1035.20180303.1017'},
-            { application: 'veilaroppfolging', fromEnvironment: 'q6', toEnvironment: 'p', fromVersion: '205.20180101.1025', toVersion: '207.20180303.1017'},
-            { application: 'veilarbaktivitet', fromEnvironment: 'q6', toEnvironment: 'p', fromVersion: '312.20180101.1025', toVersion: '3.20180303.1017'},
+            { application: 'veilarbdialog', environment, fromVersion: '102.20180101.1025', toVersion: '105.20180303.1017' },
+            { application: 'aktivitetsplan', environment, fromVersion: '1024.20180101.1025', toVersion: '1035.20180303.1017' },
+            { application: 'veilaroppfolging', environment, fromVersion: '205.20180101.1025', toVersion: '207.20180303.1017' },
+            { application: 'veilarbaktivitet', environment, fromVersion: '312.20180101.1025', toVersion: '3.20180303.1017' }
         ];
 
         return (

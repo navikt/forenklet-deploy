@@ -5,12 +5,8 @@ import { EkspanderbartpanelPure } from 'nav-frontend-ekspanderbartpanel';
 import { Action } from 'redux';
 import { connect, Dispatch } from 'react-redux';
 import { GoNogoApplication } from './application';
-import { reset, openApplication, addGoApplication, addNogoApplication } from '../../../redux/gonogo-duck';
-import AppState from '../../../redux/app-state';
-import Application from '../../../application/application';
-import { selectApplicationsForRelease } from '../../../application/application-selector';
-import { selectIsLoadingInitialData } from '../../../app-event/app-event-selector';
-import { selectIsLoadingCommits } from '../../../redux/commit-duck';
+import { reset, openApplication, addGoApplication, addNogoApplication } from '../../../redux/gonogo-view-duck';
+import { AppState } from '../../../redux/reducer';
 
 interface DispatchProps {
     doReset: () => void;
@@ -23,7 +19,7 @@ interface StateProps {
     openApplication: string;
     goApplications: string[];
     nogoApplications: string[];
-    applications: Application[];
+    applications: string[];
     isLoading: boolean;
 }
 
@@ -43,8 +39,8 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
     }
 
     openNextApplication(application: string) {
-        const nextApplicationIndex = this.props.applications.findIndex(app => app.name === application) + 1;
-        const nextApplicationName = nextApplicationIndex >= this.props.applications.length ? '' : this.props.applications[nextApplicationIndex].name;
+        const nextApplicationIndex = this.props.applications.findIndex((app) => app === application) + 1;
+        const nextApplicationName = nextApplicationIndex >= this.props.applications.length ? '' : this.props.applications[nextApplicationIndex];
         this.props.doOpenApplication(nextApplicationName);
     }
 
@@ -83,7 +79,7 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
                     <Normaltekst>Team Kartlegging, registrering og oppfølging | Dato: 4. Januar 2018</Normaltekst>
                 </div>
 
-                { this.props.applications.map((app: Application) => this.createApplicationRow(app.name)) }
+                { this.props.applications.map((app: string) => this.createApplicationRow(app)) }
             </article>
         );
     }
@@ -95,17 +91,17 @@ function mapDispatchToProps(dispatch: Dispatch<Action>): DispatchProps {
         doAddGoApplication: (app: string) => dispatch(addGoApplication(app)),
         doAddNogoApplication: (app: string) => dispatch(addNogoApplication(app)),
         doOpenApplication: (app: string) => dispatch(openApplication(app))
-    }
+    };
 }
 
 function mapStateToProps(state: AppState): StateProps {
     return {
-        isLoading: (selectIsLoadingCommits(state) && false) || selectIsLoadingInitialData(state),
-        openApplication: state.gonogo.openApplication,
-        goApplications: state.gonogo.goApplications,
-        nogoApplications: state.gonogo.nogoApplications,
-        applications: selectApplicationsForRelease(state)
-    }
+        isLoading: false,
+        openApplication: state.gonogoview.openApplication,
+        goApplications: state.gonogoview.goApplications,
+        nogoApplications: state.gonogoview.nogoApplications,
+        applications: []
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoNogo);

@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Knapp } from 'nav-frontend-knapper';
-import Application from '../../application/application';
-import Environment, { DeployType } from '../../environment/environment';
+import { Environment, DeployType } from '../../models/environment';
 
 interface PromoteButtonProps {
-    application: Application;
+    application: string;
     environment: Environment;
     disabled: boolean;
 }
@@ -25,7 +24,7 @@ function PromoteButton({application, environment, disabled}: PromoteButtonProps)
     return (
         <NavLink
             className="knapp"
-            to={`/promote/${application.name}/${environment.name}`}
+            to={`/promote/${application}/${environment.name}`}
         >
             Promoter til {environment.promotesTo}
         </NavLink>

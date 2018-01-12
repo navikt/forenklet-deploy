@@ -1,8 +1,7 @@
 import { createStore, applyMiddleware, compose, Store } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import websocketMiddleware from './websocket/websocket';
 import reducer from './redux/reducer';
-import AppState from './redux/app-state';
+import { AppState } from './redux/reducer';
 
 function create() {
     /* tslint:disable-next-line */
@@ -11,7 +10,7 @@ function create() {
     const composer = useExtension ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
 
     const composed = composer(
-        applyMiddleware(thunkMiddleware, websocketMiddleware)
+        applyMiddleware(thunkMiddleware)
     );
 
     return composed(createStore)(reducer, {});

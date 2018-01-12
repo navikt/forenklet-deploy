@@ -12,10 +12,6 @@ interface GoNogoApplicationProps {
 }
 
 export class GoNogoApplication extends React.Component<GoNogoApplicationProps> {
-    componentDidMount() {
-        console.log("mounted", this.props.application);
-    }
-
     render() {
         return (
             <section>

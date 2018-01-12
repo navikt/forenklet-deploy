@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Commit from '../../dev/commit';
+import { Commit } from '../../models/commit';
 import Alder from '../alder';
 import CommitMessage from './commit-message';
 

@@ -3,12 +3,12 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import getStore from './store';
 import Routing from './routing';
-import Loader from './view/loader';
+import InitialDataLoader from './view/initial-data-loader';
 import Header from './view/header';
-import { setupMockWS } from './mock/mock-ws';
+import { setupMock } from './mock/setup-mock';
 
 if (process.env.REACT_APP_MOCK === 'true') {
-    setupMockWS();
+    setupMock();
 }
 
 const store = getStore();
@@ -16,7 +16,7 @@ const store = getStore();
 function App() {
     return (
         <Provider store={store}>
-            <Loader>
+            <InitialDataLoader>
                 <BrowserRouter>
                     <div>
                         <Header/>
@@ -25,7 +25,7 @@ function App() {
                         </section>
                     </div>
                 </BrowserRouter>
-            </Loader>
+            </InitialDataLoader>
         </Provider>
     );
 }

@@ -1,20 +1,37 @@
-import { Action, ActionType } from './actions';
-import AppState from './app-state';
+import { AppState } from './reducer';
 
 export interface ErrorState {
-    error?: string;
+    error: string | null;
 }
 
-const initialState = {};
+const initialState: ErrorState = {
+    error: null
+};
 
-export default function reducer(state: ErrorState = initialState,
-                                action: Action): ErrorState {
+export enum errorActionNames {
+    DISPLAY_ERROR = 'error/DISPLAY',
+    HIDE_ERROR = 'error/HIDE'
+}
+
+export interface DisplayErrorAction {
+    type: errorActionNames.DISPLAY_ERROR;
+    error: string;
+}
+
+export interface HideErrorAction {
+    type: errorActionNames.HIDE_ERROR;
+}
+
+type ErrorAction =
+    | DisplayErrorAction
+    | HideErrorAction;
+
+export default function reducer(state: ErrorState = initialState, action: ErrorAction): ErrorState {
     switch (action.type) {
-        case ActionType.ERROR:
-            return {
-                ...state,
-                error: action.data
-            };
+        case errorActionNames.DISPLAY_ERROR:
+            return { ...state, error: action.error };
+        case errorActionNames.HIDE_ERROR:
+            return { ...state, error: null };
         default:
             return state;
     }

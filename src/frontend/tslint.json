@@ -8,7 +8,7 @@
         "object-literal-sort-keys": false,
         "trailing-comma": false,
         "quotemark": [true, "single", "jsx-double"],
-        "max-line-length": [true, 160],
+        "max-line-length": [false],
         "max-classes-per-file": [false],
         "interface-name": [true, "never-prefix"],
         "ordered-imports": false,

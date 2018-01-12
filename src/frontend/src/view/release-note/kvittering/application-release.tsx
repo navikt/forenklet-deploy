@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Release } from '../../../deployment/deployment-selector';
-import Commit from '../../../dev/commit';
+import { Release } from '../../../models/release';
+import { Commit } from '../../../models/commit';
 import { Undertittel, UndertekstBold } from 'nav-frontend-typografi';
 import CommitsForRelease from '../../promote/commits-for-release';
 

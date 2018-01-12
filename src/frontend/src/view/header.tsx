@@ -2,13 +2,13 @@ import * as React from 'react';
 import { Action } from 'redux';
 import { Undertittel } from 'nav-frontend-typografi';
 import { connect, Dispatch } from 'react-redux';
-import AppState from '../redux/app-state';
+import { AppState } from '../redux/reducer';
 import { selectError } from '../redux/error-duck';
 import { changeShowAll } from '../redux/view-duck';
 import { Checkbox } from 'nav-frontend-skjema';
 
 interface HeaderStateProps {
-    error?: string;
+    error: string | null;
     showAll: boolean;
 }
 

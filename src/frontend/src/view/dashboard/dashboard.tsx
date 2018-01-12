@@ -1,31 +1,36 @@
 import * as React from 'react';
-import AppState from '../../redux/app-state';
+import { AppState } from '../../redux/reducer';
 import { connect } from 'react-redux';
-import Application from '../../application/application';
-import { selectApplications } from '../../application/application-selector';
-import { selectEnvironments } from '../../environment/environment-selector';
-import Environment from '../../environment/environment';
 import Deployment from './deployment';
-import { selectIsLoadingInitialData } from '../../app-event/app-event-selector';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Undertittel } from 'nav-frontend-typografi';
+import { selectIsLoadingDeploys, selectDeploys } from '../../redux/deploy-duck';
+import { selectApplicationsWithChanges } from '../../redux/selectors/application-selectors';
+import { ApplicationWithChanges } from '../../models/application';
+import { Deploy } from '../../models/deploy';
+import { getEnvironments } from '../../utils/environment';
 
 interface ApplicationRowProps {
-    application: Application;
-    environments: Environment[];
+    application: ApplicationWithChanges;
+    deploysForApp: Deploy[];
 }
 
-function ApplicationRow({ application, environments }: ApplicationRowProps) {
+function ApplicationRow({ application, deploysForApp }: ApplicationRowProps) {
+    function sortDeployByEnv(d1: Deploy, d2: Deploy): number {
+        const envs = getEnvironments();
+        return envs.indexOf(d1.environment) - envs.indexOf(d2.environment);
+    }
+
     return (
         <section className="dashboard--applicationrow blokk-m">
             <Undertittel className="blokk-xxs">{application.name}</Undertittel>
 
             <div className="dashboard--deployments">
-                {environments.map((environment) => (
+                {deploysForApp.sort(sortDeployByEnv).map((deploy) => (
                     <Deployment
-                        key={environment.name}
-                        application={application}
-                        environment={environment}
+                        key={deploy.id}
+                        application={application.name}
+                        environment={deploy.environment}
                     />
                     )
                 )}
@@ -36,9 +41,9 @@ function ApplicationRow({ application, environments }: ApplicationRowProps) {
 
 interface StateProps {
     isLoadingData: boolean;
-    applications: Application[];
-    environments: Environment[];
+    applications: ApplicationWithChanges[];
     showAll: boolean;
+    deploys: Deploy[];
 }
 
 interface DispatchProps {
@@ -47,29 +52,21 @@ interface DispatchProps {
 
 type DashboardProps = StateProps & DispatchProps;
 
-function sortApplication(a: Application, b: Application): number {
-    if(a.hasChanges !== b.hasChanges) {
-        return a.hasChanges ? -1 : 1;
-    }
-    return a.name.localeCompare(b.name);
-}
-
-function Dashboard({ applications, environments, isLoadingData, showAll}: DashboardProps) {
-    const applicationsToDisplay = applications
-        .filter((app) => app.hasChanges || showAll)
-        .sort(sortApplication);
-
+function Dashboard({ applications, isLoadingData, showAll, deploys }: DashboardProps) {
     if (isLoadingData) {
         return <NavFrontendSpinner />;
     }
 
+    const getDeploysForApp = (app: string): Deploy[] => deploys.filter((deploy) => deploy.application === app);
+    const applicationsToDisplay = applications.filter((application) => application.hasChanges || showAll);
+
     return (
         <div className="dashboard__wrapper">
-            {applicationsToDisplay.map((a) => (
+            {applicationsToDisplay.map((app) => (
                 <ApplicationRow
-                    key={a.name}
-                    application={a}
-                    environments={environments}
+                    key={app.name}
+                    application={app}
+                    deploysForApp={getDeploysForApp(app.name)}
                 />
             ))}
         </div>
@@ -77,9 +74,9 @@ function Dashboard({ applications, environments, isLoadingData, showAll}: Dashbo
 }
 
 const mapStateToProps = (state: AppState): StateProps => ({
-    isLoadingData: selectIsLoadingInitialData(state),
-    applications: selectApplications(state),
-    environments: selectEnvironments(state),
+    isLoadingData: selectIsLoadingDeploys(state),
+    applications: selectApplicationsWithChanges(state),
+    deploys: selectDeploys(state),
     showAll: state.view.showAll
 });
 
