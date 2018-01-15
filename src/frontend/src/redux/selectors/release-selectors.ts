@@ -9,8 +9,8 @@ export function selectIsLoadingRelease(state: AppState): boolean {
 export function selectReleaseWithCommits(state: AppState, application: string, env: string): ReleaseWithCommits {
     const environment = getEnvironmentByName(env);
 
-    const deployFrom = state.deploy.deploys.find((deploy) => deploy.application === application && deploy.environment.name === env);
-    const deployTo = state.deploy.deploys.find((deploy) => deploy.application === application && deploy.environment.name === environment.promotesTo);
+    const deployTo = state.deploy.deploys.find((deploy) => deploy.application === application && deploy.environment.name === env);
+    const deployFrom = state.deploy.deploys.find((deploy) => deploy.application === application && deploy.environment.name === environment.promotesTo);
 
     const commits = state.commit.commits.filter((commit) => commit.application === application);
 

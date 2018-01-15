@@ -6,9 +6,9 @@ import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 import no.nav.fo.forenkletdeploy.domain.Commit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -16,13 +16,14 @@ import java.util.stream.Stream;
 
 import static no.nav.sbl.rest.RestUtils.withClient;
 
-public class StashCommitProvider implements CommitProvider {
+@Component
+public class StashCommitProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(StashCommitProvider.class);
     private static final Integer LIMIT = 100;
 
     private Stream<StashCommit> getCommits(ApplicationConfig application, String fromTag, String toTag) {
         String url = getRestUriForRepo(application);
-        LOGGER.info("Henter commits for " + application.name);
+        LOGGER.info(String.format("Henter commits for %s (%s -> %s)", application.name, fromTag, toTag));
         try {
             return withClient(c -> c.target(url)
                     .queryParam("since", tagRef(fromTag))
@@ -37,7 +38,6 @@ public class StashCommitProvider implements CommitProvider {
         }
     }
 
-    @Override
     public List<Commit> getCommitsForRelease(ApplicationConfig application, String fromTag, String toTag) {
         return this.getCommits(application, fromTag, toTag)
                 .map(stashCommit -> mapToCommit(stashCommit, application))
@@ -55,7 +55,7 @@ public class StashCommitProvider implements CommitProvider {
         return "";
     }
 
-    public static String getLinkUriForCommit(ApplicationConfig application, String commit) {
+    private static String getLinkUriForCommit(ApplicationConfig application, String commit) {
         Pattern pattern = Pattern.compile("7999/([a-zA-Z]+)/");
         Matcher matcher = pattern.matcher(application.getGitUrl());
 

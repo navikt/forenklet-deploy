@@ -66,7 +66,10 @@ export function selectDeploys(state: AppState): Deploy[] {
     return state.deploy.deploys;
 }
 
-export function selectDeploy(state: AppState, application: string, environment: string): Deploy | undefined {
+export function selectDeploy(state: AppState, application: string, environment?: string): Deploy | undefined {
+    if (!environment) {
+        return undefined;
+    }
     return state.deploy.deploys.find((deploy) => deploy.application === application && deploy.environment.name === environment);
 }
 

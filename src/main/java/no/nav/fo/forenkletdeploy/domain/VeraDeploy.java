@@ -1,4 +1,4 @@
-package no.nav.fo.forenkletdeploy.vera;
+package no.nav.fo.forenkletdeploy.domain;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;

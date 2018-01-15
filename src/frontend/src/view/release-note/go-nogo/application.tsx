@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Hovedknapp, Fareknapp } from 'nav-frontend-knapper';
 import { UndertekstBold, Undertittel } from 'nav-frontend-typografi';
-import { getMockCommitsForApp } from '../../../mock/commit-for-release-mock';
+import { getMockCommits } from '../../../mock/commit-for-release-mock';
 import CommitsForRelease from '../../promote/commits-for-release';
 import IssuesTable from '../kvittering/issues-table';
 
@@ -23,7 +23,7 @@ export class GoNogoApplication extends React.Component<GoNogoApplicationProps> {
                     </div>
 
                     <Undertittel className="blokk-xs">Endringer i applikasjonen</Undertittel>
-                    <CommitsForRelease commits={getMockCommitsForApp(this.props.application)} />
+                    <CommitsForRelease commits={getMockCommits(this.props.application)} />
                 </div>
 
                 <Hovedknapp onClick={() => this.props.onSelectGo()}>GO!</Hovedknapp>

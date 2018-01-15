@@ -49,6 +49,7 @@
     "nav-frontend-toggle-style": "0.2.4",
     "nav-frontend-typografi": "1.0.12",
     "nav-frontend-typografi-style": "1.0.7",
+    "path-to-regexp": "2.1.0",
     "prop-types": "15.6.0",
     "query-string": "5.0.1",
     "react": "16.0.0",

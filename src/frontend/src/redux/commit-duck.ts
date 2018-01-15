@@ -1,5 +1,8 @@
 import { Commit } from '../models/commit';
 import { AppState } from './reducer';
+import { Dispatch } from 'redux';
+import { Action } from 'redux';
+import * as api from '../api/commit-api';
 
 export interface CommitState {
     loading: boolean;
@@ -62,4 +65,16 @@ export default function deployReducer(state: CommitState = initialState, action:
 
 export function selectIsLoadingDeploys(state: AppState): boolean {
     return state.commit.loading;
+}
+
+export function clearCommits(): Clear {
+    return { type: actionNames.CLEAR };
+}
+
+export function getCommitsForApplication(application: string, fromVersion: string, toVersion: string) {
+    return (dispatch: Dispatch<Action>) => {
+        dispatch({ type: actionNames.LOADING });
+        api.getCommitsForApplication(application, fromVersion, toVersion)
+            .then((commits: Commit[]) => dispatch({ type: actionNames.FETCH_SUCCESS, commits }) );
+    };
 }

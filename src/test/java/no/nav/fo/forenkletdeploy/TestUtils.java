@@ -2,15 +2,15 @@ package no.nav.fo.forenkletdeploy;
 
 import no.nav.dialogarena.config.fasit.FasitUtils;
 import no.nav.dialogarena.config.fasit.TestUser;
-import no.nav.metrics.MetricsFactory;
 
 import static java.lang.System.setProperty;
-import static no.nav.fo.forenkletdeploy.domain.StatusProvider.JIRA_PASSWORD_PROPERTY_NAME;
-import static no.nav.fo.forenkletdeploy.domain.StatusProvider.JIRA_USERNAME_PROPERTY_NAME;
 import static no.nav.metrics.MetricsFactory.DISABLE_METRICS_REPORT_KEY;
 import static no.nav.sbl.dialogarena.test.ssl.SSLTestUtils.disableCertificateChecks;
 
 public class TestUtils {
+    private static final String JIRA_USERNAME_PROPERTY_NAME = "jira.username";
+    private static final String JIRA_PASSWORD_PROPERTY_NAME = "jira.password";
+
     public static void setupContext() {
         System.setProperty("http.nonProxyHosts", "*.155.55.|*.192.168.|*.10.|*.local|*.rtv.gov|*.adeo.no|*.nav.no|*.aetat.no|*.devillo.no|*.oera.no");
         System.setProperty("http.proxyHost", "webproxy-utvikler.nav.no");

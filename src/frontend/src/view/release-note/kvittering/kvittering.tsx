@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Sidetittel, Normaltekst, Innholdstittel } from 'nav-frontend-typografi';
 import IssuesTable from './issues-table';
 import ApplicationRelease from './application-release';
-import { getMockCommitsForApp } from '../../../mock/commit-for-release-mock';
+import { getMockCommits } from '../../../mock/commit-for-release-mock';
 import { Release } from '../../../models/release';
 import { getEnvironmentByName } from '../../../utils/environment';
 import '../release-note.less';
@@ -35,7 +35,7 @@ export class Kvittering extends React.Component<{}> {
                         <ApplicationRelease
                             release={release}
                             key={release.application}
-                            commits={getMockCommitsForApp(release.application)}
+                            commits={getMockCommits('mock-app')}
                         />))
                     }
                 </section>

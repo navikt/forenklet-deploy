@@ -6,12 +6,11 @@ import no.nav.fo.forenkletdeploy.domain.Commit;
 import java.util.Arrays;
 import java.util.List;
 
-public class MockCommitProvider implements CommitProvider {
+public class MockCommitProvider {
     private static Long getMinutesAgo(Integer minutes) {
         return (System.currentTimeMillis()) - (minutes * 60 * 1000);
     }
 
-    @Override
     public List<Commit> getCommitsForRelease(ApplicationConfig application, String fromTag, String toTag) {
         String repo = application.getGitUrl();
 

@@ -1,4 +1,4 @@
-package no.nav.fo.forenkletdeploy.jira;
+package no.nav.fo.forenkletdeploy.domain;
 
 import java.util.Map;
 

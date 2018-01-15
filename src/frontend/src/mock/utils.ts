@@ -33,3 +33,24 @@ export function respondWith(handler: any) {
         return response;
     };
 }
+
+let seed = 42;
+export function seedRandom(newSeed: number) {
+    seed = newSeed;
+}
+
+export function random(): number {
+    const x = Math.sin(seed++) * 100000;
+    return x - Math.floor(x);
+}
+
+export function randRange(fromInclusive: number, toExclusive: number): number {
+    const range = toExclusive - fromInclusive;
+    return (Math.floor(random() * 10000) % range) + fromInclusive;
+}
+
+export function getSeedFromString(text: string): number {
+    return text.split('')
+        .map((c: string) => c.charCodeAt(0))
+        .reduce((sum: number, elem: number) => sum+elem, 0);
+}
