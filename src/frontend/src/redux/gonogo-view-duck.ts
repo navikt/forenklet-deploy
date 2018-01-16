@@ -42,9 +42,17 @@ export default function reducer(state: GoNogoViewState = initialState, action: V
         case actionNames.OPEN_APPLICATION:
             return {...state, openApplication: action.application};
         case actionNames.ADD_GO_APPLICATION:
-            return {...state, goApplications: state.goApplications.concat(action.application)};
+            return {
+                ...state,
+                goApplications: state.goApplications.concat(action.application),
+                nogoApplications: state.nogoApplications.filter((application) => application !== action.application)
+            };
         case actionNames.ADD_NOGO_APPLICATION:
-            return {...state, nogoApplications: state.nogoApplications.concat(action.application)};
+            return {
+                ...state, 
+                nogoApplications: state.nogoApplications.concat(action.application),
+                goApplications: state.goApplications.filter((application) => application !== action.application)
+            };
         case actionNames.RESET:
             return initialState;
         default:
