@@ -16,7 +16,7 @@ const initialState: CommitState = {
     error: null
 };
 
-enum actionNames {
+export enum actionNames {
     LOADING = 'commit/SET_PENDING',
     FETCH_SUCCESS = 'commit/FETCH_SUCCESS',
     FETCH_ERROR = 'commit/FETCH_ERROR',
@@ -74,7 +74,7 @@ export function clearCommits(): Clear {
 export function getCommitsForApplication(application: string, fromVersion: string, toVersion: string) {
     return (dispatch: Dispatch<Action>) => {
         dispatch({ type: actionNames.LOADING });
-        api.getCommitsForApplication(application, fromVersion, toVersion)
+        return api.getCommitsForApplication(application, fromVersion, toVersion)
             .then((commits: Commit[]) => dispatch({ type: actionNames.FETCH_SUCCESS, commits }) );
     };
 }

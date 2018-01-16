@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Hovedknapp, Fareknapp } from 'nav-frontend-knapper';
 import { UndertekstBold, Undertittel } from 'nav-frontend-typografi';
-import { getMockCommits } from '../../../mock/commit-for-release-mock';
 import CommitsForRelease from '../../promote/commits-for-release';
 import IssuesTable from '../kvittering/issues-table';
+import { ReleaseWithCommits } from '../../../models/release';
 
 interface GoNogoApplicationProps {
-    application: string;
+    release: ReleaseWithCommits;
     onSelectGo: () => void;
     onSelectNogo: () => void;
 }
@@ -16,14 +16,14 @@ export class GoNogoApplication extends React.Component<GoNogoApplicationProps> {
         return (
             <section>
                 <div className="blokk-s">
-                    <UndertekstBold className="blokk-xs">103.20180101.1010 til 107.20180103.1242</UndertekstBold>
+                    <UndertekstBold className="blokk-xs">{this.props.release.fromVersion} til {this.props.release.toVersion}</UndertekstBold>
                     <div className="blokk-m">
                         <Undertittel className="blokk-xxs">Brukerhistorier</Undertittel>
                         <IssuesTable />
                     </div>
 
                     <Undertittel className="blokk-xs">Endringer i applikasjonen</Undertittel>
-                    <CommitsForRelease commits={getMockCommits(this.props.application)} />
+                    <CommitsForRelease commits={this.props.release.commits} />
                 </div>
 
                 <Hovedknapp onClick={() => this.props.onSelectGo()}>GO!</Hovedknapp>

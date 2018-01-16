@@ -1,33 +1,35 @@
 import * as React from 'react';
+import { NavLink } from 'react-router-dom';
 import { Sidetittel, Normaltekst } from 'nav-frontend-typografi';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { EkspanderbartpanelPure } from 'nav-frontend-ekspanderbartpanel';
-import { Action } from 'redux';
 import { connect, Dispatch } from 'react-redux';
 import { GoNogoApplication } from './application';
 import { reset, openApplication, addGoApplication, addNogoApplication } from '../../../redux/gonogo-view-duck';
 import { AppState } from '../../../redux/reducer';
-import { selectApplicationsWithChangesForEnvironments } from '../../../redux/selectors/application-selectors';
-import { getEnvironmentByName } from '../../../utils/environment';
+import { selectAllReleasesWithCommits, getInfoForReleaseNote } from '../../../redux/releasenote-duck';
+import { ReleaseWithCommits } from '../../../models/release';
 
 interface DispatchProps {
     doReset: () => void;
     doAddGoApplication: (app: string) => void;
     doAddNogoApplication: (app: string) => void;
     doOpenApplication: (app: string) => void;
+    doGetInfoForReleaseNote: () => void;
 }
 
 interface StateProps {
     openApplication: string;
     goApplications: string[];
     nogoApplications: string[];
-    applications: string[];
+    releases: ReleaseWithCommits[];
     isLoading: boolean;
 }
 
 export class GoNogo extends React.Component<DispatchProps & StateProps> {
     componentDidMount() {
         this.props.doReset();
+        this.props.doGetInfoForReleaseNote();
     }
 
     selectGo(application: string) {
@@ -41,9 +43,13 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
     }
 
     openNextApplication(application: string) {
-        const nextApplicationIndex = this.props.applications.findIndex((app) => app === application) + 1;
-        const nextApplicationName = nextApplicationIndex >= this.props.applications.length ? '' : this.props.applications[nextApplicationIndex];
+        const nextApplicationIndex = this.props.releases.findIndex((release) => release.application === application) + 1;
+        const nextApplicationName = nextApplicationIndex >= this.props.releases.length ? '' : this.props.releases[nextApplicationIndex].application;
         this.props.doOpenApplication(nextApplicationName);
+    }
+
+    hasAssignedAllApplications(): boolean {
+        return this.props.goApplications.length + this.props.nogoApplications.length === this.props.releases.length;
     }
 
     toggleOpen(application: string) {
@@ -55,12 +61,17 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
         return this.props.openApplication === application;
     }
 
-    createApplicationRow(application: string) {
+    createApplicationRow(release: ReleaseWithCommits) {
+        const application = release.application;
+        const check = this.props.goApplications.includes(release.application) ? '✔' : '';
+        const cross = this.props.nogoApplications.includes(release.application) ? '❌' : '';
+        const title = `${application} ${check}${cross}`;
+
         return (
             <div className="release-note--application blokk-xs" key={application}>
-                <EkspanderbartpanelPure tittel={application} apen={this.isApplicationOpen(application)} onClick={() => this.toggleOpen(application)}>
+                <EkspanderbartpanelPure tittel={title} apen={this.isApplicationOpen(application)} onClick={() => this.toggleOpen(application)}>
                     <GoNogoApplication
-                        application={application}
+                        release={release}
                         onSelectGo={() => this.selectGo(application)}
                         onSelectNogo={() => this.selectNogo(application)}
                     />
@@ -81,32 +92,37 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
                     <Normaltekst>Team Kartlegging, registrering og oppfølging | Dato: 4. Januar 2018</Normaltekst>
                 </div>
 
-                { this.props.applications.map((app: string) => this.createApplicationRow(app)) }
+                { this.props.releases.map((release: ReleaseWithCommits) => this.createApplicationRow(release)) }
+                { this.hasAssignedAllApplications() &&
+                    <NavLink
+                        className="knapp"
+                        to={`/releasenote/kvittering`}
+                    >
+                        Lag Kvittering
+                    </NavLink>
+                }
             </article>
         );
     }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>): DispatchProps {
+function mapDispatchToProps(dispatch: Dispatch<any>): DispatchProps {
     return {
         doReset: () => dispatch(reset()),
         doAddGoApplication: (app: string) => dispatch(addGoApplication(app)),
         doAddNogoApplication: (app: string) => dispatch(addNogoApplication(app)),
-        doOpenApplication: (app: string) => dispatch(openApplication(app))
+        doOpenApplication: (app: string) => dispatch(openApplication(app)),
+        doGetInfoForReleaseNote: () => dispatch(getInfoForReleaseNote())
     };
 }
 
 function mapStateToProps(state: AppState): StateProps {
-    const envs = [getEnvironmentByName('q6'), getEnvironmentByName('p')];
-
     return {
         isLoading: false,
         openApplication: state.gonogoview.openApplication,
         goApplications: state.gonogoview.goApplications,
         nogoApplications: state.gonogoview.nogoApplications,
-        applications: selectApplicationsWithChangesForEnvironments(state, envs)
-            .filter((application) => application.hasChanges)
-            .map((application) => application.name)
+        releases: selectAllReleasesWithCommits(state)
     };
 }
 
