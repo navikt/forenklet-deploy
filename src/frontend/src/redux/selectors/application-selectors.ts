@@ -28,7 +28,5 @@ export function selectApplicationsWithChangesForEnvironments(state: AppState, en
 }
 
 export function selectApplicationsWithChanges(state: AppState): ApplicationWithChanges[] {
-    return selectApplicationsWithChangesForEnvironments(state, getEnvironments())
+    return selectApplicationsWithChangesForEnvironments(state, getEnvironments());
 }
-
-

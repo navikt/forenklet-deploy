@@ -49,7 +49,7 @@ export default function reducer(state: GoNogoViewState = initialState, action: V
             };
         case actionNames.ADD_NOGO_APPLICATION:
             return {
-                ...state, 
+                ...state,
                 nogoApplications: state.nogoApplications.concat(action.application),
                 goApplications: state.goApplications.filter((application) => application !== action.application)
             };

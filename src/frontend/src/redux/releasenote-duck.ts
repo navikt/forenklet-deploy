@@ -9,7 +9,6 @@ import { clearCommits, actionNames as commitAN } from './commit-duck';
 import { selectReleaseWithCommits, selectRelease } from './selectors/release-selectors';
 import { selectApplicationsWithChangesForEnvironments } from './selectors/application-selectors';
 
-
 export function selectIsLoadingReleaseNote(state: AppState): boolean {
     return state.deploy.loading || state.commit.loading;
 }
@@ -30,7 +29,7 @@ export function getInfoForReleaseNote() {
         const state = getState();
         dispatch(clearCommits());
         dispatch({ type: commitAN.LOADING });
-        
+
         const commitPromises = getApplicationsWithChanges(state)
             .map((application) => selectRelease(state, application, 'q6', 'p'))
             .map((release) => commitApi.getCommitsForApplication(release.application, release.fromVersion, release.toVersion));
