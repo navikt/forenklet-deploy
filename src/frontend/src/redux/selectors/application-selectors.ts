@@ -1,22 +1,34 @@
 import { AppState } from '../reducer';
 import { ApplicationWithChanges } from '../../models/application';
+import { getEnvironments } from '../../utils/environment';
+import { Environment } from '../../models/environment';
 
 export function selectApplications(state: AppState): string[] {
     const applications = state.deploy.deploys.map((deploy) => deploy.application);
     return Array.from(new Set(applications));
 }
 
-export function selectApplicationHasChanges(state: AppState, application: string): boolean {
-    const deploysForApp = state.deploy.deploys.filter((deploy) => deploy.application === application);
+export function selectApplicationHasChangesForEnvironments(state: AppState, application: string, envs: Environment[]): boolean {
+    const deploysForApp = state.deploy.deploys.filter((deploy) => deploy.application === application && envs.includes(deploy.environment));
     const versionsDeployed = Array.from(new Set(deploysForApp.map((deploy) => deploy.version)));
     return versionsDeployed.length > 1;
 }
 
-export function selectApplicationsWithChanges(state: AppState): ApplicationWithChanges[] {
+export function selectApplicationHasChanges(state: AppState, application: string): boolean {
+    return selectApplicationHasChangesForEnvironments(state, application, getEnvironments());
+}
+
+export function selectApplicationsWithChangesForEnvironments(state: AppState, envs: Environment[]): ApplicationWithChanges[] {
     const applications = selectApplications(state);
     return applications
         .map((application) => ({
             name: application,
-            hasChanges: selectApplicationHasChanges(state, application)
+            hasChanges: selectApplicationHasChangesForEnvironments(state, application, envs)
         }));
 }
+
+export function selectApplicationsWithChanges(state: AppState): ApplicationWithChanges[] {
+    return selectApplicationsWithChangesForEnvironments(state, getEnvironments())
+}
+
+

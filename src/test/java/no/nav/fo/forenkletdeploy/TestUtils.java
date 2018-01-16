@@ -3,6 +3,8 @@ package no.nav.fo.forenkletdeploy;
 import no.nav.dialogarena.config.fasit.FasitUtils;
 import no.nav.dialogarena.config.fasit.TestUser;
 
+import javax.servlet.ServletContext;
+
 import static java.lang.System.setProperty;
 import static no.nav.metrics.MetricsFactory.DISABLE_METRICS_REPORT_KEY;
 import static no.nav.sbl.dialogarena.test.ssl.SSLTestUtils.disableCertificateChecks;
@@ -17,6 +19,7 @@ public class TestUtils {
         System.setProperty("http.proxyPort", "8088");
         System.setProperty("https.proxyHost", "webproxy-utvikler.nav.no");
         System.setProperty("https.proxyPort", "8088");
+
         disableCertificateChecks();
 
         System.setProperty(DISABLE_METRICS_REPORT_KEY, Boolean.TRUE.toString());

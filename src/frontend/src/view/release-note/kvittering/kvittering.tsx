@@ -35,7 +35,7 @@ export class Kvittering extends React.Component<{}> {
                         <ApplicationRelease
                             release={release}
                             key={release.application}
-                            commits={getMockCommits('mock-app')}
+                            commits={getMockCommits(release.application)}
                         />))
                     }
                 </section>

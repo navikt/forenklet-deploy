@@ -59,7 +59,7 @@ function randomAuthor(): string {
 export function getMockCommits(application: string): Commit[] {
     seedRandom(getSeedFromString(application));
 
-    const numberOfCommits = randRange(3, 10);
+    const numberOfCommits = randRange(1, 7);
     const commitMessages: string[] = [];
     for(let i=0; i<numberOfCommits; i++) {
         commitMessages.push(randomCommitMessage());

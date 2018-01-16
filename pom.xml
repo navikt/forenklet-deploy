@@ -18,7 +18,7 @@
             <dependency>
                 <groupId>no.nav.sbl</groupId>
                 <artifactId>bom</artifactId>
-                <version>2017.11.28.18.33</version>
+                <version>2018.01.15.16.15</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

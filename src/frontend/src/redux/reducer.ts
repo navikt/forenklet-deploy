@@ -18,5 +18,5 @@ export default combineReducers<AppState>({
     view: viewReducer,
     deploy: deployReducer,
     commit: commitReducer,
-    gonogoView: goNogoViewReducer,
+    gonogoview: goNogoViewReducer,
 });

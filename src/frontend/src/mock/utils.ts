@@ -18,17 +18,19 @@ export function respondWith(handler: any) {
         }
 
         /* tslint:disable */
-        console.groupCollapsed(url);
-        console.groupCollapsed('config');
-        console.log('url', url);
-        console.log('config', config);
-        console.log('queryParams', queryParams);
-        console.log('bodyParams', bodyParams);
-        console.log('extra', extra);
-        console.groupEnd();
-
-        console.log('response', response);
-        console.groupEnd();
+        if (console.groupCollapsed) {
+            console.groupCollapsed(url);
+            console.groupCollapsed('config');
+            console.log('url', url);
+            console.log('config', config);
+            console.log('queryParams', queryParams);
+            console.log('bodyParams', bodyParams);
+            console.log('extra', extra);
+            console.groupEnd();
+    
+            console.log('response', response);
+            console.groupEnd();
+        }
         /* tslint:enable */
         return response;
     };

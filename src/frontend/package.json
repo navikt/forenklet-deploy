@@ -5,7 +5,7 @@
   "scripts": {
     "start:ts": "react-scripts-ts start",
     "build:ts": "react-scripts-ts build",
-    "test": "cross-env CI=true react-scripts-ts test --env=jsdom",
+    "test": "cross-env REACT_APP_MOCK=true CI=true react-scripts-ts test --env=jsdom",
     "lint": "tslint src/**/*.ts{,x} --fix",
     "test:coverage": "npm test -- --coverage",
     "eject": "react-scripts-ts eject",

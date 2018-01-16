@@ -7,6 +7,8 @@ import { connect, Dispatch } from 'react-redux';
 import { GoNogoApplication } from './application';
 import { reset, openApplication, addGoApplication, addNogoApplication } from '../../../redux/gonogo-view-duck';
 import { AppState } from '../../../redux/reducer';
+import { selectApplicationsWithChangesForEnvironments } from '../../../redux/selectors/application-selectors';
+import { getEnvironmentByName } from '../../../utils/environment';
 
 interface DispatchProps {
     doReset: () => void;
@@ -95,12 +97,16 @@ function mapDispatchToProps(dispatch: Dispatch<Action>): DispatchProps {
 }
 
 function mapStateToProps(state: AppState): StateProps {
+    const envs = [getEnvironmentByName('q6'), getEnvironmentByName('p')];
+
     return {
         isLoading: false,
         openApplication: state.gonogoview.openApplication,
         goApplications: state.gonogoview.goApplications,
         nogoApplications: state.gonogoview.nogoApplications,
-        applications: []
+        applications: selectApplicationsWithChangesForEnvironments(state, envs)
+            .filter((application) => application.hasChanges)
+            .map((application) => application.name)
     };
 }
 
