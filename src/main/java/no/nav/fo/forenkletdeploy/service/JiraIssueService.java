@@ -36,5 +36,13 @@ public class JiraIssueService {
                 .get(JiraIssues.class))
                 .issues;
     }
+
+    @SuppressWarnings("unchecked")
+    @Cacheable("jiraissue")
+    public JiraIssue getUserStory(String issueId) {
+        return withClient(c -> c.target("https://jira.adeo.no/rest/api/2/issue/" + issueId)
+                .request()
+                .get(JiraIssue.class));
+    }
 }
 

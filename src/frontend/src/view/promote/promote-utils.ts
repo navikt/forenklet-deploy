@@ -1,4 +1,4 @@
-export interface JiraIssue {
+export interface Issue {
     name: string;
     uri: string;
 }
@@ -13,7 +13,7 @@ function onlyUnique(value: string, index: number, self: string[]): boolean {
     return self.indexOf(value) === index;
 }
 
-export function getIssuesFromMessage(message: string): JiraIssue[] {
+export function getIssuesFromMessage(message: string): Issue[] {
     const results: string[] = [];
     let match;
     do {

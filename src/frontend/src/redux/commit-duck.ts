@@ -48,7 +48,7 @@ type ReleaseActions =
     | Clear
     ;
 
-export default function deployReducer(state: CommitState = initialState, action: ReleaseActions): CommitState {
+export default function commitReducer(state: CommitState = initialState, action: ReleaseActions): CommitState {
     switch (action.type) {
         case actionNames.LOADING:
             return {...state, loading: true};

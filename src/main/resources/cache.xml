@@ -7,8 +7,11 @@
     <cache alias="veradeploys" uses-template="short">
         <heap>100</heap>
     </cache>
-    <cache alias="jiraissues" uses-template="short">
+    <cache alias="jiraissues" uses-template="long">
         <heap>100</heap>
+    </cache>
+    <cache alias="jiraissue" uses-template="medium">
+        <heap>200</heap>
     </cache>
     <cache alias="applicationlist" uses-template="long">
         <heap>100</heap>
@@ -24,6 +27,11 @@
     <cache-template name="short">
         <expiry>
             <ttl unit="minutes">1</ttl>
+        </expiry>
+    </cache-template>
+    <cache-template name="medium">
+        <expiry>
+            <ttl unit="minutes">3</ttl>
         </expiry>
     </cache-template>
     <cache-template name="long">

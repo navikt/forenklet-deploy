@@ -1,19 +1,17 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { getUrlForIssue } from '../../promote/promote-utils';
+import { JiraIssue } from '../../../models/jira-issue';
+import { AppState } from '../../../redux/reducer';
+import { selectIssuesForApplication } from '../../../redux/releasenote-duck';
 
-interface JiraIssue {
-    id: string;
-    title: string;
-    status: string;
-    assignedTo: string;
+interface OwnProps {
+    application?: string;
 }
 
-const issues: JiraIssue[] = [
-    { id: 'PUS-11', title: 'Etablere metrikker for ytelse (også frontend)', status: 'Åpen', assignedTo: 'ole brumm'},
-    { id: 'PUS-12', title: 'Etablere frontendlogger', status: 'Akseptansetest', assignedTo: 'ole brumm'},
-    { id: 'PUS-27', title: 'Automatisert test av UU og brukskvalitet', status: 'Fagfellevurdering', assignedTo: 'ole brumm'},
-    { id: 'FO-123', title: 'Identifisere ikke digitale brukere', status: 'Akseptansetest', assignedTo: 'ole brumm'}
-];
+interface StateProps {
+    issues: JiraIssue[];
+}
 
 interface JiraIssueRowProps {
     issue: JiraIssue;
@@ -23,16 +21,16 @@ function JiraIssueRow({ issue }: JiraIssueRowProps) {
     return (
         <tr>
             <td className="issue">
-                <a href={getUrlForIssue(issue.id)}>{issue.id}</a>
+                <a href={getUrlForIssue(issue.id)}>{issue.key}</a>
             </td>
-            <td className="status">{issue.status}</td>
-            <td className="assigned">{issue.assignedTo}</td>
-            <td className="title">{issue.title}</td>
+            <td className="status">{issue.fields.status.name}</td>
+            <td className="assigned">{issue.fields.assignee ? issue.fields.assignee.displayName : 'UKJENT'}</td>
+            <td className="title">{issue.fields.summary}</td>
         </tr>
     );
 }
 
-export class IssuesTable extends React.Component<{}> {
+export class IssuesTable extends React.Component<OwnProps & StateProps> {
     render() {
         return (
             <table className="issues-table">
@@ -45,11 +43,17 @@ export class IssuesTable extends React.Component<{}> {
                     </tr>
                 </thead>
                 <tbody>
-                    { issues.map((issue) => <JiraIssueRow issue={issue} key={issue.id} />) }
+                    { this.props.issues.map((issue) => <JiraIssueRow issue={issue} key={issue.id} />) }
                 </tbody>
             </table>
         );
     }
 }
 
-export default IssuesTable;
+function mapStateToProps(state: AppState, ownProps: OwnProps): StateProps {
+    return {
+        issues: ownProps.application ? selectIssuesForApplication(state, ownProps.application) : state.jira.issues
+    };
+}
+
+export default connect(mapStateToProps)(IssuesTable);

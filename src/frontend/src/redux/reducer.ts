@@ -4,6 +4,7 @@ import viewReducer, { ViewState } from './view-duck';
 import goNogoViewReducer, { GoNogoViewState } from './gonogo-view-duck';
 import deployReducer, { DeployState } from './deploy-duck';
 import commitReducer, { CommitState } from './commit-duck';
+import jiraIssueReducer, { JiraIssueState } from './jira-issue-duck';
 
 export interface AppState {
     error: ErrorState;
@@ -11,6 +12,7 @@ export interface AppState {
     deploy: DeployState;
     commit: CommitState;
     gonogoview: GoNogoViewState;
+    jira: JiraIssueState;
 }
 
 export default combineReducers<AppState>({
@@ -19,4 +21,5 @@ export default combineReducers<AppState>({
     deploy: deployReducer,
     commit: commitReducer,
     gonogoview: goNogoViewReducer,
+    jira: jiraIssueReducer
 });
