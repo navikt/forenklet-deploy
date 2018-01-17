@@ -58,6 +58,6 @@ public class DeployResource {
                 .filter(deploy -> deploy.application.equalsIgnoreCase(application))
                 .filter(deploy -> deploy.environment.equalsIgnoreCase(environment))
                 .findFirst()
-                .orElseThrow(() -> (new NotFoundException(String.format("Fant ikke VeraDeploy for %s i %s", application, environment))));
+                .orElseThrow(() -> new NotFoundException(String.format("Fant ikke VeraDeploy for %s i %s", application, environment)));
     }
 }
