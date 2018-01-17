@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { Release } from '../../../models/release';
-import { Commit } from '../../../models/commit';
+import { ReleaseWithCommits } from '../../../models/release';
 import { Undertittel, UndertekstBold } from 'nav-frontend-typografi';
 import CommitsForRelease from '../../promote/commits-for-release';
 
 interface ApplicationReleaseProps {
-    release: Release;
-    commits: Commit[];
+    release: ReleaseWithCommits;
 }
 
 export default function ApplicationRelease(props: ApplicationReleaseProps) {
@@ -14,7 +12,7 @@ export default function ApplicationRelease(props: ApplicationReleaseProps) {
         <section className="application blokk-l">
             <Undertittel className="blokk-xxs">{props.release.application}</Undertittel>
             <UndertekstBold className="blokk-xs">{props.release.fromVersion} til {props.release.toVersion}</UndertekstBold>
-            <CommitsForRelease commits={props.commits} />
+            <CommitsForRelease commits={props.release.commits} />
         </section>
     );
 }

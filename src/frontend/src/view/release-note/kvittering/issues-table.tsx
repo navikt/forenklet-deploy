@@ -21,7 +21,7 @@ function JiraIssueRow({ issue }: JiraIssueRowProps) {
     return (
         <tr>
             <td className="issue">
-                <a href={getUrlForIssue(issue.id)}>{issue.key}</a>
+                <a href={getUrlForIssue(issue.key)}>{issue.key}</a>
             </td>
             <td className="status">{issue.fields.status.name}</td>
             <td className="assigned">{issue.fields.assignee ? issue.fields.assignee.displayName : 'Ikke tildelt'}</td>
