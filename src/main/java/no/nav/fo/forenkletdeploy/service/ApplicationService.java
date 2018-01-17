@@ -36,12 +36,7 @@ public class ApplicationService {
                         .gitUrl(e.getValue().get("gitUrl"))
                         .build()
                 )
-                .filter(ApplicationService::isNotTextApplication)
                 .collect(toList());
-    }
-
-    private static boolean isNotTextApplication(ApplicationConfig app) {
-        return !(app.name.endsWith("tekster") || app.name.endsWith("-vilkar"));
     }
 }
 

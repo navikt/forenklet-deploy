@@ -85,8 +85,8 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
             return <NavFrontendSpinner />;
         }
 
-        const uriAppParam = this.props.goApplications.map((application) => `app[]=${application}`).join('&');
-        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+        const uriAppParam = this.props.goApplications.map((application) => `app[]=${application}`).join('&')
+        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };    
 
         return (
             <article className="release-note">
