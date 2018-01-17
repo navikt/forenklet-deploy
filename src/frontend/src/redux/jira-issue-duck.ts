@@ -45,7 +45,7 @@ type JiraActions =
 
 export function onlyUniqueIssues(issues: JiraIssue[]): JiraIssue[] {
     return onlyUnique(issues.map((issue) => issue.key))
-        .map((issuekey) => issues.find((issue) => issue.key === issuekey)!)
+        .map((issuekey) => issues.find((issue) => issue.key === issuekey)!);
 }
 
 export default function jiraIssueReducer(state: JiraIssueState = initialState, action: JiraActions): JiraIssueState {

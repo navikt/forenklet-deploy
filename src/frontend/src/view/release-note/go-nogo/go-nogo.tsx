@@ -85,18 +85,21 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
             return <NavFrontendSpinner />;
         }
 
+        const uriAppParam = this.props.goApplications.map((application) => `app[]=${application}`).join('&');
+        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+
         return (
             <article className="release-note">
                 <div className="blokk-m">
                     <Sidetittel className="blokk-xxs">Go-nogo Forenklet Oppfølging</Sidetittel>
-                    <Normaltekst>Team Kartlegging, registrering og oppfølging | Dato: 4. Januar 2018</Normaltekst>
+                    <Normaltekst>Team Kartlegging, registrering og oppfølging | Dato: {(new Date()).toLocaleDateString('nb-NO', dateOptions)}</Normaltekst>
                 </div>
 
                 { this.props.releases.map((release: ReleaseWithCommits) => this.createApplicationRow(release)) }
                 { this.hasAssignedAllApplications() &&
                     <NavLink
                         className="knapp"
-                        to={`/releasenote/kvittering`}
+                        to={`/releasenote/kvittering?${uriAppParam}`}
                     >
                         Lag Kvittering
                     </NavLink>
