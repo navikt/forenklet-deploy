@@ -63,7 +63,7 @@
     "reselect": "3.0.1",
     "whatwg-fetch": "2.0.3"
   },
-  "homepage": "./",
+  "homepage": "/",
   "devDependencies": {
     "@types/classnames": "2.2.3",
     "@types/fetch-mock": "5.12.2",
