@@ -4,9 +4,10 @@ import { getUrlForIssue } from '../../promote/promote-utils';
 import { JiraIssue } from '../../../models/jira-issue';
 import { AppState } from '../../../redux/reducer';
 import { selectIssuesForApplication } from '../../../redux/releasenote-duck';
+import { onlyUniqueIssues } from '../../../redux/jira-issue-duck';
 
 interface OwnProps {
-    application?: string;
+    applications: string[];
 }
 
 interface StateProps {
@@ -30,8 +31,14 @@ function JiraIssueRow({ issue }: JiraIssueRowProps) {
     );
 }
 
+function sortByStatus(issueA: JiraIssue, issueB: JiraIssue): number {
+    return issueA.fields.status.name.localeCompare(issueB.fields.status.name);
+}
+
 export class IssuesTable extends React.Component<OwnProps & StateProps> {
     render() {
+        const sortesIssues = onlyUniqueIssues(this.props.issues).sort(sortByStatus);
+
         return (
             <table className="issues-table">
                 <thead>
@@ -43,7 +50,7 @@ export class IssuesTable extends React.Component<OwnProps & StateProps> {
                     </tr>
                 </thead>
                 <tbody>
-                    { this.props.issues.map((issue) => <JiraIssueRow issue={issue} key={issue.id} />) }
+                    { sortesIssues.map((issue) => <JiraIssueRow issue={issue} key={issue.key} />) }
                 </tbody>
             </table>
         );
@@ -52,7 +59,9 @@ export class IssuesTable extends React.Component<OwnProps & StateProps> {
 
 function mapStateToProps(state: AppState, ownProps: OwnProps): StateProps {
     return {
-        issues: ownProps.application ? selectIssuesForApplication(state, ownProps.application) : state.jira.issues
+        issues: ownProps.applications
+            .map((application) => selectIssuesForApplication(state, application))
+            .reduce((agg, current) => agg.concat(current), [])
     };
 }
 

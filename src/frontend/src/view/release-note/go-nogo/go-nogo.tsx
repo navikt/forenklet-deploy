@@ -7,7 +7,7 @@ import { connect, Dispatch } from 'react-redux';
 import { GoNogoApplication } from './application';
 import { reset, openApplication, addGoApplication, addNogoApplication } from '../../../redux/gonogo-view-duck';
 import { AppState } from '../../../redux/reducer';
-import { selectAllReleasesWithCommits, getInfoForReleaseNote } from '../../../redux/releasenote-duck';
+import { selectAllReleasesWithCommits } from '../../../redux/releasenote-duck';
 import { ReleaseWithCommits } from '../../../models/release';
 
 interface DispatchProps {
@@ -15,7 +15,6 @@ interface DispatchProps {
     doAddGoApplication: (app: string) => void;
     doAddNogoApplication: (app: string) => void;
     doOpenApplication: (app: string) => void;
-    doGetInfoForReleaseNote: () => void;
 }
 
 interface StateProps {
@@ -29,7 +28,6 @@ interface StateProps {
 export class GoNogo extends React.Component<DispatchProps & StateProps> {
     componentDidMount() {
         this.props.doReset();
-        this.props.doGetInfoForReleaseNote();
     }
 
     selectGo(application: string) {
@@ -85,8 +83,8 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
             return <NavFrontendSpinner />;
         }
 
-        const uriAppParam = this.props.goApplications.map((application) => `app[]=${application}`).join('&')
-        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };    
+        const uriAppParam = this.props.goApplications.map((application) => `app[]=${application}`).join('&');
+        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
 
         return (
             <article className="release-note">
@@ -114,8 +112,7 @@ function mapDispatchToProps(dispatch: Dispatch<any>): DispatchProps {
         doReset: () => dispatch(reset()),
         doAddGoApplication: (app: string) => dispatch(addGoApplication(app)),
         doAddNogoApplication: (app: string) => dispatch(addNogoApplication(app)),
-        doOpenApplication: (app: string) => dispatch(openApplication(app)),
-        doGetInfoForReleaseNote: () => dispatch(getInfoForReleaseNote())
+        doOpenApplication: (app: string) => dispatch(openApplication(app))
     };
 }
 

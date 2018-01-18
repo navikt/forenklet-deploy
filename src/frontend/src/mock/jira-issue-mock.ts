@@ -10,7 +10,7 @@ export function getMockIssue(issueId: string): JiraIssue {
     seedRandom(getSeedFromString(issueId));
     return {
         key: issueId,
-        id: randRange(100, 5000).toString(),
+        id: randRange(100, 500000).toString(),
         fields: {
             assignee: { displayName: randomAuthor() },
             status: { name: randomStatus() },

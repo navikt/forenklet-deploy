@@ -10,6 +10,7 @@ import { AppState } from '../../../redux/reducer';
 import { selectReleasesWithCommits } from '../../../redux/releasenote-duck';
 
 interface KvitteringProps {
+    applications: string[];
     releases: ReleaseWithCommits[];
 }
 
@@ -26,8 +27,7 @@ export class Kvittering extends React.Component<KvitteringProps> {
 
                 <section className="release-note--issues blokk-l">
                     <Innholdstittel className="blokk-s">Brukerhistorier i leveransen</Innholdstittel>
-                    <IssuesTable />
-
+                    <IssuesTable applications={this.props.applications} />
                 </section>
                 <section className="release-note--applications">
                     <Innholdstittel className="blokk-s">Applikasjoner i leveransen</Innholdstittel>
@@ -45,9 +45,10 @@ export class Kvittering extends React.Component<KvitteringProps> {
 
 function mapStateToProps(state: AppState): KvitteringProps {
     const query = queryString.parse(window.location.search, { arrayFormat: 'bracket' });
-    const apps =  query.app ? query.app : [];
+    const apps =  query['app[]'] ? query['app[]'] : [];
 
     return {
+        applications: apps,
         releases: selectReleasesWithCommits(state, apps)
     };
 }

@@ -28,8 +28,7 @@ export function selectAllReleasesWithCommits(state: AppState): ReleaseWithCommit
 }
 
 export function selectReleasesWithCommits(state: AppState, applications: string[]): ReleaseWithCommits[] {
-    return state.gonogoview.goApplications
-        .map((application) => selectReleaseWithCommits(state, application, 'q6', 'p'));
+    return applications.map((application) => selectReleaseWithCommits(state, application, 'q6', 'p'));
 }
 
 export function selectIssuesForApplication(state: AppState, application: string): JiraIssue[] {
