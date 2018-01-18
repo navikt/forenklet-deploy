@@ -45,7 +45,7 @@ export class Kvittering extends React.Component<KvitteringProps> {
 
 function mapStateToProps(state: AppState): KvitteringProps {
     const query = queryString.parse(window.location.search, { arrayFormat: 'bracket' });
-    const apps =  query['app[]'] ? query['app[]'] : [];
+    const apps =  query.app? query.app : [];
 
     return {
         applications: apps,

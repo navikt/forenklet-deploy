@@ -15,4 +15,4 @@ function Routing(props: RouteComponentProps<{}>) {
     );
 }
 
-export default withRouter<{}>(Routing);
+export default withRouter(Routing);
