@@ -15,24 +15,20 @@ interface OwnProps {
 }
 
 interface StateProps {
-    deploy: Deploy;
+    deploy?: Deploy;
     deployNextEnv?: Deploy | null;
 }
 
 function Deployment(props: OwnProps & StateProps) {
-    if (!props.deploy) {
-        return null;
-    }
-
-    const hasChanges = props.deployNextEnv && props.deployNextEnv.version !== props.deploy.version;
+    const hasChanges = props.deploy && props.environment.promotesTo && (props.deployNextEnv == null || props.deploy.version !== props.deployNextEnv.version);
 
     return (
         <EtikettSuksess className="deployment">
-            <Element className="blokk-xxs">{props.deploy.environment.name.toUpperCase()}</Element>
-            <Normaltekst className="blokk-xxs">{props.deploy.version}</Normaltekst>
-            <Normaltekst className="blokk-xs">Deployet for <Alder alder={props.deploy.timestamp}/> siden</Normaltekst>
+            <Element className="blokk-xxs">{props.environment.name.toUpperCase()}</Element>
+            <Normaltekst className="blokk-xxs">{ props.deploy ? props.deploy.version : 'Ikke deployet' }</Normaltekst>
+            { props.deploy && <Normaltekst className="blokk-xs">Deployet for <Alder alder={props.deploy.timestamp}/> siden</Normaltekst> }
 
-            { props.deployNextEnv &&
+            { props.environment.promotesTo && props.deploy &&
                 <PromoteButton
                     application={props.application}
                     environment={props.deploy.environment}

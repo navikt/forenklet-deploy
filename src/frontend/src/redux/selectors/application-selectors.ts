@@ -11,7 +11,8 @@ export function selectApplications(state: AppState): string[] {
 export function selectApplicationHasChangesForEnvironments(state: AppState, application: string, envs: Environment[]): boolean {
     const deploysForApp = state.deploy.deploys.filter((deploy) => deploy.application === application && envs.includes(deploy.environment));
     const versionsDeployed = Array.from(new Set(deploysForApp.map((deploy) => deploy.version)));
-    return versionsDeployed.length > 1;
+    const notDeployedToProd = deploysForApp.find((deploy) => deploy.environment.name === 'p') == null;
+    return versionsDeployed.length > 1 || (notDeployedToProd && versionsDeployed.length >= 1);
 }
 
 export function selectApplicationHasChanges(state: AppState, application: string): boolean {

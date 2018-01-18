@@ -9,6 +9,7 @@ import { selectApplicationsWithChanges } from '../../redux/selectors/application
 import { ApplicationWithChanges } from '../../models/application';
 import { Deploy } from '../../models/deploy';
 import { getEnvironments } from '../../utils/environment';
+import { Environment } from '../../models/environment';
 
 interface ApplicationRowProps {
     application: ApplicationWithChanges;
@@ -16,21 +17,16 @@ interface ApplicationRowProps {
 }
 
 function ApplicationRow({ application, deploysForApp }: ApplicationRowProps) {
-    function sortDeployByEnv(d1: Deploy, d2: Deploy): number {
-        const envs = getEnvironments();
-        return envs.indexOf(d1.environment) - envs.indexOf(d2.environment);
-    }
-
     return (
         <section className="dashboard--applicationrow blokk-m">
             <Undertittel className="blokk-xxs">{application.name}</Undertittel>
 
             <div className="dashboard--deployments">
-                {deploysForApp.sort(sortDeployByEnv).map((deploy) => (
+                {getEnvironments().map((env: Environment) => (
                     <Deployment
-                        key={deploy.id}
+                        key={`${application.name}-${env.name}`}
                         application={application.name}
-                        environment={deploy.environment}
+                        environment={env}
                     />
                     )
                 )}

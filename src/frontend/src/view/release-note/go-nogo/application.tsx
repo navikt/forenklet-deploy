@@ -13,10 +13,11 @@ interface GoNogoApplicationProps {
 
 export class GoNogoApplication extends React.Component<GoNogoApplicationProps> {
     render() {
+        const fromVersion = this.props.release.fromVersion ? this.props.release.fromVersion : '0.0.0';
         return (
             <section>
                 <div className="blokk-s">
-                    <UndertekstBold className="blokk-xs">{this.props.release.fromVersion} til {this.props.release.toVersion}</UndertekstBold>
+                    <UndertekstBold className="blokk-xs">{fromVersion} til {this.props.release.toVersion}</UndertekstBold>
                     <div className="blokk-m">
                         <Undertittel className="blokk-xxs">Brukerhistorier</Undertittel>
                         <IssuesTable applications={[this.props.release.application]} />

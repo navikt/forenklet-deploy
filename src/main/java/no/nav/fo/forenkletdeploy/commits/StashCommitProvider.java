@@ -19,7 +19,7 @@ import static no.nav.sbl.rest.RestUtils.withClient;
 @Component
 public class StashCommitProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(StashCommitProvider.class);
-    private static final Integer LIMIT = 100;
+    private static final Integer LIMIT = 1000;
 
     private Stream<StashCommit> getCommits(ApplicationConfig application, String fromTag, String toTag) {
         String url = getRestUriForRepo(application);
@@ -67,7 +67,7 @@ public class StashCommitProvider {
     }
 
     private static String tagRef(String tag) {
-        return "refs%2Ftags%2F" + tag;
+        return "null".equalsIgnoreCase(tag) ? "" : "refs%2Ftags%2F" + tag;
     }
 
     private static String getNameForCommit(StashCommit commit) {

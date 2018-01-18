@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Commit } from '../../models/commit';
 import Alder from '../alder';
 import CommitMessage from './commit-message';
+import { Normaltekst } from 'nav-frontend-typografi';
 
 interface CommitRowProps {
     commit: Commit;
@@ -25,25 +26,30 @@ function CommitsForRelease(props: CommitsForReleaseProps) {
     const filterMergeCommits = (commit: Commit) => !commit.mergecommit;
     const sortByTimestamp = (a: Commit, b: Commit) => b.timestamp - a.timestamp;
 
+    const filteredCommits = props.commits.filter(filterMergeCommits);
+    const commitsToDisplay =filteredCommits
+        .sort(sortByTimestamp)
+        .slice(0, 30);
+
+    const harSkjultCommits = commitsToDisplay.length < filteredCommits.length;
+
     return (
-        <table className={`commits-table ${props.className}`}>
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Melding</th>
-                    <th>Utvikler</th>
-                    <th>Tidspunkt</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    props.commits
-                        .sort(sortByTimestamp)
-                        .filter(filterMergeCommits)
-                        .map((commit) => <CommitRow key={commit.hash} commit={commit} />)
-                }
-            </tbody>
-        </table>
+        <div>
+            <table className={`commits-table ${props.className}`}>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Melding</th>
+                        <th>Utvikler</th>
+                        <th>Tidspunkt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    { commitsToDisplay.map((commit) => <CommitRow key={commit.hash} commit={commit} />) }
+                </tbody>
+            </table>
+            { harSkjultCommits && <Normaltekst>Skjuler {filteredCommits.length - commitsToDisplay.length} endringer</Normaltekst> }
+        </div>
     );
 }
 
