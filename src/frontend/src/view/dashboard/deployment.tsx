@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Element, Normaltekst } from 'nav-frontend-typografi';
-import { EtikettSuksess } from 'nav-frontend-etiketter';
+import Etikett from 'nav-frontend-etiketter';
 import { Deploy } from '../../models/deploy';
 import { AppState } from '../../redux/reducer';
 import { Environment } from '../../models/environment';
@@ -23,7 +23,7 @@ function Deployment(props: OwnProps & StateProps) {
     const hasChanges = props.deploy && props.environment.promotesTo && (props.deployNextEnv == null || props.deploy.version !== props.deployNextEnv.version);
 
     return (
-        <EtikettSuksess className="deployment">
+        <Etikett type={ props.deploy ? 'suksess' : 'info' } className="deployment">
             <Element className="blokk-xxs">{props.environment.name.toUpperCase()}</Element>
             <Normaltekst className="blokk-xxs">{ props.deploy ? props.deploy.version : 'Ikke deployet' }</Normaltekst>
             { props.deploy && <Normaltekst className="blokk-xs">Deployet for <Alder alder={props.deploy.timestamp}/> siden</Normaltekst> }
@@ -35,7 +35,7 @@ function Deployment(props: OwnProps & StateProps) {
                     disabled={!hasChanges}
                 />
             }
-        </EtikettSuksess>
+        </Etikett>
     );
 }
 
