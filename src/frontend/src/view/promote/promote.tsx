@@ -45,7 +45,8 @@ class Promote extends React.PureComponent<PromoteProps> {
 
         const app = props.release.application;
         const env = props.release.environment.promotesTo;
-        const linkUrl = `http://bekkci.devillo.no/job/forenklet_oppfolging/job/${app}/job/-promotering-${env}-/`;
+        const buildName = env === 'p' ? '-release-' : `-promotering-${env}-`;
+        const linkUrl = `http://bekkci.devillo.no/job/forenklet_oppfolging/job/${app}/job/${buildName}/`;
 
         return (
             <section>
