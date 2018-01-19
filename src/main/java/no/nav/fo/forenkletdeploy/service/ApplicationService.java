@@ -4,6 +4,7 @@ import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,13 @@ import static no.nav.sbl.rest.RestUtils.withClient;
 
 @Component
 public class ApplicationService {
+    private static List<String> IGNORED_APPLICATIONS = Arrays.asList(
+            "modiacontextholder",
+            "modiaeventdistribution",
+            "internarbeidsflatedecorator",
+            "veilarbdemo"
+    );
+
     @SuppressWarnings("unchecked")
     @Cacheable("applicationlist")
     public List<ApplicationConfig> getApps() {
@@ -36,7 +44,12 @@ public class ApplicationService {
                         .gitUrl(e.getValue().get("gitUrl"))
                         .build()
                 )
+                .filter(ApplicationService::applicationIsNotIgnored)
                 .collect(toList());
+    }
+
+    private static boolean applicationIsNotIgnored(ApplicationConfig applicationConfig) {
+        return !IGNORED_APPLICATIONS.contains(applicationConfig.name);
     }
 }
 
