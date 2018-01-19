@@ -31,6 +31,7 @@ public class JiraIssueResource {
     @Path("/{issueid}")
     public JiraIssue getJiraIssue(@PathParam("issueid") String issueid) {
         JiraIssue issue = jiraIssueService.getUserStory(issueid);
+        issue.key = issueid; // Av og til er issues renamet
         return issue;
     }
 }

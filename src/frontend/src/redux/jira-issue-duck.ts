@@ -72,7 +72,7 @@ export function selectIssue(state: AppState, issue: string): JiraIssue | undefin
 export function getIssues(issueIds: string[]) {
     return (dispatch: Dispatch<Action>) => {
         dispatch({ type: actionNames.LOADING });
-        const issuePromises = issueIds.map(api.getJiraIssue);
+        const issuePromises = onlyUnique(issueIds).map(api.getJiraIssue);
 
         Promise.all(issuePromises)
             .then((issues: JiraIssue[]) => dispatch({ type: actionNames.FETCH_SUCCESS, issues }));
