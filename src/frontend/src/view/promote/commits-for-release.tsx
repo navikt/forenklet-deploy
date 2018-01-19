@@ -25,9 +25,12 @@ interface CommitsForReleaseProps {
 function CommitsForRelease(props: CommitsForReleaseProps) {
     const filterMergeCommits = (commit: Commit) => !commit.mergecommit;
     const sortByTimestamp = (a: Commit, b: Commit) => b.timestamp - a.timestamp;
+    const filterJenkinsCommits = (commit: Commit) => commit.author !== 'jenkins';
 
-    const filteredCommits = props.commits.filter(filterMergeCommits);
-    const commitsToDisplay =filteredCommits
+    const filteredCommits = props.commits
+        .filter(filterMergeCommits)
+        .filter(filterJenkinsCommits);
+    const commitsToDisplay = filteredCommits
         .sort(sortByTimestamp)
         .slice(0, 30);
 
