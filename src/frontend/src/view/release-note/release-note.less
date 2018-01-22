@@ -1,11 +1,18 @@
-.issues-table {
+.table {
     width: 100%;
     text-align: left;
+    page-break-inside: avoid;
 
     td, th {
         padding: 0.5rem;
     }
 
+    tr:nth-of-type(2n), th {
+        background: @navGra20;
+    }
+}
+
+.issues-table {
     .issue {
         width: 8rem;
     }
@@ -16,15 +23,5 @@
 
     .assigned {
         width: 10rem;
-    }
-
-    tr:nth-of-type(2n), th {
-        background: @navGra20;
-    }
-}
-
-.release-note--applications {
-    .application {
-        page-break-inside: avoid;
     }
 }

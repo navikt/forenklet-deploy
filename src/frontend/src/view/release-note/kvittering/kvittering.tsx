@@ -3,19 +3,18 @@ import { connect } from 'react-redux';
 import * as queryString from 'query-string';
 import { Sidetittel, Normaltekst, Innholdstittel } from 'nav-frontend-typografi';
 import IssuesTable from './issues-table';
-import ApplicationRelease from './application-release';
-import { ReleaseWithCommits } from '../../../models/release';
+import ApplicationReleases from './application-release';
+import { Release } from '../../../models/release';
 import '../release-note.less';
 import { AppState } from '../../../redux/reducer';
-import { selectReleasesWithCommits } from '../../../redux/releasenote-duck';
+import { selectReleases } from '../../../redux/releasenote-duck';
 
 interface KvitteringProps {
     applications: string[];
-    releases: ReleaseWithCommits[];
+    releases: Release[];
 }
 
 export class Kvittering extends React.Component<KvitteringProps> {
-
     render() {
         const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
         return (
@@ -31,12 +30,7 @@ export class Kvittering extends React.Component<KvitteringProps> {
                 </section>
                 <section className="release-note--applications">
                     <Innholdstittel className="blokk-s">Applikasjoner i leveransen</Innholdstittel>
-                    { this.props.releases.map((release) => (
-                        <ApplicationRelease
-                            release={release}
-                            key={release.application}
-                        />))
-                    }
+                    <ApplicationReleases releases={this.props.releases} />
                 </section>
             </article>
         );
@@ -49,7 +43,7 @@ function mapStateToProps(state: AppState): KvitteringProps {
 
     return {
         applications: apps,
-        releases: selectReleasesWithCommits(state, apps)
+        releases: selectReleases(state, apps)
     };
 }
 

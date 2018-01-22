@@ -17,7 +17,7 @@ export class GoNogoApplication extends React.Component<GoNogoApplicationProps> {
         return (
             <section>
                 <div className="blokk-s">
-                    <UndertekstBold className="blokk-xs">{fromVersion} til {this.props.release.toVersion}</UndertekstBold>
+                    <UndertekstBold className="blokk-xs">{fromVersion} (P) til {this.props.release.toVersion} (Q6)</UndertekstBold>
                     <div className="blokk-m">
                         <Undertittel className="blokk-xxs">Brukerhistorier</Undertittel>
                         <IssuesTable applications={[this.props.release.application]} />

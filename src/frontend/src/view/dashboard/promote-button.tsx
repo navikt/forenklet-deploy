@@ -26,7 +26,7 @@ function PromoteButton({application, environment, disabled}: PromoteButtonProps)
             className="knapp"
             to={`/promote/${application}/${environment.name}`}
         >
-            Promoter til {environment.promotesTo}
+            Vis endring til {environment.promotesTo}
         </NavLink>
     );
 }

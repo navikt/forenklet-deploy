@@ -1,18 +1,41 @@
 import * as React from 'react';
-import { ReleaseWithCommits } from '../../../models/release';
-import { Undertittel, UndertekstBold } from 'nav-frontend-typografi';
-import CommitsForRelease from '../../promote/commits-for-release';
+import { Release } from '../../../models/release';
+
+interface ApplicationReleaseRowProps {
+    release: Release;
+}
+
+function getVersion(version: string | null): string {
+    return version == null || version === '' ? 'Ikke prodsatt enda' : version;
+}
+
+function ApplicationReleaseRow(props: ApplicationReleaseRowProps) {
+    return (
+        <tr>
+            <td>{ props.release.application }</td>
+            <td>{ props.release.toVersion }</td>
+            <td>{ getVersion(props.release.fromVersion) }</td>
+        </tr>
+    );
+}
 
 interface ApplicationReleaseProps {
-    release: ReleaseWithCommits;
+    releases: Release[];
 }
 
 export default function ApplicationRelease(props: ApplicationReleaseProps) {
     return (
-        <section className="application blokk-l">
-            <Undertittel className="blokk-xxs">{props.release.application}</Undertittel>
-            <UndertekstBold className="blokk-xs">{props.release.fromVersion} til {props.release.toVersion}</UndertekstBold>
-            <CommitsForRelease commits={props.release.commits} />
-        </section>
+        <table className="table release-table">
+            <thead>
+                <tr>
+                    <th className="application">Applikasjonsnavn</th>
+                    <th className="releaseversion">Versjon som prodsettes</th>
+                    <th className="currentversion">Versjon i P</th>
+                </tr>
+            </thead>
+            <tbody>
+                { props.releases.map((release) => <ApplicationReleaseRow release={release} key={`${release.application}-${release.fromVersion}`} />) }
+            </tbody>
+        </table>
     );
 }

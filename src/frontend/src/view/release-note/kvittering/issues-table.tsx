@@ -40,7 +40,7 @@ export class IssuesTable extends React.Component<OwnProps & StateProps> {
         const sortesIssues = onlyUniqueIssues(this.props.issues).sort(sortByStatus);
 
         return (
-            <table className="issues-table">
+            <table className="table issues-table">
                 <thead>
                     <tr>
                         <th className="issue">Issue</th>
