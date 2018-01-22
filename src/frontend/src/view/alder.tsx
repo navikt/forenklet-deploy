@@ -8,8 +8,12 @@ interface AlderProps {
     alder: number;
 }
 
+export function getAlder(age: number): string {
+    return moment(age).fromNow(true);
+}
+
 function Alder({alder}: AlderProps) {
-    return <span>{moment(alder).fromNow(true)}</span>;
+    return <span>{getAlder(alder)}</span>;
 }
 
 export default Alder;
