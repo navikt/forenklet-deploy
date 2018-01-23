@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Commit } from '../../models/commit';
 import Alder from '../alder';
 import CommitMessage from './commit-message';
-import { Normaltekst } from 'nav-frontend-typografi';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 interface CommitRowProps {
     commit: Commit;
@@ -37,7 +37,8 @@ function CommitsForRelease(props: CommitsForReleaseProps) {
     const harSkjultCommits = commitsToDisplay.length < filteredCommits.length;
 
     return (
-        <div>
+        <div className="blokk-m">
+            <Undertittel className="blokk-xxs">Endringer ({ props.commits.length }):</Undertittel>
             <table className={`commits-table ${props.className}`}>
                 <thead>
                     <tr>

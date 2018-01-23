@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as queryString from 'query-string';
-import { Sidetittel, Normaltekst, Innholdstittel } from 'nav-frontend-typografi';
+import { Sidetittel, Normaltekst } from 'nav-frontend-typografi';
 import IssuesTable from './issues-table';
 import ApplicationReleases from './application-release';
 import { Release } from '../../../models/release';
@@ -24,14 +24,8 @@ export class Kvittering extends React.Component<KvitteringProps> {
                     <Normaltekst>Team Kartlegging, registrering og oppfølging | Dato: {(new Date()).toLocaleDateString('nb-NO', dateOptions)}</Normaltekst>
                 </div>
 
-                <section className="release-note--issues blokk-l">
-                    <Innholdstittel className="blokk-s">Brukerhistorier i leveransen</Innholdstittel>
-                    <IssuesTable applications={this.props.applications} />
-                </section>
-                <section className="release-note--applications">
-                    <Innholdstittel className="blokk-s">Applikasjoner i leveransen</Innholdstittel>
-                    <ApplicationReleases releases={this.props.releases} />
-                </section>
+                <IssuesTable applications={this.props.applications} />
+                <ApplicationReleases releases={this.props.releases} />
             </article>
         );
     }

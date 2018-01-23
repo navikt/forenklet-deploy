@@ -17,7 +17,6 @@ public class VeraDeployService {
             "Analyse",
             "Verifisering",
             "Klar til utvikling",
-
             "Ferdig"
     );
 

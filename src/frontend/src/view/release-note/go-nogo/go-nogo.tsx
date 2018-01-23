@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Sidetittel, Normaltekst } from 'nav-frontend-typografi';
+import { Sidetittel, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { EkspanderbartpanelPure } from 'nav-frontend-ekspanderbartpanel';
 import { connect, Dispatch } from 'react-redux';
@@ -115,7 +115,9 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
                     <Normaltekst>Team Kartlegging, registrering og oppfølging | Dato: {(new Date()).toLocaleDateString('nb-NO', dateOptions)}</Normaltekst>
                 </div>
 
+                <Undertittel className="blokk-xs">Applikasjoner ({this.props.releases.length}):</Undertittel>
                 { this.getReleasesSortedByAge().map((release: ReleaseWithCommits) => this.createApplicationRow(release)) }
+
                 { this.hasAssignedAllApplications() &&
                     <NavLink
                         className="knapp"
