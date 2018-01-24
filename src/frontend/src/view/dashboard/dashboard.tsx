@@ -51,39 +51,25 @@ interface DispatchProps {
 
 type DashboardProps = StateProps & DispatchProps;
 
-class Dashboard extends React.PureComponent<DashboardProps> {
-    componentDidMount() {
-        this.props.getDeploys(this.props.valgtTeam);
-
+function Dashboard({ isLoadingData, deploys, applications, showAll }: DashboardProps) {
+    if (isLoadingData) {
+        return <NavFrontendSpinner />;
     }
 
-    componentWillReceiveProps(nextProps: StateProps) {
-        if (this.props.valgtTeam !== nextProps.valgtTeam) {
-            this.props.getDeploys(nextProps.valgtTeam);
-        }
-    }
+    const getDeploysForApp = (app: string): Deploy[] => deploys.filter((deploy) => deploy.application === app);
+    const applicationsToDisplay = applications.filter((application) => application.hasChanges || showAll);
 
-    render() {
-        const props = this.props;
-        if (props.isLoadingData) {
-            return <NavFrontendSpinner />;
-        }
-
-        const getDeploysForApp = (app: string): Deploy[] => props.deploys.filter((deploy) => deploy.application === app);
-        const applicationsToDisplay = props.applications.filter((application) => application.hasChanges || props.showAll);
-
-        return (
-            <div className="dashboard__wrapper">
-                {applicationsToDisplay.map((app) => (
-                    <ApplicationRow
-                        key={app.name}
-                        application={app}
-                        deploysForApp={getDeploysForApp(app.name)}
-                    />
-                ))}
-            </div>
-        );
-    }
+    return (
+        <div className="dashboard__wrapper">
+            {applicationsToDisplay.map((app) => (
+                <ApplicationRow
+                    key={app.name}
+                    application={app}
+                    deploysForApp={getDeploysForApp(app.name)}
+                />
+            ))}
+        </div>
+    );
 }
 
 const mapStateToProps = (state: AppState): StateProps => ({

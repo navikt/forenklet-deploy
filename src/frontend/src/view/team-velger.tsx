@@ -7,6 +7,7 @@ import { Select } from 'nav-frontend-skjema';
 import { selectIsLoadingTeams, selectTeams } from '../redux/team-duck';
 import { Team } from '../api/team-api';
 import { velgTeam } from '../redux/team-velger-duck';
+import { getAllDeploys } from '../redux/deploy-duck';
 
 interface StateProps {
     isLoadingData: boolean;
@@ -43,7 +44,10 @@ const mapStateToProps = (state: AppState): StateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>): TeamVelgerDispatchProps => ({
-    doChangeValgtTeam: (team: string) => dispatch(velgTeam(team))
+    doChangeValgtTeam: (team: string) => {
+        dispatch(velgTeam(team));
+        dispatch(getAllDeploys(team));
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TeamVelger);

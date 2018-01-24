@@ -4,6 +4,7 @@ import { Action, Dispatch } from 'redux';
 import { AppState } from './reducer';
 import { Team } from '../api/team-api';
 import { velgTeam } from './team-velger-duck';
+import { getAllDeploys } from './deploy-duck';
 
 export interface TeamState {
     loading: boolean;
@@ -49,6 +50,7 @@ export function getAllTeams() {
         api.getAllTeams()
             .then((teams) => {
                 dispatch(velgTeam(teams[0].id));
+                dispatch(getAllDeploys(teams[0].id));
                 return dispatch({ type: actionNames.FETCH_SUCCESS, teams});
             });
     };
