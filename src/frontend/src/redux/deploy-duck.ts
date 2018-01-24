@@ -54,10 +54,10 @@ export default function deployReducer(state: DeployState = initialState, action:
     }
 }
 
-export function getAllDeploys() {
+export function getAllDeploys(teamId: string) {
     return (dispatch: Dispatch<Action>) => {
         dispatch({ type: actionNames.LOADING });
-        api.getAllDeploys()
+        api.getAllDeploys(teamId)
             .then((deploys) => dispatch({ type: actionNames.FETCH_SUCCESS, deploys }));
     };
 }

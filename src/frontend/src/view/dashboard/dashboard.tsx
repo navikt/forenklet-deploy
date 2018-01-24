@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { AppState } from '../../redux/reducer';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import Deployment from './deployment';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Undertittel } from 'nav-frontend-typografi';
-import { selectIsLoadingDeploys, selectDeploys } from '../../redux/deploy-duck';
+import { selectIsLoadingDeploys, selectDeploys, getAllDeploys } from '../../redux/deploy-duck';
 import { selectApplicationsWithChanges } from '../../redux/selectors/application-selectors';
 import { ApplicationWithChanges } from '../../models/application';
 import { Deploy } from '../../models/deploy';
 import { getEnvironments } from '../../utils/environment';
 import { Environment } from '../../models/environment';
+import { Action } from 'redux';
+import { getValgtTeam } from '../../redux/team-velger-duck';
 
 interface ApplicationRowProps {
     application: ApplicationWithChanges;
@@ -40,40 +42,64 @@ interface StateProps {
     applications: ApplicationWithChanges[];
     showAll: boolean;
     deploys: Deploy[];
+    valgtTeam: string;
 }
 
 interface DispatchProps {
-    requestDashboardData: () => void;
+    getDeploys: (teamId: string) => void;
 }
 
 type DashboardProps = StateProps & DispatchProps;
 
-function Dashboard({ applications, isLoadingData, showAll, deploys }: DashboardProps) {
-    if (isLoadingData) {
-        return <NavFrontendSpinner />;
+class Dashboard extends React.PureComponent<DashboardProps> {
+    componentDidMount() {
+        this.props.getDeploys(this.props.valgtTeam);
+
     }
 
-    const getDeploysForApp = (app: string): Deploy[] => deploys.filter((deploy) => deploy.application === app);
-    const applicationsToDisplay = applications.filter((application) => application.hasChanges || showAll);
+    componentWillReceiveProps(nextProps: StateProps) {
+        if (this.props.valgtTeam !== nextProps.valgtTeam) {
+            this.props.getDeploys(nextProps.valgtTeam);
+        }
+    }
 
-    return (
-        <div className="dashboard__wrapper">
-            {applicationsToDisplay.map((app) => (
-                <ApplicationRow
-                    key={app.name}
-                    application={app}
-                    deploysForApp={getDeploysForApp(app.name)}
-                />
-            ))}
-        </div>
-    );
+    render() {
+        const props = this.props;
+        if (props.isLoadingData) {
+            return <NavFrontendSpinner />;
+        }
+
+        const getDeploysForApp = (app: string): Deploy[] => props.deploys.filter((deploy) => deploy.application === app);
+        const applicationsToDisplay = props.applications.filter((application) => application.hasChanges || props.showAll);
+
+        return (
+            <div className="dashboard__wrapper">
+                {applicationsToDisplay.map((app) => (
+                    <ApplicationRow
+                        key={app.name}
+                        application={app}
+                        deploysForApp={getDeploysForApp(app.name)}
+                    />
+                ))}
+            </div>
+        );
+    }
 }
 
 const mapStateToProps = (state: AppState): StateProps => ({
     isLoadingData: selectIsLoadingDeploys(state),
     applications: selectApplicationsWithChanges(state),
     deploys: selectDeploys(state),
+    valgtTeam: getValgtTeam(state),
     showAll: state.view.showAll
 });
 
-export default connect(mapStateToProps)(Dashboard);
+function mapDispatchToProps(dispatch: Dispatch<Action>): DispatchProps {
+    return {
+        getDeploys: (teamId) => {
+            dispatch(getAllDeploys(teamId));
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

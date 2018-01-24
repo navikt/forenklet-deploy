@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Action } from 'redux';
 import { Undertittel } from 'nav-frontend-typografi';
+import TeamVelger from './team-velger';
 import { connect, Dispatch } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { selectError } from '../redux/error-duck';
@@ -18,10 +19,13 @@ interface HeaderDispatchProps {
 
 function Header({error, showAll, doChangeShowAll}: HeaderStateProps & HeaderDispatchProps) {
     return (
-        <div className="header">
-            <Undertittel>Forenklet Deploy</Undertittel>
-            <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle applikasjoner" checked={showAll} />
-            {error && <div className="header__error">{error}</div>}
+        <div className="header container">
+            <div className="left-side">
+                <Undertittel>Forenklet Deploy</Undertittel>
+                <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle applikasjoner" checked={showAll} />
+                {error && <div className="header__error">{error}</div>}
+            </div>
+            <TeamVelger />
         </div>
     );
 }
