@@ -19,7 +19,7 @@
     <cache alias="appbyname" uses-template="long">
         <heap>100</heap>
     </cache>
-    <cache alias="commits" uses-template="long">
+    <cache alias="commits" uses-template="medium">
         <heap>5000</heap>
     </cache>
 

@@ -2,6 +2,7 @@ package no.nav.fo.forenkletdeploy.teams;
 
 import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,13 @@ import static no.nav.json.JsonUtils.fromJson;
 import static no.nav.sbl.rest.RestUtils.withClient;
 
 public class FOTeam implements Team {
+
+    private static List<String> IGNORED_APPLICATIONS = Arrays.asList(
+            "modiacontextholder",
+            "modiaeventdistribution",
+            "internarbeidsflatedecorator",
+            "veilarbdemo"
+    );
 
     @Override
     public String getId() {
@@ -31,6 +39,12 @@ public class FOTeam implements Team {
                         .gitUrl(e.getValue().get("gitUrl"))
                         .build()
                 )
+                .filter(FOTeam::applicationIsNotIgnored)
                 .collect(toList());
     }
+
+    private static boolean applicationIsNotIgnored(ApplicationConfig applicationConfig) {
+        return !IGNORED_APPLICATIONS.contains(applicationConfig.name);
+    }
+
 }

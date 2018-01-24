@@ -5,6 +5,7 @@ import { JiraIssue } from '../../../models/jira-issue';
 import { AppState } from '../../../redux/reducer';
 import { selectIssuesForApplication } from '../../../redux/releasenote-duck';
 import { onlyUniqueIssues } from '../../../redux/jira-issue-duck';
+import { Undertittel } from 'nav-frontend-typografi';
 
 interface OwnProps {
     applications: string[];
@@ -40,19 +41,22 @@ export class IssuesTable extends React.Component<OwnProps & StateProps> {
         const sortesIssues = onlyUniqueIssues(this.props.issues).sort(sortByStatus);
 
         return (
-            <table className="issues-table">
-                <thead>
-                    <tr>
-                        <th className="issue">Issue</th>
-                        <th className="status">Status</th>
-                        <th className="assigned">Tildelt</th>
-                        <th className="title">Tittel</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { sortesIssues.map((issue) => <JiraIssueRow issue={issue} key={issue.key} />) }
-                </tbody>
-            </table>
+            <section className="blokk-m">
+                <Undertittel className="blokk-xxs">Brukerhistorier ({this.props.issues.length}):</Undertittel>
+                <table className="table issues-table">
+                    <thead>
+                        <tr>
+                            <th className="issue">Issue</th>
+                            <th className="status">Status</th>
+                            <th className="assigned">Tildelt</th>
+                            <th className="title">Tittel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        { sortesIssues.map((issue) => <JiraIssueRow issue={issue} key={issue.key} />) }
+                    </tbody>
+                </table>
+            </section>
         );
     }
 }

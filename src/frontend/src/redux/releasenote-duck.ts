@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { Action } from 'redux';
 import { AppState } from './reducer';
-import { ReleaseWithCommits } from '../models/release';
+import { ReleaseWithCommits, Release } from '../models/release';
 import { Commit } from '../models/commit';
 import { getEnvironmentByName } from '../utils/environment';
 import * as commitApi from '../api/commit-api';
@@ -22,9 +22,18 @@ function getApplicationsWithChanges(state: AppState): string[] {
         .map((application) => application.name);
 }
 
+export function selectAllReleases(state: AppState): Release[] {
+    return getApplicationsWithChanges(state)
+        .map((application) => selectRelease(state, application, 'q6', 'p'));
+}
+
 export function selectAllReleasesWithCommits(state: AppState): ReleaseWithCommits[] {
     return getApplicationsWithChanges(state)
         .map((application) => selectReleaseWithCommits(state, application, 'q6', 'p'));
+}
+
+export function selectReleases(state: AppState, applications: string[]): Release[] {
+    return applications.map((application) => selectRelease(state, application, 'q6', 'p'));
 }
 
 export function selectReleasesWithCommits(state: AppState, applications: string[]): ReleaseWithCommits[] {

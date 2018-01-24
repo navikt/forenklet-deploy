@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Commit } from '../../models/commit';
 import Alder from '../alder';
 import CommitMessage from './commit-message';
-import { Normaltekst } from 'nav-frontend-typografi';
+import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
 
 interface CommitRowProps {
     commit: Commit;
@@ -25,16 +25,20 @@ interface CommitsForReleaseProps {
 function CommitsForRelease(props: CommitsForReleaseProps) {
     const filterMergeCommits = (commit: Commit) => !commit.mergecommit;
     const sortByTimestamp = (a: Commit, b: Commit) => b.timestamp - a.timestamp;
+    const filterJenkinsCommits = (commit: Commit) => commit.author !== 'jenkins';
 
-    const filteredCommits = props.commits.filter(filterMergeCommits);
-    const commitsToDisplay =filteredCommits
+    const filteredCommits = props.commits
+        .filter(filterMergeCommits)
+        .filter(filterJenkinsCommits);
+    const commitsToDisplay = filteredCommits
         .sort(sortByTimestamp)
         .slice(0, 30);
 
     const harSkjultCommits = commitsToDisplay.length < filteredCommits.length;
 
     return (
-        <div>
+        <div className="blokk-m">
+            <Undertittel className="blokk-xxs">Endringer ({ props.commits.length }):</Undertittel>
             <table className={`commits-table ${props.className}`}>
                 <thead>
                     <tr>

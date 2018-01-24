@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Sidetittel, Normaltekst } from 'nav-frontend-typografi';
+import { Sidetittel, Normaltekst, Undertittel } from 'nav-frontend-typografi';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { EkspanderbartpanelPure } from 'nav-frontend-ekspanderbartpanel';
 import { connect, Dispatch } from 'react-redux';
@@ -9,6 +9,8 @@ import { reset, openApplication, addGoApplication, addNogoApplication } from '..
 import { AppState } from '../../../redux/reducer';
 import { selectAllReleasesWithCommits } from '../../../redux/releasenote-duck';
 import { ReleaseWithCommits } from '../../../models/release';
+import { Commit } from '../../../models/commit';
+import { getAlder } from '../../alder';
 
 interface DispatchProps {
     doReset: () => void;
@@ -59,11 +61,31 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
         return this.props.openApplication === application;
     }
 
+    getAlderForCommit(commit?: Commit): string {
+        if (commit) {
+            return `(${getAlder(commit.timestamp)} gammel)`;
+        }
+        return '';
+    }
+
+    getReleasesSortedByAge(): ReleaseWithCommits[] {
+        return this.props.releases
+            .sort((r1, r2) => {
+                const lastCommitR1 = r1.commits[r1.commits.length - 1];
+                const lastCommitR2 = r2.commits[r2.commits.length - 1];
+
+                const alderR1 = lastCommitR1 ? lastCommitR1.timestamp : Date.now();
+                const alderR2 = lastCommitR2 ? lastCommitR2.timestamp : Date.now();
+                return alderR1 - alderR2;
+            });
+    }
+
     createApplicationRow(release: ReleaseWithCommits) {
         const application = release.application;
         const check = this.props.goApplications.includes(release.application) ? '✔' : '';
         const cross = this.props.nogoApplications.includes(release.application) ? '❌' : '';
-        const title = `${application} ${check}${cross}`;
+        const lastCommit = release.commits[release.commits.length - 1];
+        const title = `${application} ${this.getAlderForCommit(lastCommit)} ${check}${cross}`;
 
         return (
             <div className="release-note--application blokk-xs" key={application}>
@@ -93,7 +115,9 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
                     <Normaltekst>Team Kartlegging, registrering og oppfølging | Dato: {(new Date()).toLocaleDateString('nb-NO', dateOptions)}</Normaltekst>
                 </div>
 
-                { this.props.releases.map((release: ReleaseWithCommits) => this.createApplicationRow(release)) }
+                <Undertittel className="blokk-xs">Applikasjoner ({this.props.releases.length}):</Undertittel>
+                { this.getReleasesSortedByAge().map((release: ReleaseWithCommits) => this.createApplicationRow(release)) }
+
                 { this.hasAssignedAllApplications() &&
                     <NavLink
                         className="knapp"
