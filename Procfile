@@ -1,0 +1,1 @@
+web: cd src/frontend && REACT_APP_MOCK=true npm run start
