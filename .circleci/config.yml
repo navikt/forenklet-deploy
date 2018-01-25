@@ -4,9 +4,10 @@ jobs:
     docker:
       - image: circleci/node:8.9.4
 
-    working_directory: ~/src/frontend
+    working_directory: ~/forenklet-deploy/src/frontend
     steps:
-      - checkout
+      - checkout:
+          path: ~/forenklet-deploy
 
       - restore_cache:
           keys:
