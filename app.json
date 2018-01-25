@@ -1,0 +1,17 @@
+{
+  "name": "fo-forenklet-deploy",
+  "scripts": {
+  },
+  "env": {
+    "NPM_CONFIG_PRODUCTION": "false"
+  },
+  "formation": {
+  },
+  "addons": [
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs.git"
+    }
+  ]
+}
