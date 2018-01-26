@@ -1,7 +1,7 @@
 # ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
 image: docker.adeo.no:5000/pus/forenklet-deploy
 replicas:
-  min: 1
+  min: 2
   max: 2
   cpuThresholdPercentage: 50
 port: 8080
