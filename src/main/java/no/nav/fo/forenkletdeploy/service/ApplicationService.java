@@ -32,7 +32,7 @@ public class ApplicationService {
     }
 
     @SuppressWarnings("unchecked")
-    @Cacheable("applicationlist")
+    @Cacheable("applicationlistbyteam")
     public List<ApplicationConfig> getAppsByTeam(String teamId) {
         return teamProvider.getTeams().stream()
                 .filter(team -> team.getId().equals(teamId))
