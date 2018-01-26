@@ -25,7 +25,7 @@ export function velgTeam(teamId: string): VelgTeam {
     return { type: actionNames.TEAM_VALGT, teamId };
 }
 
-export function getValgtTeam(state: AppState): string {
+export function selectValgtTeam(state: AppState): string {
     return state.valgtTeam.teamId;
 }
 
