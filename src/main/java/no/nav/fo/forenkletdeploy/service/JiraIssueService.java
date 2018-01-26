@@ -20,7 +20,6 @@ public class JiraIssueService {
             "Analyse",
             "Verifisering",
             "Klar til utvikling",
-
             "Ferdig"
     );
     public static final String IKKE_INTERESSANTE_STATUSER_FORMATTERT = IKKE_INTERESSANTE_STATUSER.stream().map(s -> "'" + s + "'").collect(Collectors.joining(","));

@@ -11,15 +11,6 @@ import static no.nav.sbl.rest.RestUtils.withClient;
 
 @Component
 public class VeraDeployService {
-    // https://jira.adeo.no/secure/RapidBoard.jspa?rapidView=11947
-    private static final List<String> IKKE_INTERESSANTE_STATUSER = Arrays.asList(
-            "Produktkø",
-            "Analyse",
-            "Verifisering",
-            "Klar til utvikling",
-            "Ferdig"
-    );
-
     @Cacheable("veradeploys")
     public VeraDeploys getVeraDeploys() {
         return withClient(c -> c.target("https://vera.adeo.no/api/v1/deploylog?onlyLatest=true&filterUndeployed=true")
