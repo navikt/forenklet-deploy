@@ -43,12 +43,12 @@ interface StateProps {
 }
 
 interface DispatchProps {
-    requestDashboardData: () => void;
+    getDeploys: (teamId: string) => void;
 }
 
 type DashboardProps = StateProps & DispatchProps;
 
-function Dashboard({ applications, isLoadingData, showAll, deploys }: DashboardProps) {
+function Dashboard({ isLoadingData, deploys, applications, showAll }: DashboardProps) {
     if (isLoadingData) {
         return <NavFrontendSpinner />;
     }

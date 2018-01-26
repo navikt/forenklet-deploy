@@ -16,6 +16,9 @@
     <cache alias="applicationlist" uses-template="long">
         <heap>100</heap>
     </cache>
+    <cache alias="applicationlistbyteam" uses-template="long">
+        <heap>100</heap>
+    </cache>
     <cache alias="appbyname" uses-template="long">
         <heap>100</heap>
     </cache>

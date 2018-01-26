@@ -3,7 +3,7 @@ import { Action } from 'redux';
 import { connect, Dispatch } from 'react-redux';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { AppState } from '../redux/reducer';
-import { getAllDeploys } from '../redux/deploy-duck';
+import { getAllTeams } from '../redux/team-duck';
 
 interface DispatchProps {
     requestInitialData: () => void;
@@ -31,12 +31,12 @@ class Dashboard extends React.Component<DispatchProps & StateProps> {
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>): DispatchProps => ({
     requestInitialData: () => {
-        dispatch(getAllDeploys());
+        dispatch(getAllTeams());
     }
 });
 
 const mapStateToProps = (state: AppState): StateProps => ({
-    isLoading: state.deploy.loading
+    isLoading: state.team.loading
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

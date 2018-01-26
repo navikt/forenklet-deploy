@@ -23,8 +23,8 @@ export function veraDeployToDeploy(veraDeploy: VeraDeploy): Deploy {
     };
 }
 
-export function getAllDeploys(): Promise<Deploy[]> {
-    const uri = `${apiBaseUri}/deploy`;
+export function getAllDeploys(teamId: string): Promise<Deploy[]> {
+    const uri = `${apiBaseUri}/deploy?team=${teamId}`;
     return fetch(uri)
         .then((response) => response.json())
         .then((deploys: VeraDeploy[]) => Promise.resolve(deploys.map(veraDeployToDeploy)));
