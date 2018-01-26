@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>): DispatchProps => ({
 });
 
 const mapStateToProps = (state: AppState): StateProps => ({
-    isLoading: state.team.loading
+    isLoading: state.team.loading || state.deploy.loading
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

@@ -13,9 +13,6 @@ function getDeploysForApp(app: string): VeraDeploy[] {
         deployTime -= randRange(5, 60) * 1000 * 60;
         majorVersion -= randRange(1, 8);
 
-        /* tslint:disable-next-line */
-        console.log(deployTime, (new Date(deployTime)).toISOString());
-
         deploys.push({
             id: randRange(1000, 5000000).toString(),
             application: app,
