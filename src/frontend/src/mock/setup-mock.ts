@@ -12,6 +12,7 @@ export function setupMock() {
     (fetchMock as any)._mock();
 
     fetchMock.get(apiBaseUri + `/deploy?team=${teams[0].id}`, respondWith(delayed(500, veraDeploys)));
+    fetchMock.get(apiBaseUri + `/deploy?team=${teams[1].id}`, respondWith(delayed(500, veraDeploys)));
 
     fetchMock.get('begin:' + apiBaseUri + '/commit', respondWith(delayed(500, (uri: string) => {
         const re = /\/commit\/([a-zA-Z]*)\?/;
