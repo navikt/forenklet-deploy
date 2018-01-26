@@ -142,7 +142,7 @@ function mapDispatchToProps(dispatch: Dispatch<any>): DispatchProps {
 
 function mapStateToProps(state: AppState): StateProps {
     return {
-        isLoading: false,
+        isLoading: state.deploy.loading,
         openApplication: state.gonogoview.openApplication,
         goApplications: state.gonogoview.goApplications,
         nogoApplications: state.gonogoview.nogoApplications,

@@ -2,15 +2,13 @@ import * as React from 'react';
 import { AppState } from '../redux/reducer';
 import { connect, Dispatch } from 'react-redux';
 import { Action } from 'redux';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Select } from 'nav-frontend-skjema';
-import { selectIsLoadingTeams, selectTeams } from '../redux/team-duck';
+import { selectTeams } from '../redux/team-duck';
 import { Team } from '../models/team';
 import { selectValgtTeam, velgTeam } from '../redux/team-velger-duck';
 import { getAllDeploys } from '../redux/deploy-duck';
 
 interface StateProps {
-    isLoadingData: boolean;
     teams: Team[];
     valgtTeam: string;
 }
@@ -21,14 +19,9 @@ interface TeamVelgerDispatchProps {
 
 type TeamVelgerProps = StateProps;
 
-function TeamVelger({ isLoadingData, teams, doChangeValgtTeam, valgtTeam}: TeamVelgerProps & TeamVelgerDispatchProps) {
-
+function TeamVelger({ teams, doChangeValgtTeam, valgtTeam}: TeamVelgerProps & TeamVelgerDispatchProps) {
     function handleChange(event: any) {
         doChangeValgtTeam(event.target.value);
-    }
-
-    if (isLoadingData) {
-        return <NavFrontendSpinner />;
     }
 
     const options = teams.map((team) => <option value={team.id} key={team.id}>{team.displayName}</option>);
@@ -40,7 +33,6 @@ function TeamVelger({ isLoadingData, teams, doChangeValgtTeam, valgtTeam}: TeamV
 }
 
 const mapStateToProps = (state: AppState): StateProps => ({
-    isLoadingData: selectIsLoadingTeams(state),
     teams: selectTeams(state),
     valgtTeam: selectValgtTeam(state)
 });

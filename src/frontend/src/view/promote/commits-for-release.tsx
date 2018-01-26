@@ -35,10 +35,11 @@ function CommitsForRelease(props: CommitsForReleaseProps) {
         .slice(0, 30);
 
     const harSkjultCommits = commitsToDisplay.length < filteredCommits.length;
+    const hentetAlleEndringer = props.commits.length < 1000;
 
     return (
         <div className="blokk-m">
-            <Undertittel className="blokk-xxs">Endringer ({ props.commits.length }):</Undertittel>
+            <Undertittel className="blokk-xxs">Endringer ({ hentetAlleEndringer ? commitsToDisplay.length : `1000+` }):</Undertittel>
             <table className={`commits-table ${props.className}`}>
                 <thead>
                     <tr>
