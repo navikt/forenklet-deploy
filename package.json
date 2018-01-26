@@ -1,0 +1,19 @@
+{
+  "name": "forenklet-deploy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "cd src/frontend && NODE_ENV=development npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/navikt/fo-forenket-deploy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/navikt/fo-forenket-deploy/issues"
+  },
+  "homepage": "https://github.com/navikt/fo-forenket-deploy#readme"
+}
