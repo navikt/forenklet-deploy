@@ -5,7 +5,7 @@ import { Action } from 'redux';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Select } from 'nav-frontend-skjema';
 import { selectIsLoadingTeams, selectTeams } from '../redux/team-duck';
-import { Team } from '../api/team-api';
+import { Team } from '../models/team';
 import { velgTeam } from '../redux/team-velger-duck';
 import { getAllDeploys } from '../redux/deploy-duck';
 

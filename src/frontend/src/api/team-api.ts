@@ -1,9 +1,5 @@
 import { apiBaseUri } from '../utils/config';
-
-export interface Team {
-    id: string;
-    displayName: string;
-}
+import { Team } from '../models/team';
 
 export function getAllTeams(): Promise<Team[]> {
     const uri = `${apiBaseUri}/teams`;

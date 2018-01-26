@@ -1,4 +1,4 @@
-import { Team } from '../api/team-api';
+import { Team } from '../models/team';
 
 export const teams: Team[] = [
     {
