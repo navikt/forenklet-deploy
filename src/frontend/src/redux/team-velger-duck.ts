@@ -1,4 +1,5 @@
 import { AppState } from './reducer';
+import { Team } from '../models/team';
 
 export interface ValgtTeamState {
     teamId: string;
@@ -27,6 +28,10 @@ export function velgTeam(teamId: string): VelgTeam {
 
 export function getValgtTeam(state: AppState): string {
     return state.valgtTeam.teamId;
+}
+
+export function selectValgtTeam(state: AppState): Team | undefined {
+    return state.team.teams.find((team) => team.id === getValgtTeam(state));
 }
 
 export default function valgtTeamReducer(state: ValgtTeamState = initialState, action: TeamVelgerActions) {

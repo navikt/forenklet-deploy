@@ -11,6 +11,8 @@ import { selectAllReleasesWithCommits } from '../../../redux/releasenote-duck';
 import { ReleaseWithCommits } from '../../../models/release';
 import { Commit } from '../../../models/commit';
 import { getAlder } from '../../alder';
+import { Team } from '../../../models/team';
+import { selectValgtTeam } from '../../../redux/team-velger-duck';
 
 interface DispatchProps {
     doReset: () => void;
@@ -25,6 +27,7 @@ interface StateProps {
     nogoApplications: string[];
     releases: ReleaseWithCommits[];
     isLoading: boolean;
+    valgtTeam?: Team;
 }
 
 export class GoNogo extends React.Component<DispatchProps & StateProps> {
@@ -107,12 +110,13 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
 
         const uriAppParam = this.props.goApplications.map((application) => `app[]=${application}`).join('&');
         const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+        const teamNavn = this.props.valgtTeam ? this.props.valgtTeam.displayName : 'Ukjent team';
 
         return (
             <article className="release-note">
                 <div className="blokk-m">
-                    <Sidetittel className="blokk-xxs">Go-nogo Forenklet Oppfølging</Sidetittel>
-                    <Normaltekst>Team Kartlegging, registrering og oppfølging | Dato: {(new Date()).toLocaleDateString('nb-NO', dateOptions)}</Normaltekst>
+                    <Sidetittel className="blokk-xxs">Go-nogo {teamNavn}</Sidetittel>
+                    <Normaltekst>Dato: {(new Date()).toLocaleDateString('nb-NO', dateOptions)}</Normaltekst>
                 </div>
 
                 <Undertittel className="blokk-xs">Applikasjoner ({this.props.releases.length}):</Undertittel>
@@ -146,7 +150,8 @@ function mapStateToProps(state: AppState): StateProps {
         openApplication: state.gonogoview.openApplication,
         goApplications: state.gonogoview.goApplications,
         nogoApplications: state.gonogoview.nogoApplications,
-        releases: selectAllReleasesWithCommits(state)
+        releases: selectAllReleasesWithCommits(state),
+        valgtTeam: selectValgtTeam(state)
     };
 }
 

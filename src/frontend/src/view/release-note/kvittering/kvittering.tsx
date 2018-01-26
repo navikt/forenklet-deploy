@@ -5,23 +5,27 @@ import { Sidetittel, Normaltekst } from 'nav-frontend-typografi';
 import IssuesTable from './issues-table';
 import ApplicationReleases from './application-release';
 import { Release } from '../../../models/release';
+import { Team } from '../../../models/team';
 import '../release-note.less';
 import { AppState } from '../../../redux/reducer';
 import { selectReleases } from '../../../redux/releasenote-duck';
+import { selectValgtTeam } from '../../../redux/team-velger-duck';
 
 interface KvitteringProps {
     applications: string[];
     releases: Release[];
+    team?: Team;
 }
 
 export class Kvittering extends React.Component<KvitteringProps> {
     render() {
         const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+        const teamNavn = this.props.team ? this.props.team.displayName : 'Ukjent team';
         return (
             <article className="release-note">
                 <div className="blokk-m">
-                    <Sidetittel className="blokk-xxs">Utrullingsoversikt Forenklet Oppfølging</Sidetittel>
-                    <Normaltekst>Team Kartlegging, registrering og oppfølging | Dato: {(new Date()).toLocaleDateString('nb-NO', dateOptions)}</Normaltekst>
+                    <Sidetittel className="blokk-xxs">Utrullingsoversikt {teamNavn}</Sidetittel>
+                    <Normaltekst>Dato: {(new Date()).toLocaleDateString('nb-NO', dateOptions)}</Normaltekst>
                 </div>
 
                 <IssuesTable applications={this.props.applications} />
@@ -37,7 +41,8 @@ function mapStateToProps(state: AppState): KvitteringProps {
 
     return {
         applications: apps,
-        releases: selectReleases(state, apps)
+        releases: selectReleases(state, apps),
+        team: selectValgtTeam(state)
     };
 }
 
