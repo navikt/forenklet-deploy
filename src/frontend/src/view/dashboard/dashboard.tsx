@@ -1,17 +1,15 @@
 import * as React from 'react';
 import { AppState } from '../../redux/reducer';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import Deployment from './deployment';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { Undertittel } from 'nav-frontend-typografi';
-import { selectIsLoadingDeploys, selectDeploys, getAllDeploys } from '../../redux/deploy-duck';
+import { selectIsLoadingDeploys, selectDeploys } from '../../redux/deploy-duck';
 import { selectApplicationsWithChanges } from '../../redux/selectors/application-selectors';
 import { ApplicationWithChanges } from '../../models/application';
 import { Deploy } from '../../models/deploy';
 import { getEnvironments } from '../../utils/environment';
 import { Environment } from '../../models/environment';
-import { Action } from 'redux';
-import { getValgtTeam } from '../../redux/team-velger-duck';
 
 interface ApplicationRowProps {
     application: ApplicationWithChanges;
@@ -42,7 +40,6 @@ interface StateProps {
     applications: ApplicationWithChanges[];
     showAll: boolean;
     deploys: Deploy[];
-    valgtTeam: string;
 }
 
 interface DispatchProps {
@@ -76,16 +73,7 @@ const mapStateToProps = (state: AppState): StateProps => ({
     isLoadingData: selectIsLoadingDeploys(state),
     applications: selectApplicationsWithChanges(state),
     deploys: selectDeploys(state),
-    valgtTeam: getValgtTeam(state),
     showAll: state.view.showAll
 });
 
-function mapDispatchToProps(dispatch: Dispatch<Action>): DispatchProps {
-    return {
-        getDeploys: (teamId) => {
-            dispatch(getAllDeploys(teamId));
-        }
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps)(Dashboard);
