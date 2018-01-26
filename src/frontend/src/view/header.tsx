@@ -7,6 +7,7 @@ import { AppState } from '../redux/reducer';
 import { selectError } from '../redux/error-duck';
 import { changeShowAll } from '../redux/view-duck';
 import { Checkbox } from 'nav-frontend-skjema';
+import { Link } from 'react-router-dom';
 
 interface HeaderStateProps {
     error: string | null;
@@ -21,7 +22,7 @@ function Header({error, showAll, doChangeShowAll}: HeaderStateProps & HeaderDisp
     return (
         <div className="header container">
             <div className="left-side">
-                <Undertittel>Forenklet Deploy</Undertittel>
+                <Undertittel className="logo"><Link to="/">Forenklet Deploy</Link></Undertittel>
                 <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle applikasjoner" checked={showAll} />
                 {error && <div className="header__error">{error}</div>}
             </div>
