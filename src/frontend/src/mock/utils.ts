@@ -63,6 +63,15 @@ export function randomIssue(): string {
     return `${prefix}-${randRange(1, 200)}`;
 }
 
+export function shuffleList<T>(elems: T[]): T[] {
+    const copy = [...elems];
+    const newList: T[] = [];
+    while(copy.length > 0) {
+        newList.push(copy.splice(randRange(0, copy.length), 1)[0]);
+    }
+    return newList;
+}
+
 export function randomMessage(): string {
     const commitMessages = [
         'Fix tslint issues',
