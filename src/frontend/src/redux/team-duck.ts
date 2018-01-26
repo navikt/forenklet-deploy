@@ -38,7 +38,7 @@ export interface FetchError {
     error: string;
 }
 
-type ReleaseActions =
+type TeamActions =
     | Loading
     | FetchSuccess
     | FetchError
@@ -64,7 +64,7 @@ export function selectTeams(state: AppState): Team[] {
     return state.team.teams;
 }
 
-export default function teamReducer(state: TeamState = initialState, action: ReleaseActions) {
+export default function teamReducer(state: TeamState = initialState, action: TeamActions) {
     switch (action.type) {
         case actionNames.LOADING:
             return {...state, loading: true};
