@@ -11,15 +11,20 @@ import { AppState } from '../../redux/reducer';
 
 interface StateProps {
     isLoading: boolean;
+    isLoadingDeploys: boolean;
 }
 
 interface DispatchProps {
     doGetInfoForReleaseNote: () => void;
 }
 
-class ReleaseNote extends React.Component<RouteComponentProps<{}> & DispatchProps & StateProps> {
-    componentDidMount() {
-        this.props.doGetInfoForReleaseNote();
+type ReleaseNoteProps = RouteComponentProps<{}> & DispatchProps & StateProps;
+
+class ReleaseNote extends React.Component<ReleaseNoteProps> {
+    componentWillReceiveProps(nextProps: ReleaseNoteProps) {
+        if (nextProps.isLoadingDeploys === false && this.props.isLoadingDeploys === true) {
+            this.props.doGetInfoForReleaseNote();
+        }
     }
 
     render() {
@@ -39,7 +44,8 @@ class ReleaseNote extends React.Component<RouteComponentProps<{}> & DispatchProp
 
 function mapStateToProps(state: AppState): StateProps {
     return {
-        isLoading: state.jira.loading || state.commit.loading || state.deploy.loading
+        isLoading: state.jira.loading || state.commit.loading || state.deploy.loading,
+        isLoadingDeploys: state.deploy.loading
     };
 }
 

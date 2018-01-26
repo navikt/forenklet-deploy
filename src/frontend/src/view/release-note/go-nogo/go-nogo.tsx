@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Sidetittel, Normaltekst, Undertittel } from 'nav-frontend-typografi';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import { EkspanderbartpanelPure } from 'nav-frontend-ekspanderbartpanel';
 import { connect, Dispatch } from 'react-redux';
 import { GoNogoApplication } from './application';
@@ -26,7 +25,6 @@ interface StateProps {
     goApplications: string[];
     nogoApplications: string[];
     releases: ReleaseWithCommits[];
-    isLoading: boolean;
     valgtTeam?: Team;
 }
 
@@ -104,10 +102,6 @@ export class GoNogo extends React.Component<DispatchProps & StateProps> {
     }
 
     render() {
-        if (this.props.isLoading) {
-            return <NavFrontendSpinner />;
-        }
-
         const uriAppParam = this.props.goApplications.map((application) => `app[]=${application}`).join('&');
         const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
         const teamNavn = this.props.valgtTeam ? this.props.valgtTeam.displayName : 'Ukjent team';
@@ -146,7 +140,6 @@ function mapDispatchToProps(dispatch: Dispatch<any>): DispatchProps {
 
 function mapStateToProps(state: AppState): StateProps {
     return {
-        isLoading: state.deploy.loading,
         openApplication: state.gonogoview.openApplication,
         goApplications: state.gonogoview.goApplications,
         nogoApplications: state.gonogoview.nogoApplications,
