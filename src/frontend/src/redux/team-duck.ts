@@ -3,8 +3,6 @@ import * as api from '../api/team-api';
 import { Action, Dispatch } from 'redux';
 import { AppState } from './reducer';
 import { Team } from '../models/team';
-import { velgTeam } from './team-velger-duck';
-import { getAllDeploys } from './deploy-duck';
 
 export interface TeamState {
     loading: boolean;
@@ -47,11 +45,10 @@ type TeamActions =
 export function getAllTeams() {
     return (dispatch: Dispatch<Action>) => {
         dispatch({ type: actionNames.LOADING });
-        api.getAllTeams()
+        return api.getAllTeams()
             .then((teams) => {
-                dispatch(velgTeam(teams[0].id));
-                dispatch(getAllDeploys(teams[0].id));
-                return dispatch({ type: actionNames.FETCH_SUCCESS, teams});
+                dispatch({ type: actionNames.FETCH_SUCCESS, teams});
+                return teams;
             });
     };
 }
