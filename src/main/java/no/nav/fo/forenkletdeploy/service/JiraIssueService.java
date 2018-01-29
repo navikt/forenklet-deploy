@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static no.nav.sbl.rest.RestUtils.LONG_READ_CONFIG;
 import static no.nav.sbl.rest.RestUtils.withClient;
 
 @Component
@@ -28,7 +29,7 @@ public class JiraIssueService {
     @SuppressWarnings("unchecked")
     @Cacheable("jiraissues")
     public List<JiraIssue> getUserStories() {
-        return withClient(c -> c.target("https://jira.adeo.no/rest/api/2/search")
+        return withClient(LONG_READ_CONFIG, c -> c.target("https://jira.adeo.no/rest/api/2/search")
                 .queryParam("jql", FO_JQL)
                 .queryParam("maxResults", 500)
                 .request()
