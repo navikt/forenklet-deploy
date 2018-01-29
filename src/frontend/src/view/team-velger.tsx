@@ -5,11 +5,12 @@ import { Action } from 'redux';
 import { Select } from 'nav-frontend-skjema';
 import { selectTeams } from '../redux/team-duck';
 import { Team } from '../models/team';
-import { velgTeam } from '../redux/team-velger-duck';
+import { selectValgtTeamId, velgTeam } from '../redux/team-velger-duck';
 import { getAllDeploys } from '../redux/deploy-duck';
 
 interface StateProps {
     teams: Team[];
+    valgtTeamId: string;
 }
 
 interface TeamVelgerDispatchProps {
@@ -18,14 +19,14 @@ interface TeamVelgerDispatchProps {
 
 type TeamVelgerProps = StateProps;
 
-function TeamVelger({ teams, doChangeValgtTeam}: TeamVelgerProps & TeamVelgerDispatchProps) {
+function TeamVelger({ teams, doChangeValgtTeam, valgtTeamId}: TeamVelgerProps & TeamVelgerDispatchProps) {
     function handleChange(event: any) {
         doChangeValgtTeam(event.target.value);
     }
 
     const options = teams.map((team) => <option value={team.id} key={team.id}>{team.displayName}</option>);
     return (
-        <Select label="Team" onChange={handleChange}>
+        <Select label="Team" onChange={handleChange} value={valgtTeamId}>
             {options}
         </Select>
     );
@@ -33,6 +34,7 @@ function TeamVelger({ teams, doChangeValgtTeam}: TeamVelgerProps & TeamVelgerDis
 
 const mapStateToProps = (state: AppState): StateProps => ({
     teams: selectTeams(state),
+    valgtTeamId: selectValgtTeamId(state)
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>): TeamVelgerDispatchProps => ({

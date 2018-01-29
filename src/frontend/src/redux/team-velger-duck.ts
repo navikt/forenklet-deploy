@@ -26,12 +26,12 @@ export function velgTeam(teamId: string): VelgTeam {
     return { type: actionNames.TEAM_VALGT, teamId };
 }
 
-export function getValgtTeam(state: AppState): string {
+export function selectValgtTeamId(state: AppState): string {
     return state.valgtTeam.teamId;
 }
 
 export function selectValgtTeam(state: AppState): Team | undefined {
-    return state.team.teams.find((team) => team.id === getValgtTeam(state));
+    return state.team.teams.find((team) => team.id === selectValgtTeamId(state));
 }
 
 export default function valgtTeamReducer(state: ValgtTeamState = initialState, action: TeamVelgerActions) {
