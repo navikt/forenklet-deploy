@@ -12,6 +12,10 @@ import { ReleaseWithCommits } from '../../models/release';
 import { selectDeploy } from '../../redux/deploy-duck';
 import { getEnvironmentByName } from '../../utils/environment';
 import { selectReleaseWithCommits, selectIsLoadingRelease } from '../../redux/selectors/release-selectors';
+import IssuesTable from '../release-note/kvittering/issues-table';
+import { Commit } from '../../models/commit';
+import { getIssues, selectIsLoadingIssues } from '../../redux/jira-issue-duck';
+import { commitToIssues } from '../../redux/releasenote-duck';
 
 interface PromoteRouteProps {
     app: string;
@@ -26,7 +30,7 @@ interface PromoteStateProps {
 }
 
 interface PromoteDispatchProps {
-    getCommits: (app: string, fromVersion: string, toVersion: string) => void;
+    doGetInfoForPromote: (app: string, fromVersion: string, toVersion: string) => void;
 }
 
 type PromoteProps = RouteComponentProps<PromoteRouteProps> & PromoteStateProps & PromoteDispatchProps;
@@ -34,7 +38,7 @@ type PromoteProps = RouteComponentProps<PromoteRouteProps> & PromoteStateProps &
 class Promote extends React.PureComponent<PromoteProps> {
     componentDidMount() {
         const app = this.props.match.params.app;
-        this.props.getCommits(app, this.props.fromVersion, this.props.toVersion);
+        this.props.doGetInfoForPromote(app, this.props.fromVersion, this.props.toVersion);
     }
 
     render() {
@@ -52,6 +56,7 @@ class Promote extends React.PureComponent<PromoteProps> {
             <section>
                 <Innholdstittel className="blokk-m">Promoter {props.match.params.app} til {props.release.environment.promotesTo}</Innholdstittel>
                 <Undertittel className="blokk-xs">Endringer fra {props.release.fromVersion} til {props.release.toVersion}</Undertittel>
+                <IssuesTable applications={[app]}/>
                 <ConmmitsForRelease className="blokk-m" commits={props.release.commits} />
                 <div className="knapperad-promoter">
                     <a className="knapp knapp--hoved" href={linkUrl}>
@@ -73,7 +78,7 @@ function mapStateToProps(state: AppState, ownProps: RouteComponentProps<PromoteR
     const deployNextEnv = selectDeploy(state, routeParams.app, environment.promotesTo);
 
     return {
-        isLoading: selectIsLoadingRelease(state),
+        isLoading: selectIsLoadingRelease(state) || selectIsLoadingIssues(state),
         release: selectReleaseWithCommits(state, routeParams.app, routeParams.env),
         fromVersion: deployNextEnv ? deployNextEnv.version : '',
         toVersion: deployCurrentEnv ? deployCurrentEnv.version : ''
@@ -81,10 +86,19 @@ function mapStateToProps(state: AppState, ownProps: RouteComponentProps<PromoteR
 }
 
 function mapDispatchToProps(dispatch: Dispatch<Action>): PromoteDispatchProps {
+
+    function hentIssues(commits: Commit[]) {
+        const issues = commits.map(commitToIssues)
+            .reduce((agg, current) => agg.concat(current), [])
+            .map((issue) => issue.name);
+        dispatch(getIssues(issues));
+    }
+
     return {
-        getCommits: (app: string, fromVersion: string, toVersion: string) => {
+        doGetInfoForPromote: (app: string, fromVersion: string, toVersion: string) => {
             dispatch(clearCommits());
-            dispatch(getCommitsForApplication(app, fromVersion, toVersion));
+            dispatch(getCommitsForApplication(app, fromVersion, toVersion))
+                .then(hentIssues);
         }
     };
 }

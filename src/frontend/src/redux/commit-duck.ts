@@ -75,6 +75,9 @@ export function getCommitsForApplication(application: string, fromVersion: strin
     return (dispatch: Dispatch<Action>) => {
         dispatch({ type: actionNames.LOADING });
         return api.getCommitsForApplication(application, fromVersion, toVersion)
-            .then((commits: Commit[]) => dispatch({ type: actionNames.FETCH_SUCCESS, commits }) );
+            .then((commits: Commit[]) => {
+                dispatch({ type: actionNames.FETCH_SUCCESS, commits });
+                return commits;
+            });
     };
 }
