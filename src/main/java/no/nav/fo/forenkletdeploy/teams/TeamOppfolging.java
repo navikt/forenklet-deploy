@@ -19,9 +19,14 @@ public class TeamOppfolging implements Team {
 
     @Override
     public List<ApplicationConfig> getApplicationConfigs() {
-        return Arrays.asList(ApplicationConfig.builder()
-                .name("modiabrukerdialog")
-                .gitUrl("ssh://git@stash.devillo.no:7999/dial/modiabrukerdialog.git")
-                .build());
+        return Arrays.asList(
+                ApplicationConfig.builder()
+                        .name("modiabrukerdialog")
+                        .gitUrl("ssh://git@stash.devillo.no:7999/dial/modiabrukerdialog.git")
+                        .build(),
+                ApplicationConfig.builder()
+                        .name("internarbeidsflatedecorator")
+                        .gitUrl("ssh://git@stash.devillo.no:7999/felles/internarbeidsflatedecorator.git")
+                        .build());
     }
 }
