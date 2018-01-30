@@ -13,16 +13,32 @@ interface DispatchProps {
 }
 
 interface StateProps {
-    isLoading: boolean;
+    isLoadingTeam: boolean;
+    isLoadingDeploy: boolean;
 }
 
-class Dashboard extends React.Component<DispatchProps & StateProps> {
+interface OwnProps {
+    spinnerTeam?: boolean;
+    spinnerDeploy?: boolean;
+    fetchData?: boolean;
+}
+
+type DashboardProps = DispatchProps & StateProps & OwnProps;
+
+class Dashboard extends React.Component<DashboardProps> {
     componentDidMount() {
-        this.props.requestInitialData();
+        if(this.props.fetchData === true) {
+            this.props.requestInitialData();
+        }
+    }
+
+    isLoading() {
+        const { spinnerTeam, spinnerDeploy, isLoadingDeploy, isLoadingTeam } = this.props;
+        return ((spinnerTeam && isLoadingTeam) || (spinnerDeploy && isLoadingDeploy));
     }
 
     render() {
-        if (this.props.isLoading) {
+        if (this.isLoading()) {
             return <NavFrontendSpinner />;
         }
 
@@ -43,7 +59,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>): DispatchProps => ({
 });
 
 const mapStateToProps = (state: AppState): StateProps => ({
-    isLoading: state.team.loading
+    isLoadingTeam: state.team.loading,
+    isLoadingDeploy: state.deploy.loading
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

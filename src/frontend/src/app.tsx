@@ -16,15 +16,17 @@ const store = getStore();
 function App() {
     return (
         <Provider store={store}>
-            <InitialDataLoader>
-                <BrowserRouter>
-                    <div>
-                        <Header/>
-                        <section className="content__wrapper">
-                            <Routing />
-                        </section>
-                    </div>
-                </BrowserRouter>
+            <InitialDataLoader fetchData={true} spinnerTeam={true}>
+                <div>
+                    <Header/>
+                    <section className="content__wrapper">
+                        <InitialDataLoader spinnerDeploy={true}>
+                            <BrowserRouter>
+                                <Routing />
+                            </BrowserRouter>
+                        </InitialDataLoader>
+                    </section>
+                </div>
             </InitialDataLoader>
         </Provider>
     );
