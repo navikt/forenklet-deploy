@@ -53,7 +53,7 @@ function responseToCommits(response: Commit[][]): Commit[] {
     return response.reduce((agg, current) => agg.concat(current), []);
 }
 
-function commitToIssues(commit: Commit): Issue[] {
+export function commitToIssues(commit: Commit): Issue[] {
     return getIssuesFromMessage(commit.message);
 }
 

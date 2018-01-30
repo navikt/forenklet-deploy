@@ -1,17 +1,18 @@
 import * as React from 'react';
-import { Action } from 'redux';
 import { NavLink } from 'react-router-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { connect, Dispatch } from 'react-redux';
 import { Innholdstittel, Undertittel } from 'nav-frontend-typografi';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import ConmmitsForRelease from './commits-for-release';
-import { getCommitsForApplication, clearCommits } from '../../redux/commit-duck';
 import { AppState } from '../../redux/reducer';
 import { ReleaseWithCommits } from '../../models/release';
 import { selectDeploy } from '../../redux/deploy-duck';
 import { getEnvironmentByName } from '../../utils/environment';
 import { selectReleaseWithCommits, selectIsLoadingRelease } from '../../redux/selectors/release-selectors';
+import IssuesTable from '../release-note/kvittering/issues-table';
+import { selectIsLoadingIssues } from '../../redux/jira-issue-duck';
+import { getInfoForPromote } from '../../redux/promote-duck';
 
 interface PromoteRouteProps {
     app: string;
@@ -25,16 +26,16 @@ interface PromoteStateProps {
     toVersion: string;
 }
 
-interface PromoteDispatchProps {
-    getCommits: (app: string, fromVersion: string, toVersion: string) => void;
+interface DispatchProps {
+    doGetInfoForPromote: (app: string, fromVersion: string, toVersion: string) => void;
 }
 
-type PromoteProps = RouteComponentProps<PromoteRouteProps> & PromoteStateProps & PromoteDispatchProps;
+type PromoteProps = RouteComponentProps<PromoteRouteProps> & PromoteStateProps & DispatchProps;
 
 class Promote extends React.PureComponent<PromoteProps> {
     componentDidMount() {
         const app = this.props.match.params.app;
-        this.props.getCommits(app, this.props.fromVersion, this.props.toVersion);
+        this.props.doGetInfoForPromote(app, this.props.fromVersion, this.props.toVersion);
     }
 
     render() {
@@ -52,6 +53,7 @@ class Promote extends React.PureComponent<PromoteProps> {
             <section>
                 <Innholdstittel className="blokk-m">Promoter {props.match.params.app} til {props.release.environment.promotesTo}</Innholdstittel>
                 <Undertittel className="blokk-xs">Endringer fra {props.release.fromVersion} til {props.release.toVersion}</Undertittel>
+                <IssuesTable applications={[app]}/>
                 <ConmmitsForRelease className="blokk-m" commits={props.release.commits} />
                 <div className="knapperad-promoter">
                     <a className="knapp knapp--hoved" href={linkUrl}>
@@ -73,19 +75,16 @@ function mapStateToProps(state: AppState, ownProps: RouteComponentProps<PromoteR
     const deployNextEnv = selectDeploy(state, routeParams.app, environment.promotesTo);
 
     return {
-        isLoading: selectIsLoadingRelease(state),
+        isLoading: selectIsLoadingRelease(state) || selectIsLoadingIssues(state),
         release: selectReleaseWithCommits(state, routeParams.app, routeParams.env),
         fromVersion: deployNextEnv ? deployNextEnv.version : '',
         toVersion: deployCurrentEnv ? deployCurrentEnv.version : ''
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>): PromoteDispatchProps {
+function mapDispatchToProps(dispatch: Dispatch<any>): DispatchProps {
     return {
-        getCommits: (app: string, fromVersion: string, toVersion: string) => {
-            dispatch(clearCommits());
-            dispatch(getCommitsForApplication(app, fromVersion, toVersion));
-        }
+        doGetInfoForPromote: (app, fromVersion, toVersion) => dispatch(getInfoForPromote(app, fromVersion, toVersion))
     };
 }
 
