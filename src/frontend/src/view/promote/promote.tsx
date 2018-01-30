@@ -56,7 +56,7 @@ class Promote extends React.PureComponent<PromoteProps> {
                 <IssuesTable applications={[app]}/>
                 <ConmmitsForRelease className="blokk-m" commits={props.release.commits} />
                 <div className="knapperad-promoter">
-                    <a className="knapp knapp--hoved" href={linkUrl}>
+                    <a className="knapp knapp--hoved" href={linkUrl} target="_blank" rel="noopener noreferrer">
                         Promoter
                     </a>
                     <NavLink className="knapp" to="/">
