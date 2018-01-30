@@ -1,21 +1,18 @@
 import * as React from 'react';
-import { Action } from 'redux';
 import { NavLink } from 'react-router-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { connect, Dispatch } from 'react-redux';
 import { Innholdstittel, Undertittel } from 'nav-frontend-typografi';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import ConmmitsForRelease from './commits-for-release';
-import { getCommitsForApplication, clearCommits } from '../../redux/commit-duck';
 import { AppState } from '../../redux/reducer';
 import { ReleaseWithCommits } from '../../models/release';
 import { selectDeploy } from '../../redux/deploy-duck';
 import { getEnvironmentByName } from '../../utils/environment';
 import { selectReleaseWithCommits, selectIsLoadingRelease } from '../../redux/selectors/release-selectors';
 import IssuesTable from '../release-note/kvittering/issues-table';
-import { Commit } from '../../models/commit';
-import { getIssues, selectIsLoadingIssues } from '../../redux/jira-issue-duck';
-import { commitToIssues } from '../../redux/releasenote-duck';
+import { selectIsLoadingIssues } from '../../redux/jira-issue-duck';
+import { getInfoForPromote } from '../../redux/promote-duck';
 
 interface PromoteRouteProps {
     app: string;
@@ -29,11 +26,11 @@ interface PromoteStateProps {
     toVersion: string;
 }
 
-interface PromoteDispatchProps {
+interface DispatchProps {
     doGetInfoForPromote: (app: string, fromVersion: string, toVersion: string) => void;
 }
 
-type PromoteProps = RouteComponentProps<PromoteRouteProps> & PromoteStateProps & PromoteDispatchProps;
+type PromoteProps = RouteComponentProps<PromoteRouteProps> & PromoteStateProps & DispatchProps;
 
 class Promote extends React.PureComponent<PromoteProps> {
     componentDidMount() {
@@ -85,21 +82,9 @@ function mapStateToProps(state: AppState, ownProps: RouteComponentProps<PromoteR
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>): PromoteDispatchProps {
-
-    function hentIssues(commits: Commit[]) {
-        const issues = commits.map(commitToIssues)
-            .reduce((agg, current) => agg.concat(current), [])
-            .map((issue) => issue.name);
-        dispatch(getIssues(issues));
-    }
-
+function mapDispatchToProps(dispatch: Dispatch<any>): DispatchProps {
     return {
-        doGetInfoForPromote: (app: string, fromVersion: string, toVersion: string) => {
-            dispatch(clearCommits());
-            dispatch(getCommitsForApplication(app, fromVersion, toVersion))
-                .then(hentIssues);
-        }
+        doGetInfoForPromote: (app, fromVersion, toVersion) => dispatch(getInfoForPromote(app, fromVersion, toVersion))
     };
 }
 
