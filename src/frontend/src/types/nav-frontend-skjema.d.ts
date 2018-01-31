@@ -70,7 +70,7 @@ declare module 'nav-frontend-skjema' {
         textareaRef?: (ref: any) => void;
     }
 
-    interface SelectProps extends React.HTMLProps<Select> {
+    interface SelectProps extends React.HTMLProps<HTMLSelectElement> {
         label: React.ReactNode | any;
         bredde?: SelectBredde;
         id?: string;

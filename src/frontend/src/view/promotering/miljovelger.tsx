@@ -9,14 +9,16 @@ interface MiljovelgerProps {
 }
 
 export default function Miljovelger(props: MiljovelgerProps) {
+    const envs = getEnvironments();
+
     return (
-        <div className="miljovelger">
-            <Select label="Fra miljø:" bredde="s" value={props.fromEnv}>
-                { getEnvironments().map((env) => <option key={`fra-${env.name}`}>{env.name}</option>) }
+        <div className="miljovelger blokk-m">
+            <Select label="Fra miljø:" bredde="s" value={props.fromEnv} onChange={(e) => props.onChange(e.currentTarget.value, props.toEnv)}>
+                { envs.map((env) => <option key={`fra-${env.name}`}>{env.name}</option>) }
             </Select>
 
-            <Select label="Til miljø:" bredde="s" value={props.toEnv}>
-                { getEnvironments().map((env) => <option key={`til-${env.name}`}>{env.name}</option>) }
+            <Select label="Til miljø:" bredde="s" value={props.toEnv} onChange={(e) => props.onChange(props.fromEnv, e.currentTarget.value)}>
+                { envs.map((env) => <option key={`til-${env.name}`}>{env.name}</option>) }
             </Select>
         </div>
     );

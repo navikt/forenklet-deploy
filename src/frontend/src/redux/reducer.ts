@@ -7,6 +7,7 @@ import commitReducer, { CommitState } from './commit-duck';
 import jiraIssueReducer, { JiraIssueState } from './jira-issue-duck';
 import teamReducer, { TeamState } from './team-duck';
 import valgTeamReducer, { ValgtTeamState } from './team-velger-duck';
+import promoteringReducer, { PromoteState } from './promote-duck';
 
 export interface AppState {
     error: ErrorState;
@@ -17,6 +18,7 @@ export interface AppState {
     jira: JiraIssueState;
     team: TeamState;
     valgtTeam: ValgtTeamState;
+    promotering: PromoteState;
 }
 
 export default combineReducers<AppState>({
@@ -27,5 +29,6 @@ export default combineReducers<AppState>({
     gonogoview: goNogoViewReducer,
     jira: jiraIssueReducer,
     team: teamReducer,
-    valgtTeam: valgTeamReducer
+    valgtTeam: valgTeamReducer,
+    promotering: promoteringReducer
 });

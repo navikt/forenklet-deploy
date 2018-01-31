@@ -16,8 +16,8 @@ export function selectIsLoadingReleaseNote(state: AppState): boolean {
     return state.deploy.loading || state.commit.loading || state.jira.loading;
 }
 
-function getApplicationsWithChanges(state: AppState): string[] {
-    return selectApplicationsWithChangesForEnvironments(state, [getEnvironmentByName('q6'), getEnvironmentByName('p')])
+function getApplicationsWithChanges(state: AppState, fromEnv: string = 'q6', toEnv: string = 'p'): string[] {
+    return selectApplicationsWithChangesForEnvironments(state, [getEnvironmentByName(fromEnv), getEnvironmentByName(toEnv)])
         .filter((application) => application.hasChanges)
         .map((application) => application.name);
 }
@@ -30,6 +30,11 @@ export function selectAllReleases(state: AppState): Release[] {
 export function selectAllReleasesWithCommits(state: AppState): ReleaseWithCommits[] {
     return getApplicationsWithChanges(state)
         .map((application) => selectReleaseWithCommits(state, application, 'q6', 'p'));
+}
+
+export function selectAllReleasesWithCommitsForEnvironments(state: AppState, fromEnv: string, toEnv: string): ReleaseWithCommits[] {
+    return getApplicationsWithChanges(state, fromEnv, toEnv)
+        .map((application) => selectReleaseWithCommits(state, application, fromEnv, toEnv));
 }
 
 export function selectReleases(state: AppState, applications: string[]): Release[] {
@@ -57,14 +62,14 @@ export function commitToIssues(commit: Commit): Issue[] {
     return getIssuesFromMessage(commit.message);
 }
 
-export function getInfoForReleaseNote() {
+export function getInfoForReleaseNote(fromEnv: string = 'q6', toEnv: string = 'p') {
     return (dispatch: Dispatch<Action>, getState: () => AppState) => {
         const state = getState();
         dispatch(clearCommits());
         dispatch({ type: commitAN.LOADING });
 
         const commitPromises = getApplicationsWithChanges(state)
-            .map((application) => selectRelease(state, application, 'q6', 'p'))
+            .map((application) => selectRelease(state, application, fromEnv, toEnv))
             .map((release) => commitApi.getCommitsForApplication(release.application, release.fromVersion, release.toVersion));
 
         Promise.all(commitPromises)
