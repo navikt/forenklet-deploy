@@ -68,7 +68,7 @@ export function getInfoForReleaseNote(fromEnv: string = 'q6', toEnv: string = 'p
         dispatch(clearCommits());
         dispatch({ type: commitAN.LOADING });
 
-        const commitPromises = getApplicationsWithChanges(state)
+        const commitPromises = getApplicationsWithChanges(state, fromEnv, toEnv)
             .map((application) => selectRelease(state, application, fromEnv, toEnv))
             .map((release) => commitApi.getCommitsForApplication(release.application, release.fromVersion, release.toVersion));
 
