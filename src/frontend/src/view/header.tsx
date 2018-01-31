@@ -19,13 +19,20 @@ interface HeaderDispatchProps {
 
 function Header({error, showAll, doChangeShowAll}: HeaderStateProps & HeaderDispatchProps) {
     return (
-        <div className="header container">
-            <div className="left-side">
-                <Undertittel className="logo"><a href="/">Forenklet Deploy</a></Undertittel>
-                <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle applikasjoner" checked={showAll} />
-                {error && <div className="header__error">{error}</div>}
+        <div className="header">
+            <div className="container">
+                <div className="left-side">
+                    <Undertittel className="logo"><a href="/">Forenklet Deploy</a></Undertittel>
+                    <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle applikasjoner" checked={showAll} />
+                    {error && <div className="header__error">{error}</div>}
+                </div>
+                <TeamVelger />
             </div>
-            <TeamVelger />
+            <ul className="navigasjonslinje">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/promote">Promotering</a></li>
+                <li><a href="/releasenote">Go/nogo</a></li>
+            </ul>
         </div>
     );
 }
