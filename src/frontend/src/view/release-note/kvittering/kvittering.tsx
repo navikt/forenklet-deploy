@@ -4,16 +4,17 @@ import * as queryString from 'query-string';
 import { Sidetittel, Normaltekst } from 'nav-frontend-typografi';
 import IssuesTable from './issues-table';
 import ApplicationReleases from './application-release';
-import { Release } from '../../../models/release';
+import { ReleaseWithCommits } from '../../../models/release';
 import { Team } from '../../../models/team';
 import '../release-note.less';
 import { AppState } from '../../../redux/reducer';
-import { selectReleases } from '../../../redux/releasenote-duck';
+import { selectReleasesWithCommits } from '../../../redux/releasenote-duck';
 import { selectValgtTeam } from '../../../redux/team-velger-duck';
+import Utrullingskandidater from './utrullingskandidater';
 
 interface KvitteringProps {
     applications: string[];
-    releases: Release[];
+    releases: ReleaseWithCommits[];
     team?: Team;
 }
 
@@ -28,6 +29,7 @@ export class Kvittering extends React.Component<KvitteringProps> {
                     <Normaltekst>Dato: {(new Date()).toLocaleDateString('nb-NO', dateOptions)}</Normaltekst>
                 </div>
 
+                <Utrullingskandidater releases={this.props.releases} />
                 <IssuesTable applications={this.props.applications} />
                 <ApplicationReleases releases={this.props.releases} />
             </article>
@@ -41,7 +43,7 @@ function mapStateToProps(state: AppState): KvitteringProps {
 
     return {
         applications: apps,
-        releases: selectReleases(state, apps),
+        releases: selectReleasesWithCommits(state, apps),
         team: selectValgtTeam(state)
     };
 }
