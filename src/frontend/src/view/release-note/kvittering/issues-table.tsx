@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { getUrlForIssue } from '../../promote/promote-utils';
+import ReactTable from 'react-table';
 import { JiraIssue } from '../../../models/jira-issue';
 import { AppState } from '../../../redux/reducer';
 import { selectIssuesForApplication } from '../../../redux/releasenote-duck';
@@ -15,21 +15,13 @@ interface StateProps {
     issues: JiraIssue[];
 }
 
-interface JiraIssueRowProps {
-    issue: JiraIssue;
-}
-
-function JiraIssueRow({ issue }: JiraIssueRowProps) {
-    return (
-        <tr>
-            <td className="issue">
-                <a href={getUrlForIssue(issue.key)}>{issue.key}</a>
-            </td>
-            <td className="status">{issue.fields.status.name}</td>
-            <td className="assigned">{issue.fields.assignee ? issue.fields.assignee.displayName : 'Ikke tildelt'}</td>
-            <td className="title">{issue.fields.summary}</td>
-        </tr>
-    );
+function formatIssue(issue: JiraIssue ) {
+    return {
+        issue: issue.key,
+        status: issue.fields.status.name,
+        tildelt: issue.fields.assignee ? issue.fields.assignee.displayName : 'Ikke tildelt',
+        tittel: issue.fields.summary
+    };
 }
 
 function sortByStatus(issueA: JiraIssue, issueB: JiraIssue): number {
@@ -38,24 +30,29 @@ function sortByStatus(issueA: JiraIssue, issueB: JiraIssue): number {
 
 export class IssuesTable extends React.Component<OwnProps & StateProps> {
     render() {
-        const sortesIssues = onlyUniqueIssues(this.props.issues).sort(sortByStatus);
+        const sortedIssues = onlyUniqueIssues(this.props.issues).sort(sortByStatus);
+        const data = sortedIssues.map((issue) => formatIssue(issue));
+        const columns = [{
+            Header: 'Issue',
+            accessor: 'issue',
+            width: 150
+        }, {
+            Header: 'Status',
+            accessor: 'status',
+            width: 200
+        }, {
+            Header: 'Tildelt',
+            accessor: 'tildelt',
+            width: 250
+        }, {
+            Header: 'Tittel',
+            accessor: 'tittel'
+        }];
 
         return (
             <section className="blokk-m">
                 <Undertittel className="blokk-xxs">Brukerhistorier ({this.props.issues.length}):</Undertittel>
-                <table className="table issues-table">
-                    <thead>
-                        <tr>
-                            <th className="issue">Issue</th>
-                            <th className="status">Status</th>
-                            <th className="assigned">Tildelt</th>
-                            <th className="title">Tittel</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { sortesIssues.map((issue) => <JiraIssueRow issue={issue} key={issue.key} />) }
-                    </tbody>
-                </table>
+                <ReactTable columns={columns} data={data}/>
             </section>
         );
     }
