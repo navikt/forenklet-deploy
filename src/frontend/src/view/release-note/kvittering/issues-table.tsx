@@ -6,6 +6,7 @@ import { AppState } from '../../../redux/reducer';
 import { selectIssuesForApplication } from '../../../redux/releasenote-duck';
 import { onlyUniqueIssues } from '../../../redux/jira-issue-duck';
 import { Undertittel } from 'nav-frontend-typografi';
+import { getUrlForIssue } from '../../promote/promote-utils';
 
 interface OwnProps {
     applications: string[];
@@ -15,13 +16,8 @@ interface StateProps {
     issues: JiraIssue[];
 }
 
-function formatIssue(issue: JiraIssue ) {
-    return {
-        issue: issue.key,
-        status: issue.fields.status.name,
-        tildelt: issue.fields.assignee ? issue.fields.assignee.displayName : 'Ikke tildelt',
-        tittel: issue.fields.summary
-    };
+interface CellPropTypes {
+    value: JiraIssue;
 }
 
 function sortByStatus(issueA: JiraIssue, issueB: JiraIssue): number {
@@ -31,28 +27,48 @@ function sortByStatus(issueA: JiraIssue, issueB: JiraIssue): number {
 export class IssuesTable extends React.Component<OwnProps & StateProps> {
     render() {
         const sortedIssues = onlyUniqueIssues(this.props.issues).sort(sortByStatus);
-        const data = sortedIssues.map((issue) => formatIssue(issue));
         const columns = [{
             Header: 'Issue',
-            accessor: 'issue',
-            width: 150
+            width: 150,
+            id: 'issue',
+            accessor: (props: CellPropTypes): CellPropTypes => props,
+            Cell: (props: CellPropTypes) => <a href={getUrlForIssue(props.value.key)}>{props.value.key}</a>
         }, {
             Header: 'Status',
-            accessor: 'status',
+            id: 'status',
+            accessor: (props: CellPropTypes): CellPropTypes =>  props,
+            Cell: (props: CellPropTypes) => props.value.fields.status.name,
             width: 200
         }, {
             Header: 'Tildelt',
-            accessor: 'tildelt',
+            id: 'tildelt',
+            accessor: (props: CellPropTypes): CellPropTypes => props,
+            Cell: (props: CellPropTypes) => props.value.fields.assignee ? props.value.fields.assignee.displayName : 'Ikke tildelt',
             width: 250
         }, {
             Header: 'Tittel',
-            accessor: 'tittel'
+            id: 'tittel',
+            accessor: (props: CellPropTypes): CellPropTypes =>  props,
+            Cell: (props: CellPropTypes) => props.value.fields.summary,
         }];
+
+        const defaultPageSize = sortedIssues.length < 20 ? sortedIssues.length : 20;
+        const showPagination = sortedIssues.length > 20;
 
         return (
             <section className="blokk-m">
                 <Undertittel className="blokk-xxs">Brukerhistorier ({this.props.issues.length}):</Undertittel>
-                <ReactTable columns={columns} data={data}/>
+                <ReactTable
+                    columns={columns}
+                    data={sortedIssues}
+                    defaultPageSize={defaultPageSize}
+                    showPagination={showPagination}
+                    previousText={'Forrige'}
+                    nextText={'Neste'}
+                    pageText={'Side'}
+                    ofText={'av'}
+                    rowsText={'rader'}
+                />
             </section>
         );
     }
