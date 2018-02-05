@@ -10,6 +10,7 @@ import { getUrlForIssue } from '../../promote/promote-utils';
 
 interface OwnProps {
     applications: string[];
+    className?: string;
 }
 
 interface StateProps {
@@ -56,7 +57,7 @@ export class IssuesTable extends React.Component<OwnProps & StateProps> {
         const showPagination = sortedIssues.length > 20;
 
         return (
-            <section className="blokk-m">
+            <section className={`${this.props.className} blokk-m`}>
                 <Undertittel className="blokk-xxs">Brukerhistorier ({this.props.issues.length}):</Undertittel>
                 <ReactTable
                     columns={columns}

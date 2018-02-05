@@ -53,8 +53,10 @@ class Promote extends React.PureComponent<PromoteProps> {
             <section>
                 <Innholdstittel className="blokk-m">Promoter {props.match.params.app} til {props.release.environment.promotesTo}</Innholdstittel>
                 <Undertittel className="blokk-xs">Endringer fra {props.release.fromVersion} til {props.release.toVersion}</Undertittel>
-                <IssuesTable applications={[app]}/>
-                <ConmmitsForRelease className="blokk-m" commits={props.release.commits} />
+                <div className="panel blokk-m">
+                    <IssuesTable applications={[app]}/>
+                    <ConmmitsForRelease commits={props.release.commits} />
+                </div>
                 <div className="knapperad-promoter">
                     <a className="knapp knapp--hoved" href={linkUrl} target="_blank" rel="noopener noreferrer">
                         Promoter
