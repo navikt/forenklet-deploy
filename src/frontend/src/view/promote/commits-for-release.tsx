@@ -1,21 +1,56 @@
 import * as React from 'react';
+import ReactTable from 'react-table';
 import { Commit } from '../../models/commit';
 import Alder from '../alder';
 import CommitMessage from './commit-message';
-import { Normaltekst, Undertittel } from 'nav-frontend-typografi';
+import { Undertittel } from 'nav-frontend-typografi';
 
-interface CommitRowProps {
-    commit: Commit;
+interface CommitTablePropTypes {
+    commits: Commit[];
 }
 
-const CommitRow = ({commit}: CommitRowProps) => (
-    <tr>
-        <td><a href={commit.url}>{commit.hash.slice(0,8)}</a></td>
-        <td><CommitMessage message={commit.message}/></td>
-        <td>{commit.author}</td>
-        <td><Alder alder={commit.timestamp}/> siden</td>
-    </tr>
-);
+interface CellPropTypes {
+    value: Commit;
+}
+
+const CommitTable = ({commits}: CommitTablePropTypes) => {
+    const columns = [{
+        Header: 'Id',
+        id: 'id',
+        width: 160,
+        accessor: (commit: Commit) => commit,
+        Cell: (props: CellPropTypes) => <a href={props.value.url}>{props.value.hash.slice(0, 8)}</a>
+    }, {
+        Header: 'Melding',
+        id: 'melding',
+        width: 700,
+        accessor: (commit: Commit) => commit,
+        Cell: (props: CellPropTypes) => <CommitMessage message={props.value.message}/>
+    }, {
+        Header: 'Utvikler',
+        accessor: 'author'
+    }, {
+        Header: 'Tidspunkt',
+        id: 'tidspunkt',
+        accessor: (commit: Commit) => commit,
+        Cell: (props: CellPropTypes) => <Alder alder={props.value.timestamp}/>
+    }];
+
+    const defaultPageSize = commits.length < 20 ? commits.length : 20;
+    const showPagination = commits.length > 20;
+
+    return (<ReactTable
+        columns={columns}
+        data={commits}
+        defaultPageSize={defaultPageSize}
+        showPagination={showPagination}
+        previousText={'Forrige'}
+        nextText={'Neste'}
+        pageText={'Side'}
+        ofText={'av'}
+        rowsText={'rader'}
+    />);
+};
 
 interface CommitsForReleaseProps {
     className?: string;
@@ -31,29 +66,14 @@ function CommitsForRelease(props: CommitsForReleaseProps) {
         .filter(filterMergeCommits)
         .filter(filterJenkinsCommits);
     const commitsToDisplay = filteredCommits
-        .sort(sortByTimestamp)
-        .slice(0, 30);
+        .sort(sortByTimestamp);
 
-    const harSkjultCommits = commitsToDisplay.length < filteredCommits.length;
     const hentetAlleEndringer = props.commits.length < 1000;
 
     return (
         <div className="blokk-m">
             <Undertittel className="blokk-xxs">Endringer ({ hentetAlleEndringer ? commitsToDisplay.length : `1000+` }):</Undertittel>
-            <table className={`commits-table ${props.className}`}>
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Melding</th>
-                        <th>Utvikler</th>
-                        <th>Tidspunkt</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { commitsToDisplay.map((commit) => <CommitRow key={commit.hash} commit={commit} />) }
-                </tbody>
-            </table>
-            { harSkjultCommits && <Normaltekst>Skjuler {filteredCommits.length - commitsToDisplay.length} endringer</Normaltekst> }
+            <CommitTable commits={commitsToDisplay}/>
         </div>
     );
 }
