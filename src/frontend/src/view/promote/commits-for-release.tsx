@@ -47,7 +47,7 @@ const CommitTable = ({commits}: CommitTablePropTypes) => {
         data={commits}
         defaultPageSize={defaultPageSize}
         showPagination={showPagination}
-        sorted={[{ id: 'tidspunkt', desc: true }]}
+        defaultSorted={[{ id: 'tidspunkt', desc: true }]}
         previousText={'Forrige'}
         nextText={'Neste'}
         pageText={'Side'}

@@ -18,7 +18,8 @@ interface StateProps {
 }
 
 interface CellPropTypes {
-    value: JiraIssue;
+    value: string;
+    original: JiraIssue;
 }
 
 function sortByStatus(issueA: JiraIssue, issueB: JiraIssue): number {
@@ -32,25 +33,25 @@ export class IssuesTable extends React.Component<OwnProps & StateProps> {
             Header: 'Issue',
             width: 150,
             id: 'issue',
-            accessor: (props: CellPropTypes): CellPropTypes => props,
-            Cell: (props: CellPropTypes) => <a href={getUrlForIssue(props.value.key)}>{props.value.key}</a>
+            accessor: (issue: JiraIssue) => issue.key,
+            Cell: (props: CellPropTypes) => <a href={getUrlForIssue(props.value)}>{props.value}</a>
         }, {
             Header: 'Status',
             id: 'status',
-            accessor: (props: CellPropTypes): CellPropTypes =>  props,
-            Cell: (props: CellPropTypes) => props.value.fields.status.name,
+            accessor: (issue: JiraIssue) =>  issue.fields.status.name,
+            Cell: (props: CellPropTypes) => props.value,
             width: 200
         }, {
             Header: 'Tildelt',
             id: 'tildelt',
-            accessor: (props: CellPropTypes): CellPropTypes => props,
-            Cell: (props: CellPropTypes) => props.value.fields.assignee ? props.value.fields.assignee.displayName : 'Ikke tildelt',
+            accessor: (issue: JiraIssue) =>  issue.fields.assignee ? issue.fields.assignee.displayName : 'Ikke tildelt',
+            Cell: (props: CellPropTypes) => props.value,
             width: 250
         }, {
             Header: 'Tittel',
             id: 'tittel',
-            accessor: (props: CellPropTypes): CellPropTypes =>  props,
-            Cell: (props: CellPropTypes) => props.value.fields.summary,
+            accessor: (issue: JiraIssue) => issue.fields.summary,
+            Cell: (props: CellPropTypes) => props.value,
         }];
 
         const defaultPageSize = sortedIssues.length < 20 ? sortedIssues.length : 20;
@@ -62,6 +63,7 @@ export class IssuesTable extends React.Component<OwnProps & StateProps> {
                 <ReactTable
                     columns={columns}
                     data={sortedIssues}
+                    defaultSorted={[{ id: 'status' }, { id: 'tildelt' }]}
                     defaultPageSize={defaultPageSize}
                     showPagination={showPagination}
                     previousText={'Forrige'}
