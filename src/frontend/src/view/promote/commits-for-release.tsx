@@ -47,6 +47,7 @@ const CommitTable = ({commits}: CommitTablePropTypes) => {
         data={commits}
         defaultPageSize={defaultPageSize}
         showPagination={showPagination}
+        sorted={[{ id: 'tidspunkt', desc: true }]}
         previousText={'Forrige'}
         nextText={'Neste'}
         pageText={'Side'}
@@ -62,21 +63,18 @@ interface CommitsForReleaseProps {
 
 function CommitsForRelease(props: CommitsForReleaseProps) {
     const filterMergeCommits = (commit: Commit) => !commit.mergecommit;
-    const sortByTimestamp = (a: Commit, b: Commit) => b.timestamp - a.timestamp;
     const filterJenkinsCommits = (commit: Commit) => commit.author !== 'jenkins';
 
     const filteredCommits = props.commits
         .filter(filterMergeCommits)
         .filter(filterJenkinsCommits);
-    const commitsToDisplay = filteredCommits
-        .sort(sortByTimestamp);
 
     const hentetAlleEndringer = props.commits.length < 1000;
 
     return (
         <div className="blokk-m">
-            <Undertittel className="blokk-xxs">Endringer ({ hentetAlleEndringer ? commitsToDisplay.length : `1000+` }):</Undertittel>
-            <CommitTable commits={commitsToDisplay}/>
+            <Undertittel className="blokk-xxs">Endringer ({ hentetAlleEndringer ? filteredCommits.length : `1000+` }):</Undertittel>
+            <CommitTable commits={filteredCommits}/>
         </div>
     );
 }
