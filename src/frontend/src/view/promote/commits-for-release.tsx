@@ -38,8 +38,9 @@ const CommitTable = ({commits}: CommitTablePropTypes) => {
         Cell: (props: CellPropTypes) => (<span><Alder alder={props.original.timestamp}/> siden</span>)
     }];
 
-    const defaultPageSize = commits.length < 10 ? commits.length : 10;
-    const showPagination = commits.length > 10;
+    const pageSize = 20;
+    const defaultPageSize = commits.length < pageSize ? commits.length : pageSize;
+    const showPagination = commits.length > pageSize;
 
     return (<ReactTable
         columns={columns}
