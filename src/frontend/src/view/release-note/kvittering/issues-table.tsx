@@ -22,13 +22,9 @@ interface CellPropTypes {
     original: JiraIssue;
 }
 
-function sortByStatus(issueA: JiraIssue, issueB: JiraIssue): number {
-    return issueA.fields.status.name.localeCompare(issueB.fields.status.name);
-}
-
 export class IssuesTable extends React.Component<OwnProps & StateProps> {
     render() {
-        const sortedIssues = onlyUniqueIssues(this.props.issues).sort(sortByStatus);
+        const uniqueIssues = onlyUniqueIssues(this.props.issues);
         const columns = [{
             Header: 'Issue',
             width: 150,
@@ -39,30 +35,27 @@ export class IssuesTable extends React.Component<OwnProps & StateProps> {
             Header: 'Status',
             id: 'status',
             accessor: (issue: JiraIssue) =>  issue.fields.status.name,
-            Cell: (props: CellPropTypes) => props.value,
             width: 200
         }, {
             Header: 'Tildelt',
             id: 'tildelt',
             accessor: (issue: JiraIssue) =>  issue.fields.assignee ? issue.fields.assignee.displayName : 'Ikke tildelt',
-            Cell: (props: CellPropTypes) => props.value,
             width: 250
         }, {
             Header: 'Tittel',
             id: 'tittel',
-            accessor: (issue: JiraIssue) => issue.fields.summary,
-            Cell: (props: CellPropTypes) => props.value,
+            accessor: (issue: JiraIssue) => issue.fields.summary
         }];
 
-        const defaultPageSize = sortedIssues.length < 20 ? sortedIssues.length : 20;
-        const showPagination = sortedIssues.length > 20;
+        const defaultPageSize = uniqueIssues.length < 20 ? uniqueIssues.length : 20;
+        const showPagination = uniqueIssues.length > 20;
 
         return (
             <section className={`${this.props.className} blokk-m`}>
                 <Undertittel className="blokk-xxs">Brukerhistorier ({this.props.issues.length}):</Undertittel>
                 <ReactTable
                     columns={columns}
-                    data={sortedIssues}
+                    data={uniqueIssues}
                     defaultSorted={[{ id: 'status' }, { id: 'tildelt' }]}
                     defaultPageSize={defaultPageSize}
                     showPagination={showPagination}

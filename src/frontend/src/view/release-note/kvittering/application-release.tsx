@@ -1,23 +1,10 @@
 import * as React from 'react';
+import ReactTable from 'react-table';
 import { Release } from '../../../models/release';
 import { Undertittel } from 'nav-frontend-typografi';
 
-interface ApplicationReleaseRowProps {
-    release: Release;
-}
-
 function getVersion(version: string | null): string {
     return version == null || version === '' ? 'Ikke prodsatt enda' : version;
-}
-
-function ApplicationReleaseRow(props: ApplicationReleaseRowProps) {
-    return (
-        <tr>
-            <td>{ props.release.application }</td>
-            <td>{ props.release.toVersion }</td>
-            <td>{ getVersion(props.release.fromVersion) }</td>
-        </tr>
-    );
 }
 
 interface ApplicationReleaseProps {
@@ -25,21 +12,38 @@ interface ApplicationReleaseProps {
 }
 
 export default function ApplicationRelease(props: ApplicationReleaseProps) {
+    const columns = [{
+        Header: 'Applikasjonsnavn',
+        id: 'name',
+        accessor: (release: Release) => release.application
+    }, {
+        Header: 'Versjon som prodsettes',
+        id: 'toVersion',
+        accessor: (release: Release) => release.toVersion
+    }, {
+        Header: 'Versjon i prod',
+        id: 'fromVersion',
+        accessor: (release: Release) => getVersion(release.fromVersion)
+    }];
+
+    const defaultPageSize = props.releases.length < 20 ? props.releases.length : 20;
+    const showPagination = props.releases.length > 20;
+
     return (
         <section>
             <Undertittel className="blokk-xxs">Applikasjoner ({ props.releases.length }):</Undertittel>
-            <table className="table release-table">
-                <thead>
-                    <tr>
-                        <th className="application">Applikasjonsnavn</th>
-                        <th className="releaseversion">Versjon som prodsettes</th>
-                        <th className="currentversion">Versjon i P</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { props.releases.map((release) => <ApplicationReleaseRow release={release} key={`${release.application}-${release.fromVersion}`} />) }
-                </tbody>
-            </table>
+            <ReactTable
+                columns={columns}
+                data={props.releases}
+                defaultSorted={[{ id: 'name' }]}
+                defaultPageSize={defaultPageSize}
+                showPagination={showPagination}
+                previousText={'Forrige'}
+                nextText={'Neste'}
+                pageText={'Side'}
+                ofText={'av'}
+                rowsText={'rader'}
+            />
         </section>
     );
 }
