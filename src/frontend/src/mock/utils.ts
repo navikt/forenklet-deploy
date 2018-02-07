@@ -96,7 +96,16 @@ export function randomMessage(): string {
         'Skriver litt flere tester',
         'Fikser bug i utledning av status på arbeidserfaring',
         'Må bruker Tom og ikke Fom for arbeidsperiode',
-        'Fikser diverse feil'
+        'Fikser diverse feil',
+        'la til policy som sjekker at vi har faste versjoner i package.json',
+        'Kunne finnt og fordele nye brukere',
+        'Legge til masse nye features',
+        'Ta i bruk masse feature-toggles',
+        'Slette masse feature-toggles',
+        'Legge til rette for digitale brukere',
+        'Gjøre masse designendinger',
+        'Legge til animasjoner',
+        'Fjerne en KVP-toggle'
     ];
     return commitMessages[randRange(0, commitMessages.length)];
 }

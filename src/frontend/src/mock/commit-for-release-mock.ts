@@ -13,7 +13,7 @@ function generateHash(): string {
 export function getMockCommits(application: string): Commit[] {
     seedRandom(getSeedFromString(application));
 
-    const numberOfCommits = randRange(1, 7);
+    const numberOfCommits = randRange(1, 25);
     const commitMessages: string[] = [];
     for(let i=0; i<numberOfCommits; i++) {
         commitMessages.push(randomMessage());
@@ -24,7 +24,7 @@ export function getMockCommits(application: string): Commit[] {
         hash: generateHash(),
         application,
         url: '#',
-        timestamp: Date.now(),
+        timestamp: Date.now() - (randRange(4, 1000) * 1000),
         message: `${randomIssue()} ${commitMessage}`,
         author: randomAuthor(),
         mergecommit: false

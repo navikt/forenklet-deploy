@@ -10,7 +10,8 @@ interface CommitTablePropTypes {
 }
 
 interface CellPropTypes {
-    value: Commit;
+    value: string;
+    original: Commit;
 }
 
 const CommitTable = ({commits}: CommitTablePropTypes) => {
@@ -18,26 +19,28 @@ const CommitTable = ({commits}: CommitTablePropTypes) => {
         Header: 'Id',
         id: 'id',
         width: 160,
-        accessor: (commit: Commit) => commit,
-        Cell: (props: CellPropTypes) => <a href={props.value.url}>{props.value.hash.slice(0, 8)}</a>
+        accessor: (commit: Commit) => commit.hash,
+        Cell: (props: CellPropTypes) => {
+            return <a href={props.original.url}>{props.value.slice(0, 8)}</a>;
+        }
     }, {
         Header: 'Melding',
         id: 'melding',
         width: 700,
-        accessor: (commit: Commit) => commit,
-        Cell: (props: CellPropTypes) => <CommitMessage message={props.value.message}/>
+        accessor: (commit: Commit) => commit.message,
+        Cell: (props: CellPropTypes) => <CommitMessage message={props.value}/>
     }, {
         Header: 'Utvikler',
         accessor: 'author'
     }, {
         Header: 'Tidspunkt',
         id: 'tidspunkt',
-        accessor: (commit: Commit) => commit,
-        Cell: (props: CellPropTypes) => <Alder alder={props.value.timestamp}/>
+        accessor: (commit: Commit) => commit.timestamp,
+        Cell: (props: CellPropTypes) => (<span><Alder alder={props.original.timestamp}/> siden</span>)
     }];
 
-    const defaultPageSize = commits.length < 20 ? commits.length : 20;
-    const showPagination = commits.length > 20;
+    const defaultPageSize = commits.length < 10 ? commits.length : 10;
+    const showPagination = commits.length > 10;
 
     return (<ReactTable
         columns={columns}
