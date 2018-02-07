@@ -24,16 +24,17 @@ const CommitTable = ({commits}: CommitTablePropTypes) => {
     }, {
         Header: 'Melding',
         id: 'melding',
-        width: 700,
         accessor: (commit: Commit) => commit.message,
         Cell: (props: CellPropTypes) => <CommitMessage message={props.value}/>
     }, {
         Header: 'Utvikler',
         id: 'utvikler',
+        width: 230,
         accessor: (commit: Commit) => commit.author,
     }, {
         Header: 'Tidspunkt',
         id: 'tidspunkt',
+        width: 230,
         accessor: (commit: Commit) => commit.timestamp,
         Cell: (props: CellPropTypes) => (<span><Alder alder={props.original.timestamp}/> siden</span>)
     }];

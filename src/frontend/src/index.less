@@ -29,6 +29,36 @@ a {
   padding: 3rem;
 }
 
+.container {
+  display: flex;
+}
+
+.ReactTable {
+  .-sort-desc, .-sort-asc {
+    box-shadow: none !important;
+    position: relative;
+
+    &:after {
+      content: " ";
+      top: 10px;
+      right: 15px;
+      transition: 300ms transform;
+      position: absolute;
+      border-left: 1px solid;
+      border-top: 1px solid;
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  .-sort-asc:after {
+    transform: translateY(-3px) rotateX(0deg) rotateZ(-135deg);
+  }
+
+  .-sort-desc:after {
+    transform: translateY(0px) rotateX(-180deg) rotateZ(-135deg);    
+  }
+}
 
 @media print {
   .header {
@@ -38,8 +68,4 @@ a {
   a[href]:after {
       content: none !important;
   }
-}
-
-.container {
-  display: flex;
 }
