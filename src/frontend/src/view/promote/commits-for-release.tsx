@@ -29,6 +29,7 @@ const CommitTable = ({commits}: CommitTablePropTypes) => {
         Cell: (props: CellPropTypes) => <CommitMessage message={props.value}/>
     }, {
         Header: 'Utvikler',
+        id: 'utvikler',
         accessor: (commit: Commit) => commit.author,
     }, {
         Header: 'Tidspunkt',
