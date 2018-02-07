@@ -20,9 +20,7 @@ const CommitTable = ({commits}: CommitTablePropTypes) => {
         id: 'id',
         width: 160,
         accessor: (commit: Commit) => commit.hash,
-        Cell: (props: CellPropTypes) => {
-            return <a href={props.original.url}>{props.value.slice(0, 8)}</a>;
-        }
+        Cell: (props: CellPropTypes) => <a href={props.original.url}>{props.value.slice(0, 8)}</a>
     }, {
         Header: 'Melding',
         id: 'melding',
