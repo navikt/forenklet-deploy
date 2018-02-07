@@ -16,6 +16,7 @@
     "build": "npm run build:less && npm run build:ts"
   },
   "dependencies": {
+    "@types/react-table": "6.7.2",
     "babel-polyfill": "6.26.0",
     "classnames": "2.2.5",
     "fetch-mock": "5.12.2",
@@ -55,6 +56,7 @@
     "react-router": "4.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts-ts": "2.12.0",
+    "react-table": "6.7.6",
     "redux": "3.7.2",
     "redux-thunk": "2.2.0",
     "reselect": "3.0.1",

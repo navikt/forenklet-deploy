@@ -1,61 +1,70 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { getUrlForIssue } from '../../promote/promote-utils';
+import ReactTable from 'react-table';
 import { JiraIssue } from '../../../models/jira-issue';
 import { AppState } from '../../../redux/reducer';
 import { selectIssuesForApplication } from '../../../redux/releasenote-duck';
 import { onlyUniqueIssues } from '../../../redux/jira-issue-duck';
 import { Undertittel } from 'nav-frontend-typografi';
+import { getUrlForIssue } from '../../promote/promote-utils';
 
 interface OwnProps {
     applications: string[];
+    className?: string;
 }
 
 interface StateProps {
     issues: JiraIssue[];
 }
 
-interface JiraIssueRowProps {
-    issue: JiraIssue;
-}
-
-function JiraIssueRow({ issue }: JiraIssueRowProps) {
-    return (
-        <tr>
-            <td className="issue">
-                <a href={getUrlForIssue(issue.key)}>{issue.key}</a>
-            </td>
-            <td className="status">{issue.fields.status.name}</td>
-            <td className="assigned">{issue.fields.assignee ? issue.fields.assignee.displayName : 'Ikke tildelt'}</td>
-            <td className="title">{issue.fields.summary}</td>
-        </tr>
-    );
-}
-
-function sortByStatus(issueA: JiraIssue, issueB: JiraIssue): number {
-    return issueA.fields.status.name.localeCompare(issueB.fields.status.name);
+interface CellPropTypes {
+    value: string;
+    original: JiraIssue;
 }
 
 export class IssuesTable extends React.Component<OwnProps & StateProps> {
     render() {
-        const sortesIssues = onlyUniqueIssues(this.props.issues).sort(sortByStatus);
+        const uniqueIssues = onlyUniqueIssues(this.props.issues);
+        const columns = [{
+            Header: 'Issue',
+            width: 150,
+            id: 'issue',
+            accessor: (issue: JiraIssue) => issue.key,
+            Cell: (props: CellPropTypes) => <a href={getUrlForIssue(props.value)}>{props.value}</a>
+        }, {
+            Header: 'Status',
+            id: 'status',
+            accessor: (issue: JiraIssue) =>  issue.fields.status.name,
+            width: 200
+        }, {
+            Header: 'Tildelt',
+            id: 'tildelt',
+            accessor: (issue: JiraIssue) =>  issue.fields.assignee ? issue.fields.assignee.displayName : 'Ikke tildelt',
+            width: 250
+        }, {
+            Header: 'Tittel',
+            id: 'tittel',
+            accessor: (issue: JiraIssue) => issue.fields.summary
+        }];
+
+        const defaultPageSize = uniqueIssues.length < 20 ? uniqueIssues.length : 20;
+        const showPagination = uniqueIssues.length > 20;
 
         return (
-            <section className="blokk-m">
+            <section className={`${this.props.className} blokk-m`}>
                 <Undertittel className="blokk-xxs">Brukerhistorier ({this.props.issues.length}):</Undertittel>
-                <table className="table issues-table">
-                    <thead>
-                        <tr>
-                            <th className="issue">Issue</th>
-                            <th className="status">Status</th>
-                            <th className="assigned">Tildelt</th>
-                            <th className="title">Tittel</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { sortesIssues.map((issue) => <JiraIssueRow issue={issue} key={issue.key} />) }
-                    </tbody>
-                </table>
+                <ReactTable
+                    columns={columns}
+                    data={uniqueIssues}
+                    defaultSorted={[{ id: 'status' }, { id: 'tildelt' }]}
+                    defaultPageSize={defaultPageSize}
+                    showPagination={showPagination}
+                    previousText={'Forrige'}
+                    nextText={'Neste'}
+                    pageText={'Side'}
+                    ofText={'av'}
+                    rowsText={'rader'}
+                />
             </section>
         );
     }

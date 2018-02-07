@@ -30,8 +30,10 @@ export class Kvittering extends React.Component<KvitteringProps> {
                 </div>
 
                 <Utrullingskandidater releases={this.props.releases} />
-                <IssuesTable applications={this.props.applications} />
-                <ApplicationReleases releases={this.props.releases} />
+                <div className="panel">
+                    <IssuesTable applications={this.props.applications} />
+                    <ApplicationReleases releases={this.props.releases} />
+                </div>
             </article>
         );
     }

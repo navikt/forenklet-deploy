@@ -17,9 +17,6 @@ export function selectApplicationHasChangesForEnvironments(state: AppState, appl
     const versionsDeployed = Array.from(new Set(deploysForApp.map((deploy) => deploy.version)));
     const envsDeployedTo = Array.from(new Set(deploysForApp.map((deploy) => deploy.environment.name)));
 
-    /* tslint:disable-next-line */
-    console.log("select", application, versionsDeployed, envsDeployedTo);
-
     return versionsDeployed.length > 1 || envsDeployedTo.length === 1;
 }
 
