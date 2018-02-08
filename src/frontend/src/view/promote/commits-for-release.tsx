@@ -35,6 +35,12 @@ const CommitTable = ({commits}: CommitTablePropTypes) => {
         Header: 'Tidspunkt',
         id: 'tidspunkt',
         width: 230,
+        sortMethod: (a: number, b: number) => {
+            if (a === b ) {
+                return 0;
+            }
+            return b > a ? 1 : -1;
+        },
         accessor: (commit: Commit) => commit.timestamp,
         Cell: (props: CellPropTypes) => (<span><Alder alder={props.original.timestamp}/> siden</span>)
     }];
@@ -48,7 +54,7 @@ const CommitTable = ({commits}: CommitTablePropTypes) => {
         data={commits}
         defaultPageSize={defaultPageSize}
         showPagination={showPagination}
-        defaultSorted={[{ id: 'tidspunkt', desc: true }]}
+        defaultSorted={[{ id: 'tidspunkt' }]}
         previousText={'Forrige'}
         nextText={'Neste'}
         pageText={'Side'}
