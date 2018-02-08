@@ -13,9 +13,6 @@ import static no.nav.sbl.rest.RestUtils.withClient;
 public class FOTeam implements Team {
 
     private static List<String> IGNORED_APPLICATIONS = Arrays.asList(
-            "modiacontextholder",
-            "modiaeventdistribution",
-            "internarbeidsflatedecorator",
             "veilarbdemo",
             "badkitty"
     );
