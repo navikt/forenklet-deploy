@@ -7,6 +7,7 @@ import { AppState } from '../redux/reducer';
 import { selectError } from '../redux/error-duck';
 import { changeShowAll } from '../redux/view-duck';
 import { Checkbox } from 'nav-frontend-skjema';
+import { TeamAwareAnchor } from './team-aware-link';
 
 interface HeaderStateProps {
     error: string | null;
@@ -22,16 +23,16 @@ function Header({error, showAll, doChangeShowAll}: HeaderStateProps & HeaderDisp
         <div className="header">
             <div className="container">
                 <div className="left-side">
-                    <Undertittel className="logo"><a href="/">Forenklet Deploy</a></Undertittel>
+                    <Undertittel className="logo"><TeamAwareAnchor href="/">Forenklet Deploy</TeamAwareAnchor></Undertittel>
                     <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle applikasjoner" checked={showAll} />
                     {error && <div className="header__error">{error}</div>}
                 </div>
                 <TeamVelger />
             </div>
             <ul className="navigasjonslinje">
-                <li><a href="/">Dashboard</a></li>
-                <li><a href="/promote">Promotering</a></li>
-                <li><a href="/releasenote">Go/nogo</a></li>
+                <li><TeamAwareAnchor href="/">Dashboard</TeamAwareAnchor></li>
+                <li><TeamAwareAnchor href="/promote">Promotering</TeamAwareAnchor></li>
+                <li><TeamAwareAnchor href="/releasenote">Go/nogo</TeamAwareAnchor></li>
             </ul>
         </div>
     );

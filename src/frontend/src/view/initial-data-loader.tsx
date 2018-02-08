@@ -7,6 +7,7 @@ import { getAllTeams } from '../redux/team-duck';
 import { velgTeam } from '../redux/team-velger-duck';
 import { Team } from '../models/team';
 import { getAllDeploys } from '../redux/deploy-duck';
+import { getInitialValgtTeam } from '../redux/initial-data-loader-duck';
 
 interface DispatchProps {
     requestInitialData: () => void;
@@ -52,8 +53,9 @@ const mapDispatchToProps = (dispatch: Dispatch<Action>): DispatchProps => ({
     requestInitialData: () => {
         dispatch(getAllTeams())
             .then((teams: Team[]) => {
-                dispatch(velgTeam(teams[0].id));
-                dispatch(getAllDeploys(teams[0].id));
+                const valgtTeamId = getInitialValgtTeam(teams);
+                dispatch(velgTeam(valgtTeamId));
+                dispatch(getAllDeploys(valgtTeamId));
             });
     }
 });
