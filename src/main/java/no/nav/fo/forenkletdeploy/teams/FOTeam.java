@@ -17,10 +17,7 @@ public class FOTeam implements Team {
             "modiaeventdistribution",
             "internarbeidsflatedecorator",
             "veilarbdemo",
-            "badkitty",
-            "mia",
-            "miasolr",
-            "miatekster"
+            "badkitty"
     );
 
     @Override
