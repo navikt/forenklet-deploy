@@ -29,6 +29,10 @@ public class TeamOppfolging implements Team {
                         .gitUrl("ssh://git@stash.devillo.no:7999/felles/internarbeidsflatedecorator.git")
                         .build(),
                 ApplicationConfig.builder()
+                        .name("dialogstyring")
+                        .gitUrl("ssh://git@stash.devillo.no:7999/dial/dialogstyring.git")
+                        .build(),
+                ApplicationConfig.builder()
                         .name("henvendelse")
                         .gitUrl("ssh://git@stash.devillo.no:7999/dial/henvendelse.git")
                         .build());
