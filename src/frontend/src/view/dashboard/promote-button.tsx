@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
 import { Knapp } from 'nav-frontend-knapper';
 import { Environment, DeployType } from '../../models/environment';
+import { TeamAwareLink } from '../team-aware-link';
 
 interface PromoteButtonProps {
     application: string;
@@ -22,12 +22,12 @@ function PromoteButton({application, environment, disabled}: PromoteButtonProps)
     }
 
     return (
-        <NavLink
+        <TeamAwareLink
             className="knapp"
             to={`/promote/${application}/${environment.name}`}
         >
             Vis endring til {environment.promotesTo}
-        </NavLink>
+        </TeamAwareLink >
     );
 }
 

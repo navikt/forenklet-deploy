@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { connect, Dispatch } from 'react-redux';
 import { Innholdstittel, Undertittel } from 'nav-frontend-typografi';
@@ -13,6 +12,7 @@ import { selectReleaseWithCommits, selectIsLoadingRelease } from '../../redux/se
 import IssuesTable from '../release-note/kvittering/issues-table';
 import { selectIsLoadingIssues } from '../../redux/jira-issue-duck';
 import { getInfoForPromote } from '../../redux/promote-duck';
+import { TeamAwareLink, TeamAwareAnchor } from '../team-aware-link';
 
 interface PromoteRouteProps {
     app: string;
@@ -58,12 +58,12 @@ class Promote extends React.PureComponent<PromoteProps> {
                     <ConmmitsForRelease commits={props.release.commits} />
                 </div>
                 <div className="knapperad-promoter">
-                    <a className="knapp knapp--hoved" href={linkUrl} target="_blank" rel="noopener noreferrer">
+                    <TeamAwareAnchor className="knapp knapp--hoved" href={linkUrl} target="_blank" rel="noopener noreferrer">
                         Promoter
-                    </a>
-                    <NavLink className="knapp" to="/">
+                    </TeamAwareAnchor>
+                    <TeamAwareLink className="knapp" to="/">
                         Avbryt
-                    </NavLink>
+                    </TeamAwareLink>
                 </div>
             </section>
         );
