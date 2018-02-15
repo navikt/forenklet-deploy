@@ -6,6 +6,10 @@ Oversikt og styring av deploys av FO-applikasjoner via pipeline T6 - Q6 - Q0 - P
 
 ## Utvikling
 
+For å kjøre opp lokalt i intelliJ må man ta i bruk en plugin som heter `lombok`.
+Det er viktig at man installerer riktig versjon. Man finner denne her på felles-disken
+`F:\programvare\idea\plugins`
+
 * Start MainTest.main() i testmappa. 
 * Kjør ` npm install && npm start` i `src/frontend` 
 
