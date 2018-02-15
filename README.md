@@ -10,3 +10,5 @@ Oversikt og styring av deploys av FO-applikasjoner via pipeline T6 - Q6 - Q0 - P
 * Kjør ` npm install && npm start` i `src/frontend` 
 
 Det er lettest å starte backend og frontend helt uavhengig av hverandre når man skal teste lokalt. 
+
+Ved utvikling av frontend er et lettest å bare kjøre opp med mockdata Dette kan gjøred med å starte opp frontenden med `npm run start-mock`. Modkdataen skal til en hver tid være representativ for reelle data. Og heroku
