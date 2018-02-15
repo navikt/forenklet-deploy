@@ -3,6 +3,7 @@ package no.nav.fo.forenkletdeploy.provider;
 import no.nav.fo.forenkletdeploy.teams.FOTeam;
 import no.nav.fo.forenkletdeploy.teams.Team;
 import no.nav.fo.forenkletdeploy.teams.TeamOppfolging;
+import no.nav.fo.forenkletdeploy.teams.TeamSoknad;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class TeamProvider {
     public TeamProvider() {
         teams.add(new FOTeam());
         teams.add(new TeamOppfolging());
+        teams.add(new TeamSoknad());
     }
 
     public List<Team> getTeams() {
