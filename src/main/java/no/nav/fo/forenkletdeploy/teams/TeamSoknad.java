@@ -24,6 +24,11 @@ public class TeamSoknad implements Team {
     }
 
     @Override
+    public String getJenkinsFolder() {
+        return "team_soknad";
+    }
+
+    @Override
     public List<ApplicationConfig> getApplicationConfigs() {
         String json = withClient(c -> c.target("https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/team_soknad/config.json").request().get(String.class));
         Map<String, Map<String, String>> map = fromJson(json, Map.class);

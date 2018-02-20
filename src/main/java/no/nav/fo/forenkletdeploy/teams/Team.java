@@ -7,5 +7,6 @@ import java.util.List;
 public interface Team {
     String getId();
     String getDisplayName();
+    String getJenkinsFolder();
     List<ApplicationConfig> getApplicationConfigs();
 }
