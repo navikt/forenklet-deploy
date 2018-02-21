@@ -3,6 +3,7 @@ import { UndertekstBold } from 'nav-frontend-typografi';
 import CommitsForRelease from '../promote/commits-for-release';
 import IssuesTable from '../release-note/kvittering/issues-table';
 import { ReleaseWithCommits } from '../../models/release';
+import PromoteJenkinsAnchor from '../promote/promote-jenkins-anchor';
 
 interface PromoteApplicationProps {
     release: ReleaseWithCommits;
@@ -11,6 +12,8 @@ interface PromoteApplicationProps {
 export class PromoteApplication extends React.Component<PromoteApplicationProps> {
     render() {
         const fromVersion = this.props.release.fromVersion ? this.props.release.fromVersion : '0.0.0';
+        const app = this.props.release.application;
+        const env = this.props.release.environment.promotesTo ? this.props.release.environment.promotesTo : '';
 
         return (
             <section>
@@ -18,6 +21,7 @@ export class PromoteApplication extends React.Component<PromoteApplicationProps>
                     <UndertekstBold className="blokk-xs">{fromVersion} til {this.props.release.toVersion}</UndertekstBold>
                     <IssuesTable applications={[this.props.release.application]} />
                     <CommitsForRelease commits={this.props.release.commits} />
+                    <PromoteJenkinsAnchor application={app} env={env}/>
                 </div>
             </section>
         );

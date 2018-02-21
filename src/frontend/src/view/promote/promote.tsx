@@ -15,6 +15,7 @@ import { getInfoForPromote } from '../../redux/promote-duck';
 import { TeamAwareLink } from '../team-aware-link';
 import { selectValgtTeam } from '../../redux/team-velger-duck';
 import { Team } from '../../models/team';
+import PromoteJenkinsAnchor from './promote-jenkins-anchor';
 
 interface PromoteRouteProps {
     app: string;
@@ -48,10 +49,7 @@ class Promote extends React.PureComponent<PromoteProps> {
         }
 
         const app = props.release.application;
-        const env = props.release.environment.promotesTo;
-        const buildName = env === 'p' ? '-release-' : `-promotering-${env}-`;
-        const jenkinsFolder = props.valgtTeam ? props.valgtTeam.jenkinsFolder : '';
-        const linkUrl = `http://bekkci.devillo.no/job/${jenkinsFolder}/job/${app}/job/${buildName}/`;
+        const env = props.release.environment.promotesTo ? props.release.environment.promotesTo : '';
 
         return (
             <section>
@@ -62,9 +60,7 @@ class Promote extends React.PureComponent<PromoteProps> {
                     <ConmmitsForRelease commits={props.release.commits} />
                 </div>
                 <div className="knapperad-promoter">
-                    <a className="knapp knapp--hoved" href={linkUrl} target="_blank" rel="noopener noreferrer">
-                        Promoter
-                    </a>
+                    <PromoteJenkinsAnchor application={app} env={env}/>
                     <TeamAwareLink className="knapp" to="/">
                         Avbryt
                     </TeamAwareLink>
