@@ -18,6 +18,11 @@ public class TeamOppfolging implements Team {
     }
 
     @Override
+    public String getJenkinsFolder() {
+        return "teamoppfolging";
+    }
+
+    @Override
     public List<ApplicationConfig> getApplicationConfigs() {
         return Arrays.asList(
                 ApplicationConfig.builder()

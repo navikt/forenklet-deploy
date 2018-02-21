@@ -28,6 +28,11 @@ public class FOTeam implements Team {
     }
 
     @Override
+    public String getJenkinsFolder() {
+        return "forenklet_oppfolging";
+    }
+
+    @Override
     public List<ApplicationConfig> getApplicationConfigs() {
         String json = withClient(c -> c.target("https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json").request().get(String.class));
         Map<String, Map<String, String>> map = fromJson(json, Map.class);
