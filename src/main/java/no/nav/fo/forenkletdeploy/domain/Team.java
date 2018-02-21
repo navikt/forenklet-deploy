@@ -8,4 +8,5 @@ import lombok.Value;
 public class Team {
     String displayName;
     String id;
+    String jenkinsFolder;
 }

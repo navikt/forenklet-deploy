@@ -23,6 +23,7 @@ public class TeamService {
                 .map(team -> Team.builder()
                         .id(team.getId())
                         .displayName(team.getDisplayName())
+                        .jenkinsFolder(team.getJenkinsFolder())
                         .build())
                 .collect(Collectors.toList());
     }

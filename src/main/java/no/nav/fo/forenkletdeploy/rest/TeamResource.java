@@ -21,7 +21,7 @@ public class TeamResource {
     }
 
     @GET
-    public List<Team> getCommitsForApplication() {
+    public List<Team> getTeams() {
         return teamService.getTeams();
     }
 
