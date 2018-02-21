@@ -23,7 +23,7 @@ function Deployment(props: OwnProps & StateProps) {
     const hasChanges = props.deploy && props.environment.promotesTo && (props.deployNextEnv == null || props.deploy.version !== props.deployNextEnv.version);
 
     return (
-        <Etikett type={ props.deploy ? 'suksess' : 'info' } className="deployment">
+        <Etikett type={ props.deploy ? 'suksess' : 'info' } typo="normaltekst" className="deployment">
             <Element className="blokk-xxs">{props.environment.name.toUpperCase()}</Element>
             <Normaltekst className="blokk-xxs">{ props.deploy ? props.deploy.version : 'Ikke deployet' }</Normaltekst>
             { props.deploy && <Normaltekst className="blokk-xs">Deployet for <Alder alder={props.deploy.timestamp}/> siden</Normaltekst> }

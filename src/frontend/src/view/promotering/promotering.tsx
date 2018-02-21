@@ -51,7 +51,7 @@ class Promotering extends React.Component<PromoteringProps> {
                 <Sidetittel className="blokk-s">Promotering og oversikt</Sidetittel>
                 <Miljovelger onChange={this.handleChangeMiljo} fromEnv={this.props.valgtFromEnv} toEnv={this.props.valgtToEnv} />
                 { this.props.isLoading
-                    ? <NavFrontendSpinner />
+                    ? <NavFrontendSpinner type="L" />
                     : <PromoteReleases releases={this.props.releases} openApplication={this.props.openApplication} doOpenApplication={this.handleOpenApplication} />
                 }
             </article>

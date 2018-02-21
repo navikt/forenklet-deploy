@@ -26,7 +26,7 @@ class ReleaseNote extends React.Component<ReleaseNoteProps> {
 
     render() {
         if(this.props.isLoading) {
-            return <NavFrontendSpinner />;
+            return <NavFrontendSpinner type="L" />;
         }
 
         return (

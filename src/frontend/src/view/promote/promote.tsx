@@ -44,7 +44,7 @@ class Promote extends React.PureComponent<PromoteProps> {
     render() {
         const props = this.props;
         if (props.isLoading) {
-            return <NavFrontendSpinner />;
+            return <NavFrontendSpinner type="L" />;
         }
 
         const app = props.release.application;
