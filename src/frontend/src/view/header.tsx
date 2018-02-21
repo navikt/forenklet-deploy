@@ -30,8 +30,8 @@ function Header({error, showAll, doChangeShowAll}: HeaderStateProps & HeaderDisp
                 <TeamVelger />
             </div>
             <ul className="navigasjonslinje">
-                <li><TeamAwareAnchor href="/">Dashboard</TeamAwareAnchor></li>
                 <li><TeamAwareAnchor href="/promote">Promotering</TeamAwareAnchor></li>
+                <li><TeamAwareAnchor href="/dashboard">Dashboard</TeamAwareAnchor></li>
                 <li><TeamAwareAnchor href="/releasenote">Go/nogo</TeamAwareAnchor></li>
             </ul>
         </div>
