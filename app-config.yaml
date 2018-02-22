@@ -12,3 +12,7 @@ healthcheck:
   readiness:
     path: internal/selftest
     initialDelay: 20
+fasitResources:
+  used:
+  - alias: unleash-client-api
+    resourceType: restservice

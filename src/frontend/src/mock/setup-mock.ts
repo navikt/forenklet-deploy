@@ -5,6 +5,7 @@ import { apiBaseUri } from '../utils/config';
 import { getMockIssue } from './jira-issue-mock';
 import { getMockCommits } from './commit-for-release-mock';
 import { teams } from './teams';
+import { getMockToggle } from './unleash-mock';
 
 export function setupMock() {
     /* tslint:disable-next-line */
@@ -30,6 +31,13 @@ export function setupMock() {
         const result = re.exec(uri);
         const issueId = result ? result[1] : 'UKJENT-01';
         return getMockIssue(issueId);
+    })));
+
+    fetchMock.get('begin:' + apiBaseUri + '/featuretoggles', respondWith(delayed(150, (uri: string) => {
+        const re = /\/featuretoggles\/([a-zA-Z0-9._\-]*)/;
+        const result = re.exec(uri);
+        const toggleName = result ? result[1] : 'mock.toggle';
+        return getMockToggle(toggleName, 50);
     })));
 
     fetchMock.get(apiBaseUri + '/teams', respondWith(delayed(500, teams)));
