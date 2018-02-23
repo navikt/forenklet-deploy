@@ -19,6 +19,8 @@ public class TestUtils {
         System.setProperty("http.proxyPort", "8088");
         System.setProperty("https.proxyHost", "webproxy-utvikler.nav.no");
         System.setProperty("https.proxyPort", "8088");
+        System.setProperty("FASIT_ENVIRONMENT_NAME", "local");
+        System.setProperty("UNLEASH_API_URL", "https://unleash.nais.preprod.local/api/");
 
         disableCertificateChecks();
 
