@@ -7,20 +7,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class UnleashService {
     private DefaultUnleash unleash;
     private Logger LOG = LoggerFactory.getLogger(UnleashService.class.getName());
 
     public UnleashService() {
-        String instanceId = System.getProperty("FASIT_ENVIRONMENT_NAME", "local");
-        String env = System.getProperty("UNLEASH_API_URL");
-        LOG.info(String.format("Setting up unleash with instance: '%s' with uri: '%s'", instanceId, env));
+        String instanceId = getEnvironment();
+        String apiUrl = getApiUrl();
+        LOG.info(String.format("Setting up unleash with instance: '%s' with uri: '%s'", instanceId, apiUrl));
 
         UnleashConfig config = UnleashConfig.builder()
                 .appName("forenklet-deploy")
                 .instanceId(instanceId)
-                .unleashAPI(env)
+                .unleashAPI(apiUrl)
                 .build();
 
         this.unleash = new DefaultUnleash(config, new ByEnvironmentStrategy());
@@ -28,5 +30,16 @@ public class UnleashService {
 
     public boolean isEnabled(String toggleName) {
         return this.unleash.isEnabled(toggleName);
+    }
+
+    public static String getEnvironment() {
+        return Optional.ofNullable(System.getenv("FASIT_ENVIRONMENT_NAME"))
+                .orElse("local");
+
+    }
+
+    public static String getApiUrl() {
+        return Optional.ofNullable(System.getenv("UNLEASH_API_URL"))
+                .orElse("https://unleash.nais.preprod.local/api/");
     }
 }
