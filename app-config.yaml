@@ -14,5 +14,5 @@ healthcheck:
     initialDelay: 20
 fasitResources:
   used:
-  - alias: unleash-client-api
+  - alias: unleash-api
     resourceType: restservice
