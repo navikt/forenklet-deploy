@@ -3,6 +3,8 @@ package no.nav.fo.forenkletdeploy.service;
 import no.finn.unleash.DefaultUnleash;
 import no.finn.unleash.util.UnleashConfig;
 import no.nav.fo.forenkletdeploy.unleash.streategies.ByEnvironmentStrategy;
+import no.nav.fo.forenkletdeploy.unleash.streategies.IsDevStrategy;
+import no.nav.fo.forenkletdeploy.unleash.streategies.IsNotProdStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,12 @@ public class UnleashService {
                 .unleashAPI(apiUrl)
                 .build();
 
-        this.unleash = new DefaultUnleash(config, new ByEnvironmentStrategy());
+        this.unleash = new DefaultUnleash(
+                config,
+                new ByEnvironmentStrategy(),
+                new IsNotProdStrategy(),
+                new IsDevStrategy()
+        );
     }
 
     public boolean isEnabled(String toggleName) {

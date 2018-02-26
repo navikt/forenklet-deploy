@@ -33,7 +33,7 @@ export function setupMock() {
         return getMockIssue(issueId);
     })));
 
-    fetchMock.get('begin:' + apiBaseUri + '/featuretoggles', respondWith(delayed(150, (uri: string) => {
+    fetchMock.get('begin:' + apiBaseUri + '/featuretoggles', respondWith(delayed(600, (uri: string) => {
         const re = /\/featuretoggles\/([a-zA-Z0-9._\-]*)/;
         const result = re.exec(uri);
         const toggleName = result ? result[1] : 'mock.toggle';
