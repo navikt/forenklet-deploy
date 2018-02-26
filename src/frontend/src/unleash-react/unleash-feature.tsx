@@ -46,25 +46,3 @@ export class FeatureIsEnabled extends React.Component<UnleashFeatureProps, Unlea
     }
 }
 
-export class FeatureIsDisabled extends React.Component<UnleashFeatureProps, UnleashFeatureState> {
-    constructor(props: UnleashFeatureProps) {
-        super(props);
-        this.state = {
-            enabled: props.defaultEnabled === true
-        };
-    }
-
-    componentDidMount() {
-        getFeature(this.props.name)
-            .then((feature: Feature) => {
-                this.setState({ enabled: feature.enabled });
-            });
-    }
-
-    render() {
-        if (!this.state.enabled) {
-            return this.props.children;
-        }
-        return null;
-    }
-}
