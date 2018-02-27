@@ -45,4 +45,3 @@ export class FeatureIsEnabled extends React.Component<UnleashFeatureProps, Unlea
         return null;
     }
 }
-
