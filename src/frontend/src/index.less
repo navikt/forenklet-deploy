@@ -56,7 +56,17 @@ a {
   }
 
   .-sort-desc:after {
-    transform: translateY(0px) rotateX(-180deg) rotateZ(-135deg);    
+    transform: translateY(0px) rotateX(-180deg) rotateZ(-135deg);
+  }
+}
+
+.error {
+  background-color: @navRod;
+  padding: 1rem;
+  color: white;
+
+  &:empty{
+    display: none;
   }
 }
 

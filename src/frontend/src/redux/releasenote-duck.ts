@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { Action } from 'redux';
 import { AppState } from './reducer';
-import { ReleaseWithCommits, Release } from '../models/release';
+import { ReleaseWithCommits, Release, ReleaseWithCommitsAndIssues } from '../models/release';
 import { Commit } from '../models/commit';
 import { getEnvironmentByName } from '../utils/environment';
 import * as commitApi from '../api/commit-api';
@@ -43,6 +43,13 @@ export function selectReleases(state: AppState, applications: string[]): Release
 
 export function selectReleasesWithCommits(state: AppState, applications: string[]): ReleaseWithCommits[] {
     return applications.map((application) => selectReleaseWithCommits(state, application, 'q6', 'p'));
+}
+
+export function selectReleasesWithCommitsAndIssues(state: AppState, applications: string[]): ReleaseWithCommitsAndIssues[] {
+    return selectReleasesWithCommits(state, applications).map((a) => ({
+        ...a,
+        issues: selectIssuesForApplication(state, a.application)
+    }));
 }
 
 export function selectIssuesForApplication(state: AppState, application: string): JiraIssue[] {

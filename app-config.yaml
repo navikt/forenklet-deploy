@@ -16,3 +16,5 @@ fasitResources:
   used:
   - alias: unleash-api
     resourceType: restservice
+  - alias: bekkci_confluence
+    resourceType: credential
