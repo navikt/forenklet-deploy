@@ -5,7 +5,7 @@
     <parent>
         <groupId>no.nav.sbl</groupId>
         <artifactId>mor-pom</artifactId>
-        <version>2017.11.28.18.33</version>
+        <version>2018.02.05.16.55</version>
     </parent>
 
     <groupId>no.nav.fo</groupId>
@@ -18,7 +18,7 @@
             <dependency>
                 <groupId>no.nav.sbl</groupId>
                 <artifactId>bom</artifactId>
-                <version>2018.01.15.16.15</version>
+                <version>2018.02.05.16.55</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -36,6 +36,11 @@
                 <groupId>no.finn.unleash</groupId>
                 <artifactId>unleash-client-java</artifactId>
                 <version>3.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.spullara.mustache.java</groupId>
+                <artifactId>compiler</artifactId>
+                <version>0.9.5</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -106,12 +111,12 @@
             <groupId>no.finn.unleash</groupId>
             <artifactId>unleash-client-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.spullara.mustache.java</groupId>
+            <artifactId>compiler</artifactId>
+        </dependency>
 
         <!-- test -->
-        <dependency>
-            <groupId>no.nav.sbl</groupId>
-            <artifactId>fasit</artifactId>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -125,23 +130,27 @@
             <artifactId>metrics</artifactId>
         </dependency>
         <dependency>
+            <groupId>no.nav.sbl</groupId>
+            <artifactId>json</artifactId>
+            <type>test-jar</type>
+        </dependency>
+        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.sbl</groupId>
+            <artifactId>fasit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.sbl.dialogarena</groupId>
+            <artifactId>test-config</artifactId>
         </dependency>
 
     </dependencies>
 
     <build>
         <finalName>forenklet-deploy</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 
 </project>

@@ -1,20 +1,19 @@
 package no.nav.fo.forenkletdeploy;
 
-import no.nav.apiapp.ApiApplication;
-import org.springframework.cache.annotation.EnableCaching;
+import no.nav.apiapp.ApiApplication.NaisApiApplication;
+import no.nav.apiapp.config.ApiAppConfigurator;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
-
 import java.util.EnumSet;
 
 import static no.nav.apiapp.ApiApplication.Sone.FSS;
 
 @Configuration
 @ComponentScan(basePackages = "no.nav.fo.forenkletdeploy")
-public class ApplicationConfig implements ApiApplication {
+public class ApplicationConfig implements NaisApiApplication {
 
     @Override
     public String getApplicationName() {
@@ -45,4 +44,8 @@ public class ApplicationConfig implements ApiApplication {
         return false;
     }
 
+    @Override
+    public void configure(ApiAppConfigurator apiAppConfigurator) {
+
+    }
 }

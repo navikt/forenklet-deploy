@@ -8,6 +8,7 @@ import jiraIssueReducer, { JiraIssueState } from './jira-issue-duck';
 import teamReducer, { TeamState } from './team-duck';
 import valgTeamReducer, { ValgtTeamState } from './team-velger-duck';
 import promoteringReducer, { PromoteState } from './promote-duck';
+import kvitteringReducer, { KvitteringState } from './kvittering-duck';
 
 export interface AppState {
     error: ErrorState;
@@ -19,6 +20,7 @@ export interface AppState {
     team: TeamState;
     valgtTeam: ValgtTeamState;
     promotering: PromoteState;
+    kvittering: KvitteringState;
 }
 
 export default combineReducers<AppState>({
@@ -30,5 +32,6 @@ export default combineReducers<AppState>({
     jira: jiraIssueReducer,
     team: teamReducer,
     valgtTeam: valgTeamReducer,
-    promotering: promoteringReducer
+    promotering: promoteringReducer,
+    kvittering: kvitteringReducer
 });

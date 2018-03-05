@@ -40,5 +40,9 @@ export function setupMock() {
         return getMockToggle(toggleName, 50);
     })));
 
+    fetchMock.post('begin:' + apiBaseUri + '/kvittering', respondWith(delayed(6000, () => {
+        return { url: '/' };
+    })));
+
     fetchMock.get(apiBaseUri + '/teams', respondWith(delayed(500, teams)));
 }
