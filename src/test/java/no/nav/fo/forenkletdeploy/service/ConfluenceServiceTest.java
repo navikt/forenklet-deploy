@@ -41,7 +41,8 @@ public class ConfluenceServiceTest {
 
     @Test
     public void requestDTO() {
-        assertEqualJson(toJson(confluenceService.requestDTO(releaseNote())), read("/confluence/requestDTO.json"));
+        String json = toJson(confluenceService.requestDTO(releaseNote()));
+        assertEqualJson(json, read("/confluence/requestDTO.json"));
     }
 
     private ReleaseNote releaseNote() {
