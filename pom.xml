@@ -115,6 +115,18 @@
             <groupId>com.github.spullara.mustache.java</groupId>
             <artifactId>compiler</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.sbl</groupId>
+            <artifactId>util</artifactId>
+        </dependency>
 
         <!-- test -->
         <dependency>
@@ -146,7 +158,6 @@
             <groupId>no.nav.sbl.dialogarena</groupId>
             <artifactId>test-config</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>
