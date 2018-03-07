@@ -6,6 +6,8 @@ import no.nav.fo.forenkletdeploy.util.MustacheUtil;
 import no.nav.json.JsonUtils;
 import no.nav.sbl.rest.RestUtils;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.client.Entity;
@@ -21,6 +23,7 @@ import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeatu
 @Component
 public class ConfluenceService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ConfluenceService.class.getName());
     public static final String CONTENT_API_URL = "https://confluence.adeo.no/rest/api/content";
     public static final String BEKKCI_CONFLUENCE_USERNAME_PROPERTY = "BEKKCI_CONFLUENCE_USERNAME";
     public static final String BEKKCI_CONFLUENCE_PASSWORD_PROPERTY = "BEKKCI_CONFLUENCE_PASSWORD";
@@ -38,6 +41,7 @@ public class ConfluenceService {
             String responseString = post.readEntity(String.class);
             int status = post.getStatus();
             if (status != 200) {
+                LOG.error("Feil ved oppdatering av confluence. Confluence returerte status " + status);
                 throw new IllegalStateException(responseString);
             } else {
                 return releaseNote.withUrl(pageUrl(responseString));
