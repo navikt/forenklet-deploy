@@ -33,11 +33,9 @@ public class ConfluenceService {
         return RestUtils.withClient(RestUtils.LONG_READ_CONFIG, c -> {
             c.register(authenticationFeature);
             CreatePageDTO createPageDTO = requestDTO(releaseNote);
-            System.out.println(JsonUtils.toJson(createPageDTO));
             Response post = c.target(CONTENT_API_URL).request().post(Entity.json(createPageDTO));
 
             String responseString = post.readEntity(String.class);
-            System.out.println(responseString);
             int status = post.getStatus();
             if (status != 200) {
                 throw new IllegalStateException(responseString);
