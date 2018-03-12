@@ -25,10 +25,9 @@ public class FOTeam implements Team {
     }
 
     private String getConfigUrl() {
-        String username = getRequiredProperty("PUS_GITHUB_USERNAME");
-        String password = getRequiredProperty("PUS_GITHUB_PASSWORD");
-        String configUrl = "https://{0}:{1}@raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json";
-        return MessageFormat.format(configUrl, username, password);
+        String apiToken = getRequiredProperty("GITHUB_FO_CONFIG_TOKEN");
+        String configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json?token={0}";
+        return MessageFormat.format(configUrl, apiToken);
     }
 
     @Override
