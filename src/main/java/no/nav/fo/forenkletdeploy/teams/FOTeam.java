@@ -2,6 +2,7 @@ package no.nav.fo.forenkletdeploy.teams;
 
 import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 import static java.util.stream.Collectors.toList;
 import static no.nav.json.JsonUtils.fromJson;
 import static no.nav.sbl.rest.RestUtils.withClient;
+import static no.nav.sbl.util.EnvironmentUtils.getRequiredProperty;
 
 public class FOTeam implements Team {
 
@@ -20,6 +22,13 @@ public class FOTeam implements Team {
     @Override
     public String getId() {
         return "fo";
+    }
+
+    private String getConfigUrl() {
+        String username = getRequiredProperty("PUS_GITHUB_USERNAME");
+        String password = getRequiredProperty("PUS_GITHUB_PASSWORD");
+        String configUrl = "https://{0}:{1}@raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json";
+        return MessageFormat.format(configUrl, username, password);
     }
 
     @Override
@@ -34,7 +43,7 @@ public class FOTeam implements Team {
 
     @Override
     public List<ApplicationConfig> getApplicationConfigs() {
-        String json = withClient(c -> c.target("https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json").request().get(String.class));
+        String json = withClient(c -> c.target(this.getConfigUrl()).request().get(String.class));
         Map<String, Map<String, String>> map = fromJson(json, Map.class);
         return map.entrySet().stream()
                 .map(e -> ApplicationConfig.builder()
