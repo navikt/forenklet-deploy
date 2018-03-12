@@ -28,5 +28,9 @@ public class TestUtils {
         TestUser confluenceUser = FasitUtils.getTestUser("bekkci_confluence");
         setProperty(BEKKCI_CONFLUENCE_USERNAME_PROPERTY, confluenceUser.username);
         setProperty(BEKKCI_CONFLUENCE_PASSWORD_PROPERTY, confluenceUser.password);
+
+        TestUser githubUser = FasitUtils.getTestUser("pus-github");
+        setProperty("PUS_GITHUB_USERNAME", githubUser.username);
+        setProperty("PUS_GITHUB_PASSWORD", githubUser.password);
     }
 }
