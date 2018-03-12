@@ -2,6 +2,7 @@ package no.nav.fo.forenkletdeploy.teams;
 
 import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import static java.util.stream.Collectors.toList;
 
 import static no.nav.json.JsonUtils.fromJson;
 import static no.nav.sbl.rest.RestUtils.withClient;
+import static no.nav.sbl.util.EnvironmentUtils.getRequiredProperty;
 
 
 public class TeamSoknad implements Team {
@@ -23,6 +25,12 @@ public class TeamSoknad implements Team {
         return "Team Søknad";
     }
 
+    private String getConfigUrl() {
+        String apiToken = getRequiredProperty("GITHUB_SD_CONFIG_TOKEN");
+        String configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/team_soknad/config.json?token={0}";
+        return MessageFormat.format(configUrl, apiToken);
+    }
+
     @Override
     public String getJenkinsFolder() {
         return "team_soknad";
@@ -30,7 +38,7 @@ public class TeamSoknad implements Team {
 
     @Override
     public List<ApplicationConfig> getApplicationConfigs() {
-        String json = withClient(c -> c.target("https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/team_soknad/config.json").request().get(String.class));
+        String json = withClient(c -> c.target(this.getConfigUrl()).request().get(String.class));
         Map<String, Map<String, String>> map = fromJson(json, Map.class);
         List<ApplicationConfig> applications = map.entrySet().stream()
                 .map(e -> ApplicationConfig.builder()

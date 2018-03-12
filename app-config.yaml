@@ -19,4 +19,4 @@ fasitResources:
   - alias: bekkci_confluence
     resourceType: credential
   - alias: pus-github
-    resourceType: credential
+    resourceType: applicationProperties
