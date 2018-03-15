@@ -48,11 +48,12 @@ class Promote extends React.PureComponent<PromoteProps> {
         const env = props.release.environment.promotesTo;
         const buildName = env === 'p' ? '-release-' : `-promotering-${env}-`;
         const linkUrl = `http://bekkci.devillo.no/job/forenklet_oppfolging/job/${app}/job/${buildName}/`;
+        const bitbucketDiffUrl = `http://stash.devillo.no/projects/SOKD/repos/${app}/compare/commits?targetBranch=refs%2Ftags%2F${props.release.fromVersion}&sourceBranch=refs%2Ftags%2F${props.release.toVersion}`;
 
         return (
             <section>
                 <Innholdstittel className="blokk-m">Promoter {props.match.params.app} til {props.release.environment.promotesTo}</Innholdstittel>
-                <Undertittel className="blokk-xs">Endringer fra {props.release.fromVersion} til {props.release.toVersion}</Undertittel>
+                <Undertittel className="blokk-xs">Endringer fra {props.release.fromVersion} til {props.release.toVersion}Diff: <a href={bitbucketDiffUrl} target="_blank" rel="noopener noreferrer">Bitbucket</a></Undertittel>
                 <div className="panel blokk-m">
                     <IssuesTable applications={[app]}/>
                     <ConmmitsForRelease commits={props.release.commits} />
