@@ -50,11 +50,21 @@ class Promote extends React.PureComponent<PromoteProps> {
 
         const app = props.release.application;
         const env = props.release.environment.promotesTo ? props.release.environment.promotesTo : '';
-        const bitbucketDiffUrl = `http://stash.devillo.no/projects/SOKD/repos/${app}/compare/commits?targetBranch=refs%2Ftags%2F${props.release.fromVersion}&sourceBranch=refs%2Ftags%2F${props.release.toVersion}`;
+
+        const cvsUrl = props.release.commits[0].url.match('.*projects/.*/repos/[a-z]*/');
+
         return (
             <section>
                 <Innholdstittel className="blokk-m">Promoter {props.match.params.app} til {props.release.environment.promotesTo}</Innholdstittel>
-                <Undertittel className="blokk-xs">Endringer fra {props.release.fromVersion} til {props.release.toVersion}Diff: <a href={bitbucketDiffUrl} target="_blank" rel="noopener noreferrer">Bitbucket</a></Undertittel>
+                <Undertittel className="blokk-xs">
+                    Endringer fra {props.release.fromVersion} til {props.release.toVersion}
+                    { !!cvsUrl &&
+                        <a href={`${cvsUrl}compare/diff?targetBranch=refs%2Ftags%2F${props.release.fromVersion}&sourceBranch=refs%2Ftags%2F${props.release.toVersion}`}
+                           target="_blank" rel="noopener noreferrer">
+                            <span> Diff</span>
+                        </a>
+                    }
+                </Undertittel>
                 <div className="panel blokk-m">
                     <IssuesTable applications={[app]}/>
                     <ConmmitsForRelease commits={props.release.commits} />
@@ -75,7 +85,6 @@ function mapStateToProps(state: AppState, ownProps: RouteComponentProps<PromoteR
     const environment = getEnvironmentByName(routeParams.env);
     const deployCurrentEnv = selectDeploy(state, routeParams.app, environment.name);
     const deployNextEnv = selectDeploy(state, routeParams.app, environment.promotesTo);
-
     return {
         isLoading: selectIsLoadingRelease(state) || selectIsLoadingIssues(state),
         release: selectReleaseWithCommits(state, routeParams.app, routeParams.env),
