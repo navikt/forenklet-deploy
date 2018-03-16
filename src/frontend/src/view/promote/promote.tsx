@@ -12,7 +12,10 @@ import { selectReleaseWithCommits, selectIsLoadingRelease } from '../../redux/se
 import IssuesTable from '../release-note/kvittering/issues-table';
 import { selectIsLoadingIssues } from '../../redux/jira-issue-duck';
 import { getInfoForPromote } from '../../redux/promote-duck';
-import { TeamAwareLink, TeamAwareAnchor } from '../team-aware-link';
+import { TeamAwareLink } from '../team-aware-link';
+import { selectValgtTeam } from '../../redux/team-velger-duck';
+import { Team } from '../../models/team';
+import PromoteJenkinsAnchor from './promote-jenkins-anchor';
 
 interface PromoteRouteProps {
     app: string;
@@ -24,6 +27,7 @@ interface PromoteStateProps {
     release: ReleaseWithCommits;
     fromVersion: string;
     toVersion: string;
+    valgtTeam?: Team;
 }
 
 interface DispatchProps {
@@ -41,15 +45,12 @@ class Promote extends React.PureComponent<PromoteProps> {
     render() {
         const props = this.props;
         if (props.isLoading) {
-            return <NavFrontendSpinner />;
+            return <NavFrontendSpinner type="L" />;
         }
 
         const app = props.release.application;
-        const env = props.release.environment.promotesTo;
-        const buildName = env === 'p' ? '-release-' : `-promotering-${env}-`;
-        const linkUrl = `http://bekkci.devillo.no/job/forenklet_oppfolging/job/${app}/job/${buildName}/`;
+        const env = props.release.environment.promotesTo ? props.release.environment.promotesTo : '';
         const bitbucketDiffUrl = `http://stash.devillo.no/projects/SOKD/repos/${app}/compare/commits?targetBranch=refs%2Ftags%2F${props.release.fromVersion}&sourceBranch=refs%2Ftags%2F${props.release.toVersion}`;
-
         return (
             <section>
                 <Innholdstittel className="blokk-m">Promoter {props.match.params.app} til {props.release.environment.promotesTo}</Innholdstittel>
@@ -59,9 +60,7 @@ class Promote extends React.PureComponent<PromoteProps> {
                     <ConmmitsForRelease commits={props.release.commits} />
                 </div>
                 <div className="knapperad-promoter">
-                    <TeamAwareAnchor className="knapp knapp--hoved" href={linkUrl} target="_blank" rel="noopener noreferrer">
-                        Promoter
-                    </TeamAwareAnchor>
+                    <PromoteJenkinsAnchor application={app} env={env}/>
                     <TeamAwareLink className="knapp" to="/">
                         Avbryt
                     </TeamAwareLink>
@@ -81,7 +80,8 @@ function mapStateToProps(state: AppState, ownProps: RouteComponentProps<PromoteR
         isLoading: selectIsLoadingRelease(state) || selectIsLoadingIssues(state),
         release: selectReleaseWithCommits(state, routeParams.app, routeParams.env),
         fromVersion: deployNextEnv ? deployNextEnv.version : '',
-        toVersion: deployCurrentEnv ? deployCurrentEnv.version : ''
+        toVersion: deployCurrentEnv ? deployCurrentEnv.version : '',
+        valgtTeam: selectValgtTeam(state),
     };
 }
 

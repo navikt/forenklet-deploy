@@ -40,7 +40,7 @@ class Dashboard extends React.Component<DashboardProps> {
 
     render() {
         if (this.isLoading()) {
-            return <NavFrontendSpinner />;
+            return <NavFrontendSpinner type="L" />;
         }
 
         return (

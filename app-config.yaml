@@ -1,7 +1,7 @@
 # ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
 image: docker.adeo.no:5000/pus/forenklet-deploy
 replicas:
-  min: 2
+  min: 1
   max: 2
   cpuThresholdPercentage: 50
 port: 8080
@@ -12,3 +12,11 @@ healthcheck:
   readiness:
     path: internal/selftest
     initialDelay: 20
+fasitResources:
+  used:
+  - alias: unleash-api
+    resourceType: restservice
+  - alias: bekkci_confluence
+    resourceType: credential
+  - alias: pus-github
+    resourceType: applicationProperties

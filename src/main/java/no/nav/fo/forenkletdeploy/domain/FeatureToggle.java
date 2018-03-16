@@ -5,8 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class Team {
-    String displayName;
-    String id;
-    String jenkinsFolder;
+public class FeatureToggle {
+    private String name;
+    private boolean enabled;
 }

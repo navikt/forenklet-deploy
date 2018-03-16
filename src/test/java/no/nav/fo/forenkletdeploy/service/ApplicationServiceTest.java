@@ -16,7 +16,7 @@ public class ApplicationServiceTest {
     }
 
     @Test
-    public void getApps() {
-        assertThat(applicationService.getApps()).isNotEmpty();
+    public void getAppsByTeam() {
+        assertThat(applicationService.getAppsByTeam("teamoppfolging")).isNotEmpty();
     }
 }

@@ -1,0 +1,18 @@
+{
+  "type": "page",
+  "title": "Release note 09.02.1970",
+  "ancestors": [
+    {
+      "id": 254466637
+    }
+  ],
+  "space": {
+    "key": "INI754"
+  },
+  "body": {
+    "storage": {
+      "value": "<div>\r\n    <table>\r\n        <thead>\r\n        <tr>\r\n            <th>Applikasjon</th>\r\n            <th>Ny versjon</th>\r\n            <th>Tilhørende brukerhistorier</th>\r\n            <th>Vises for sluttbruker<br/>i prod</th>\r\n            <th>Feature toggle på<br/>i prod</th>\r\n            <th>Kommentar</th>\r\n            <th>Q0 regresjonstest</th>\r\n        </tr>\r\n        </thead>\r\n        <tbody>\r\n            <tr>\r\n                <td>a</td>\r\n                <td>1.2.3</td>\r\n                <td>\r\n\r\n                    <ac:structured-macro ac:name=\"jira\" ac:schema-version=\"1\" ac:macro-id=\"49b7c77e-8637-4920-9dd3-e083da842b66\">\r\n                        <ac:parameter ac:name=\"server\">Jira Prod</ac:parameter>\r\n                        <ac:parameter ac:name=\"serverId\">9a8a5698-c576-3af9-a61d-4c56256123c6</ac:parameter>\r\n                        <ac:parameter ac:name=\"key\">FO-1</ac:parameter>\r\n                    </ac:structured-macro>\r\n                    <br/>\r\n\r\n                </td>\r\n                <td></td>\r\n                <td></td>\r\n                <td></td>\r\n                <td></td>\r\n            </tr>\r\n            <tr>\r\n                <td>b</td>\r\n                <td>1.2.3</td>\r\n                <td>\r\n\r\n                    <ac:structured-macro ac:name=\"jira\" ac:schema-version=\"1\" ac:macro-id=\"49b7c77e-8637-4920-9dd3-e083da842b66\">\r\n                        <ac:parameter ac:name=\"server\">Jira Prod</ac:parameter>\r\n                        <ac:parameter ac:name=\"serverId\">9a8a5698-c576-3af9-a61d-4c56256123c6</ac:parameter>\r\n                        <ac:parameter ac:name=\"key\">FO-2</ac:parameter>\r\n                    </ac:structured-macro>\r\n                    <br/>\r\n\r\n                </td>\r\n                <td></td>\r\n                <td></td>\r\n                <td></td>\r\n                <td></td>\r\n            </tr>\r\n            <tr>\r\n                <td>c</td>\r\n                <td>1.2.3</td>\r\n                <td>\r\n\r\n                    <ac:structured-macro ac:name=\"jira\" ac:schema-version=\"1\" ac:macro-id=\"49b7c77e-8637-4920-9dd3-e083da842b66\">\r\n                        <ac:parameter ac:name=\"server\">Jira Prod</ac:parameter>\r\n                        <ac:parameter ac:name=\"serverId\">9a8a5698-c576-3af9-a61d-4c56256123c6</ac:parameter>\r\n                        <ac:parameter ac:name=\"key\">FO-3</ac:parameter>\r\n                    </ac:structured-macro>\r\n                    <br/>\r\n\r\n                </td>\r\n                <td></td>\r\n                <td></td>\r\n                <td></td>\r\n                <td></td>\r\n            </tr>\r\n        </tbody>\r\n    </table>\r\n</div>",
+      "representation": "storage"
+    }
+  }
+}

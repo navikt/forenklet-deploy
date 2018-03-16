@@ -12,7 +12,8 @@ function Routing(props: RouteComponentProps<{}>) {
             <Route exact={true} path="/promote" component={Promotering}/>
             <Route path="/promote/:app/:env" component={Promote}/>
             <Route path="/releasenote" component={ReleaseNote}/>
-            <Route component={Dashboard}/>
+            <Route path="/dashboard" component={Dashboard}/>
+            <Route component={Promotering}/>
         </Switch>
     );
 }

@@ -1,7 +1,11 @@
 import no.nav.apiapp.ApiApp;
 import no.nav.fo.forenkletdeploy.ApplicationConfig;
+import no.nav.sbl.util.PropertyUtils;
 
+import static java.lang.Boolean.TRUE;
+import static no.nav.apiapp.feil.FeilMapper.VIS_DETALJER_VED_FEIL;
 import static no.nav.sbl.dialogarena.test.ssl.SSLTestUtils.disableCertificateChecks;
+import static no.nav.sbl.util.EnvironmentUtils.Type.PUBLIC;
 
 public class Main {
 
@@ -12,6 +16,8 @@ public class Main {
         System.setProperty("https.proxyHost", "webproxy-utvikler.nav.no");
         System.setProperty("https.proxyPort", "8088");
         disableCertificateChecks();
+
+        PropertyUtils.setProperty(VIS_DETALJER_VED_FEIL, TRUE.toString(), PUBLIC);
 
         ApiApp.startApp(ApplicationConfig.class, args);
     }

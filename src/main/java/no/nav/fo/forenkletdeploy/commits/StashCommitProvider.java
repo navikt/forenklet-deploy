@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,8 +34,8 @@ public class StashCommitProvider {
                     .get(StashCommits.class)
             ).values.stream();
         } catch (Throwable t) {
-            LOGGER.warn("Feil ved henting av commits for " + application.name);
-            throw t;
+            LOGGER.warn("Feil ved henting av commits for " + application.name, t);
+            return (new ArrayList<StashCommit>()).stream();
         }
     }
 
