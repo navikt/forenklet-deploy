@@ -19,7 +19,7 @@ export class GoNogoApplication extends React.Component<GoNogoApplicationProps> {
                 <div className="blokk-s">
                     <UndertekstBold className="blokk-xs">{fromVersion} (P) til {this.props.release.toVersion} (Q6)</UndertekstBold>
                     <IssuesTable applications={[this.props.release.application]} />
-                    <CommitsForRelease commits={this.props.release.commits} />
+                    <CommitsForRelease release={this.props.release} />
                 </div>
 
                 <Hovedknapp onClick={() => this.props.onSelectGo()}>GO!</Hovedknapp>

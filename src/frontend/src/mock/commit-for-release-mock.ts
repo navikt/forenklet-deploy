@@ -20,13 +20,17 @@ export function getMockCommits(application: string): Commit[] {
     }
 
     const uniqueCommitsMessages = Array.from(new Set(commitMessages));
-    return uniqueCommitsMessages.map((commitMessage: string) => ({
-        hash: generateHash(),
-        application,
-        url: '#',
-        timestamp: Date.now() - (randRange(4, 1000) * 1000),
-        message: `${randomIssue()} ${commitMessage}`,
-        author: randomAuthor(),
-        mergecommit: false
-    }));
+    return uniqueCommitsMessages.map((commitMessage: string) => {
+        const hash = generateHash();
+        const url = `http://stash.devillo.no/projects/dial/repos/${application}/commits/${hash}`;
+        return {
+            hash,
+            application,
+            url,
+            timestamp: Date.now() - (randRange(4, 1000) * 1000),
+            message: `${randomIssue()} ${commitMessage}`,
+            author: randomAuthor(),
+            mergecommit: false
+        };
+    });
 }

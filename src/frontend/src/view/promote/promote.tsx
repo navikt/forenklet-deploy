@@ -57,7 +57,7 @@ class Promote extends React.PureComponent<PromoteProps> {
                 <Undertittel className="blokk-xs">Endringer fra {props.release.fromVersion} til {props.release.toVersion}</Undertittel>
                 <div className="panel blokk-m">
                     <IssuesTable applications={[app]}/>
-                    <ConmmitsForRelease commits={props.release.commits} />
+                    <ConmmitsForRelease release={props.release} />
                 </div>
                 <div className="knapperad-promoter">
                     <PromoteJenkinsAnchor application={app} env={env}/>
@@ -75,7 +75,6 @@ function mapStateToProps(state: AppState, ownProps: RouteComponentProps<PromoteR
     const environment = getEnvironmentByName(routeParams.env);
     const deployCurrentEnv = selectDeploy(state, routeParams.app, environment.name);
     const deployNextEnv = selectDeploy(state, routeParams.app, environment.promotesTo);
-
     return {
         isLoading: selectIsLoadingRelease(state) || selectIsLoadingIssues(state),
         release: selectReleaseWithCommits(state, routeParams.app, routeParams.env),

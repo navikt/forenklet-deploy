@@ -20,7 +20,7 @@ export class PromoteApplication extends React.Component<PromoteApplicationProps>
                 <div className="blokk-s">
                     <UndertekstBold className="blokk-xs">{fromVersion} til {this.props.release.toVersion}</UndertekstBold>
                     <IssuesTable applications={[this.props.release.application]} />
-                    <CommitsForRelease commits={this.props.release.commits} />
+                    <CommitsForRelease release={this.props.release} />
                     <PromoteJenkinsAnchor application={app} env={env}/>
                 </div>
             </section>
