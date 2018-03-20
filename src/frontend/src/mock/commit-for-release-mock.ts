@@ -23,7 +23,6 @@ export function getMockCommits(application: string): Commit[] {
     return uniqueCommitsMessages.map((commitMessage: string) => {
         const hash = generateHash();
         const url = `http://stash.devillo.no/projects/dial/repos/${application}/commits/${hash}`;
-        // const url = `https://github.com/navikt/jenkins-dsl-scripts/commit/52277652301f747dc14918457c481973d0d2823f`;
         return {
             hash,
             application,
