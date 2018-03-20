@@ -82,13 +82,11 @@ function CommitsForRelease(props: CommitsForReleaseProps) {
     const cvsUrl = props.release.commits[0].url.match('.*projects/.*/repos/[a-z]*/');
     return (
         <div className="blokk-m">
-            <Undertittel className="blokk-xxs">Endringer ({ hentetAlleEndringer ? filteredCommits.length : `1000+` }):
-                { !!cvsUrl &&
-                <a href={`${cvsUrl}compare/diff?targetBranch=refs%2Ftags%2F${props.release.fromVersion}&sourceBranch=refs%2Ftags%2F${props.release.toVersion}`}
+            <Undertittel className="blokk-xxs">Endringer
+                 ( <a href={`${cvsUrl}compare/diff?targetBranch=refs%2Ftags%2F${props.release.fromVersion}&sourceBranch=refs%2Ftags%2F${props.release.toVersion}`}
                    target="_blank" rel="noopener noreferrer">
-                    <span> se i kode</span>
-                </a>
-                }</Undertittel>
+                    <span> {hentetAlleEndringer ? filteredCommits.length : `1000+`} </span>
+                </a> ):</Undertittel>
             <CommitTable commits={filteredCommits}/>
         </div>
     );
