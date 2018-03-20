@@ -4,6 +4,7 @@ import { Commit } from '../../models/commit';
 import Alder from '../alder';
 import CommitMessage from './commit-message';
 import { Undertittel } from 'nav-frontend-typografi';
+import { ReleaseWithCommits } from '../../models/release';
 
 interface CommitTablePropTypes {
     commits: Commit[];
@@ -65,22 +66,29 @@ const CommitTable = ({commits}: CommitTablePropTypes) => {
 
 interface CommitsForReleaseProps {
     className?: string;
-    commits: Commit[];
+    release: ReleaseWithCommits;
 }
 
 function CommitsForRelease(props: CommitsForReleaseProps) {
     const filterMergeCommits = (commit: Commit) => !commit.mergecommit;
     const filterJenkinsCommits = (commit: Commit) => commit.author !== 'jenkins';
 
-    const filteredCommits = props.commits
+    const filteredCommits = props.release.commits
         .filter(filterMergeCommits)
         .filter(filterJenkinsCommits);
 
-    const hentetAlleEndringer = props.commits.length < 1000;
+    const hentetAlleEndringer = props.release.commits.length < 1000;
 
+    const cvsUrl = props.release.commits[0].url.match('.*projects/.*/repos/[a-z]*/');
     return (
         <div className="blokk-m">
-            <Undertittel className="blokk-xxs">Endringer ({ hentetAlleEndringer ? filteredCommits.length : `1000+` }):</Undertittel>
+            <Undertittel className="blokk-xxs">Endringer ({ hentetAlleEndringer ? filteredCommits.length : `1000+` }):
+                { !!cvsUrl &&
+                <a href={`${cvsUrl}compare/diff?targetBranch=refs%2Ftags%2F${props.release.fromVersion}&sourceBranch=refs%2Ftags%2F${props.release.toVersion}`}
+                   target="_blank" rel="noopener noreferrer">
+                    <span> se i kode</span>
+                </a>
+                }</Undertittel>
             <CommitTable commits={filteredCommits}/>
         </div>
     );
