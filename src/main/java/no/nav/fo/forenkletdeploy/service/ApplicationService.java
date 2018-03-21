@@ -54,7 +54,7 @@ public class ApplicationService {
                 .get();
     }
 
-    @Scheduled(fixedRate = 5 * MINUTTER)
+    @Scheduled(fixedRate = 10 * MINUTTER)
     public void lastAlleApplicationConfigs() {
         logger.info("Henter og oppdaterer alle applicationConfigs");
         teamProvider.getTeams().forEach(Team::hentApplicationConfigs);
