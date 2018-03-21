@@ -9,4 +9,5 @@ public interface Team {
     String getDisplayName();
     String getJenkinsFolder();
     List<ApplicationConfig> getApplicationConfigs();
+    void hentApplicationConfigs();
 }

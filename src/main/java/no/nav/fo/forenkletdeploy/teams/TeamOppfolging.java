@@ -1,7 +1,10 @@
 package no.nav.fo.forenkletdeploy.teams;
 
 import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +14,10 @@ import static no.nav.json.JsonUtils.fromJson;
 import static no.nav.sbl.rest.RestUtils.withClient;
 
 public class TeamOppfolging implements Team {
-
+    private Logger logger = LoggerFactory.getLogger(TeamOppfolging.class.getName());
     public static final String APPLICATION_CONFIG_URL = "http://stash.devillo.no/projects/OPP/repos/team-oppfolging/raw/applikasjonsportefolje/config.json";
+
+    private List<ApplicationConfig> applicationConfigs = new ArrayList<>();
 
     @Override
     public String getId() {
@@ -31,14 +36,23 @@ public class TeamOppfolging implements Team {
 
     @Override
     public List<ApplicationConfig> getApplicationConfigs() {
-        String json = withClient(c -> c.target(APPLICATION_CONFIG_URL).request().get(String.class));
-        Map<String, Map<String, String>> map = fromJson(json, Map.class);
-        return map.entrySet().stream()
-                .map(entry -> ApplicationConfig.builder()
-                        .name(entry.getKey())
-                        .gitUrl(entry.getValue().get("gitUrl"))
-                        .build()
-                )
-                .collect(toList());
+        return this.applicationConfigs;
+    }
+
+    @Override
+    public void hentApplicationConfigs() {
+        try {
+            String json = withClient(c -> c.target(APPLICATION_CONFIG_URL).request().get(String.class));
+            Map<String, Map<String, String>> map = fromJson(json, Map.class);
+            this.applicationConfigs = map.entrySet().stream()
+                    .map(entry -> ApplicationConfig.builder()
+                            .name(entry.getKey())
+                            .gitUrl(entry.getValue().get("gitUrl"))
+                            .build()
+                    )
+                    .collect(toList());
+        } catch (Throwable e) {
+            logger.error("Feil ved henting av application-configs for team-oppfølging");
+        }
     }
 }

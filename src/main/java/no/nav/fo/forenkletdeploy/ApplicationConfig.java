@@ -4,6 +4,7 @@ import no.nav.apiapp.ApiApplication.NaisApiApplication;
 import no.nav.apiapp.config.ApiAppConfigurator;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
@@ -13,6 +14,7 @@ import static no.nav.apiapp.ApiApplication.Sone.FSS;
 
 @Configuration
 @ComponentScan(basePackages = "no.nav.fo.forenkletdeploy")
+@EnableScheduling
 public class ApplicationConfig implements NaisApiApplication {
 
     @Override
