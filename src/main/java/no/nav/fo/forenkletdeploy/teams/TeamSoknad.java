@@ -4,18 +4,16 @@ import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
-
+import static no.nav.fo.forenkletdeploy.util.HttpUtil.githubHttpRequest;
 import static no.nav.json.JsonUtils.fromJson;
-import static no.nav.sbl.rest.RestUtils.withClient;
-import static no.nav.sbl.util.EnvironmentUtils.getRequiredProperty;
 
 
+@SuppressWarnings("ALL")
 public class TeamSoknad implements Team {
 
     private List<ApplicationConfig> applicationConfigs = new ArrayList<>();
@@ -32,9 +30,7 @@ public class TeamSoknad implements Team {
     }
 
     private String getConfigUrl() {
-        String apiToken = getRequiredProperty("GITHUB_SD_CONFIG_TOKEN");
-        String configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/team_soknad/config.json?token={0}";
-        return MessageFormat.format(configUrl, apiToken);
+        return "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/team_soknad/config.json";
     }
 
     @Override
@@ -47,11 +43,13 @@ public class TeamSoknad implements Team {
         return  this.applicationConfigs;
     }
 
+
     @Override
     public void hentApplicationConfigs() {
         try {
-            String json = withClient(c -> c.target(this.getConfigUrl()).request().get(String.class));
+            String json = githubHttpRequest(this.getConfigUrl()).get(String.class);
             Map<String, Map<String, String>> map = fromJson(json, Map.class);
+
             this.applicationConfigs = map.entrySet().stream()
                     .map(e -> ApplicationConfig.builder()
                             .name(e.getKey())
