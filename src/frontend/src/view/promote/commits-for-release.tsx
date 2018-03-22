@@ -69,6 +69,27 @@ interface CommitsForReleaseProps {
     release: ReleaseWithCommits;
 }
 
+function getAnchor(text: string, url: string | null) {
+    if (url) {
+        return (
+            <a href={url} target="_blank" rel="noopener noreferrer">
+                {text}
+            </a>
+        );
+    }
+    return <span>{text}</span>;
+}
+
+function getCVSUrl(release: ReleaseWithCommits): string | null {
+    if (release.commits && release.commits.length > 0) {
+        const cvsUrlBase = release.commits[0].url.match('.*projects/.*/repos/[a-z]*/');
+        if (cvsUrlBase) {
+            return `${cvsUrlBase}compare/diff?targetBranch=refs%2Ftags%2F${release.fromVersion}&sourceBranch=refs%2Ftags%2F${release.toVersion}`;
+        }
+    }
+    return null;
+}
+
 function CommitsForRelease(props: CommitsForReleaseProps) {
     const filterMergeCommits = (commit: Commit) => !commit.mergecommit;
     const filterJenkinsCommits = (commit: Commit) => commit.author !== 'jenkins';
@@ -78,15 +99,13 @@ function CommitsForRelease(props: CommitsForReleaseProps) {
         .filter(filterJenkinsCommits);
 
     const hentetAlleEndringer = props.release.commits.length < 1000;
+    const cvsUrl = getCVSUrl(props.release);
 
-    const cvsUrl = props.release.commits[0].url.match('.*projects/.*/repos/[a-z]*/');
     return (
         <div className="blokk-m">
             <Undertittel className="blokk-xxs">Endringer
-                 ( <a href={`${cvsUrl}compare/diff?targetBranch=refs%2Ftags%2F${props.release.fromVersion}&sourceBranch=refs%2Ftags%2F${props.release.toVersion}`}
-                   target="_blank" rel="noopener noreferrer">
-                    <span> {hentetAlleEndringer ? filteredCommits.length : `1000+`} </span>
-                </a> ):</Undertittel>
+                 ({getAnchor(hentetAlleEndringer ? filteredCommits.length.toString() : '1000+', cvsUrl)}):
+            </Undertittel>
             <CommitTable commits={filteredCommits}/>
         </div>
     );
