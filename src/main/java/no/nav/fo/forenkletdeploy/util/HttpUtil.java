@@ -14,7 +14,7 @@ public class HttpUtil {
     }
 
     public static Invocation.Builder githubHttpRequest(String url) {
-        return withClient(c -> c.target(url).request().header("Authorization", String.format("Basic %s", getGithubEncodedBasicAuthHeader())));
+        return withClient(c -> c.target(url).request().header("Authorization %s", getGithubEncodedBasicAuthHeader()));
     }
 
 }
