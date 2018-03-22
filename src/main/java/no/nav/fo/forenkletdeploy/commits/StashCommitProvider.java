@@ -34,7 +34,7 @@ public class StashCommitProvider {
                     .get(StashCommits.class)
             ).values.stream();
         } catch (Throwable t) {
-            LOGGER.warn("Feil ved henting av commits for " + application.name, t);
+            LOGGER.warn("Feil ved henting av commits for " + application.name + " via " + application.getGitUrl(), t);
             return (new ArrayList<StashCommit>()).stream();
         }
     }
