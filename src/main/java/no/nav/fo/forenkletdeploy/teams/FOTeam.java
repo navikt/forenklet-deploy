@@ -57,7 +57,7 @@ public class FOTeam implements Team {
             String json = withClient(c -> c.target(this.getConfigUrl()).request().get(String.class));
             Map<String, Map<String, String>> map = fromJson(json, Map.class);
 
-            this.applicationConfigs = map.entrySet().stream()
+            List<ApplicationConfig> applications = map.entrySet().stream()
                     .map(e -> ApplicationConfig.builder()
                             .name(e.getKey())
                             .gitUrl(e.getValue().get("gitUrl"))
@@ -65,6 +65,11 @@ public class FOTeam implements Team {
                     )
                     .filter(FOTeam::applicationIsNotIgnored)
                     .collect(toList());
+
+            if (applications != null && applications.size() > 0) {
+                logger.info("Oppdaterer forenklet-oppfølging med " + applications.size() + " applikasjoner.");
+                this.applicationConfigs = applications;
+            }
         } catch (Throwable e) {
             logger.error("Feil ved henting av applicationConfig for FO");
         }
