@@ -1,4 +1,4 @@
-FROM docker.adeo.no:5000/fo/node as node-builder
+FROM docker.adeo.no:5000/pus/node as node-builder
 ADD /src/frontend /source
 WORKDIR /source
 RUN npm ci && npm run build
