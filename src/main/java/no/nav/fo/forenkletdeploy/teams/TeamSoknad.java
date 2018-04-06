@@ -31,12 +31,6 @@ public class TeamSoknad implements Team {
         return "Team Søknad";
     }
 
-    private String getConfigUrl() {
-        String apiToken = getRequiredProperty("GITHUB_SD_CONFIG_TOKEN");
-        String configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/team_soknad/config.json?token={0}";
-        return MessageFormat.format(configUrl, apiToken);
-    }
-
     @Override
     public String getJenkinsFolder() {
         return "team_soknad";
@@ -50,7 +44,14 @@ public class TeamSoknad implements Team {
     @Override
     public void hentApplicationConfigs() {
         try {
-            String json = withClient(c -> c.target(this.getConfigUrl()).request().get(String.class));
+            String configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/team_soknad/config.json";
+            String apiToken = getRequiredProperty("GITHUB_JENKINSPUS_TOKEN");
+
+            String json = withClient(c -> c.target(configUrl)
+                    .request()
+                    .header("Authorization", "token " + apiToken)
+                    .get(String.class));
+
             Map<String, Map<String, String>> map = fromJson(json, Map.class);
             this.applicationConfigs = map.entrySet().stream()
                     .map(e -> ApplicationConfig.builder()

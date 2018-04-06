@@ -30,12 +30,6 @@ public class FOTeam implements Team {
         return "fo";
     }
 
-    private String getConfigUrl() {
-        String apiToken = getRequiredProperty("GITHUB_FO_CONFIG_TOKEN");
-        String configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json?token={0}";
-        return MessageFormat.format(configUrl, apiToken);
-    }
-
     @Override
     public String getDisplayName() {
         return "Forenklet Oppfølging";
@@ -54,7 +48,12 @@ public class FOTeam implements Team {
     @Override
     public void hentApplicationConfigs() {
         try {
-            String json = withClient(c -> c.target(this.getConfigUrl()).request().get(String.class));
+            String apiToken = getRequiredProperty("GITHUB_JENKINSPUS_TOKEN");
+            String configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json";
+            String json = withClient(c -> c.target(configUrl)
+                    .request()
+                    .header("Authorization", "token " + apiToken)
+                    .get(String.class));
             Map<String, Map<String, String>> map = fromJson(json, Map.class);
 
             List<ApplicationConfig> applications = map.entrySet().stream()
