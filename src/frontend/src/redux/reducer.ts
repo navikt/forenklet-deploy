@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import { combineReducers, Action } from 'redux';
 import errorReducer, { ErrorState } from './error-duck';
 import viewReducer, { ViewState } from './view-duck';
 import goNogoViewReducer, { GoNogoViewState } from './gonogo-view-duck';
@@ -23,6 +23,24 @@ export interface AppState {
     kvittering: KvitteringState;
 }
 
+function getSavedState<T>(name: string): T {
+    const savedState = localStorage.getItem(name);
+    return savedState == null ? undefined : JSON.parse(savedState);
+}
+
+function saveState<T>(name: string, state: T) {
+    localStorage.setItem(name, JSON.stringify(state));
+}
+
+function storedReducer<T>(name: string, reducer: (state: T, action: Action) => T): (state: T, action: Action) => T {
+    return (state: T, action: Action): T => {
+        const stateToUse = state == null ? getSavedState<T>(name) : state;
+        const nextState = reducer(stateToUse, action);
+        saveState(name, nextState);
+        return nextState;
+    };
+}
+
 export default combineReducers<AppState>({
     error: errorReducer,
     view: viewReducer,
@@ -32,6 +50,6 @@ export default combineReducers<AppState>({
     jira: jiraIssueReducer,
     team: teamReducer,
     valgtTeam: valgTeamReducer,
-    promotering: promoteringReducer,
+    promotering: storedReducer('promotering', promoteringReducer),
     kvittering: kvitteringReducer
 });
