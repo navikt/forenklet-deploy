@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static no.nav.sbl.rest.RestUtils.withClient;
+import static no.nav.fo.forenkletdeploy.util.Utils.withClient;
 
 @Component
 public class StashCommitProvider {
@@ -26,13 +26,13 @@ public class StashCommitProvider {
         String url = getRestUriForRepo(application);
         LOGGER.info(String.format("Henter commits for %s (%s -> %s)", application.name, fromTag, toTag));
         try {
-            return withClient(c -> c.target(url)
+            return withClient(url)
                     .queryParam("since", tagRef(fromTag))
                     .queryParam("until", tagRef(toTag))
                     .queryParam("limit", LIMIT)
                     .request()
                     .get(StashCommits.class)
-            ).values.stream();
+                    .values.stream();
         } catch (Throwable t) {
             LOGGER.error("Feil ved henting av commits for " + application.name + " via " + url, t);
             return (new ArrayList<StashCommit>()).stream();

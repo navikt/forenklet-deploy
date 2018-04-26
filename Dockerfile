@@ -10,4 +10,9 @@ COPY --from=node-builder /source/build /source/src/main/webapp
 RUN mvn package -DskipTests
 
 FROM docker.adeo.no:5000/bekkci/nais-java-app
-COPY --from=maven-builder /source/target/forenklet-deploy /app
+COPY --from=maven-builder /source/target /app
+
+EXPOSE 8800
+
+WORKDIR /app
+CMD java -jar ./forenklet-deploy.jar

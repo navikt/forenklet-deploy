@@ -1,25 +1,21 @@
-import no.nav.apiapp.ApiApp;
-import no.nav.fo.forenkletdeploy.ApplicationConfig;
-import no.nav.sbl.util.PropertyUtils;
+package no.nav.fo.forenkletdeploy;
 
-import static java.lang.Boolean.TRUE;
-import static no.nav.apiapp.feil.FeilMapper.VIS_DETALJER_VED_FEIL;
-import static no.nav.sbl.dialogarena.test.ssl.SSLTestUtils.disableCertificateChecks;
-import static no.nav.sbl.util.EnvironmentUtils.Type.PUBLIC;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
+@SpringBootApplication
 public class Main {
+    public static void main(String... args) {
+        if ("true".equalsIgnoreCase(System.getProperty("webproxy.enabled", "false"))) {
+            System.setProperty("http.nonProxyHosts", "*.155.55.|*.192.168.|*.10.|*.local|*.rtv.gov|*.adeo.no|*.nav.no|*.aetat.no|*.devillo.no|*.oera.no");
+            System.setProperty("http.proxyHost", "webproxy-utvikler.nav.no");
+            System.setProperty("http.proxyPort", "8088");
+            System.setProperty("https.proxyHost", "webproxy-utvikler.nav.no");
+            System.setProperty("https.proxyPort", "8088");
+        }
 
-    public static void main(String... args) throws Exception {
-        System.setProperty("http.nonProxyHosts", "*.155.55.|*.192.168.|*.10.|*.local|*.rtv.gov|*.adeo.no|*.nav.no|*.aetat.no|*.devillo.no|*.oera.no");
-        System.setProperty("http.proxyHost", "webproxy-utvikler.nav.no");
-        System.setProperty("http.proxyPort", "8088");
-        System.setProperty("https.proxyHost", "webproxy-utvikler.nav.no");
-        System.setProperty("https.proxyPort", "8088");
-        disableCertificateChecks();
-
-        PropertyUtils.setProperty(VIS_DETALJER_VED_FEIL, TRUE.toString(), PUBLIC);
-
-        ApiApp.startApp(ApplicationConfig.class, args);
+        SpringApplication.run(Main.class, args);
     }
 
 }
