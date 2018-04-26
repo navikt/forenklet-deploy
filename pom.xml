@@ -19,7 +19,6 @@
         <javax.cache.version>1.1.0</javax.cache.version>
         <unleash.version>3.0.0</unleash.version>
         <lombok.version>1.16.16</lombok.version>
-        <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.25</slf4j.version>
         <log4j.version>2.9.1</log4j.version>
         <mustache.version>0.9.5</mustache.version>
@@ -78,28 +77,14 @@
 
         <!-- logging -->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-            <scope>compile</scope>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>5.0</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-to-slf4j</artifactId>
-            <version>${log4j.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>compile</scope>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.0.8</version>
         </dependency>
 
         <!-- Utils -->

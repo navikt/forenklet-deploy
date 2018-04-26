@@ -6,7 +6,6 @@ import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 import no.nav.fo.forenkletdeploy.domain.Commit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.stream.Stream;
 
 import static no.nav.fo.forenkletdeploy.util.Utils.withClient;
 
-@Component
 public class StashCommitProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(StashCommitProvider.class);
     private static final Integer LIMIT = 1000;

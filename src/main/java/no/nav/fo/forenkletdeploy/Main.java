@@ -1,10 +1,17 @@
 package no.nav.fo.forenkletdeploy;
 
+import no.nav.fo.forenkletdeploy.config.ApplicationConfig;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 
-@SpringBootApplication
+@Configuration
+@Import({
+        ApplicationConfig.class
+})
+@EnableAutoConfiguration
 public class Main {
     public static void main(String... args) {
         if ("true".equalsIgnoreCase(System.getProperty("webproxy.enabled", "false"))) {

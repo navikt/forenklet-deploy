@@ -29,8 +29,7 @@ public class JiraIssueResource {
 
     @GetMapping("/{issueid}")
     public JiraIssue getJiraIssue(@PathVariable("issueid") String issueid) {
-        JiraIssue issue = jiraIssueService.getUserStory(issueid);
-        issue.key = issueid; // Av og til er issues renamet
-        return issue;
+        return jiraIssueService.getUserStory(issueid)
+                .withKey(issueid);
     }
 }

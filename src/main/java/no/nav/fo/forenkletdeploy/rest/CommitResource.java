@@ -5,7 +5,6 @@ import no.nav.fo.forenkletdeploy.domain.Commit;
 import no.nav.fo.forenkletdeploy.service.ApplicationService;
 import no.nav.fo.forenkletdeploy.service.CommitService;
 import no.nav.fo.forenkletdeploy.util.NotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;

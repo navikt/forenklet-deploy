@@ -1,19 +1,19 @@
-package no.nav.fo.forenkletdeploy;
+package no.nav.fo.forenkletdeploy.config;
 
+import no.nav.fo.forenkletdeploy.CorsFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.context.annotation.Import;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.ServletContext;
 import java.util.Arrays;
-import java.util.EnumSet;
 
 @Configuration
-@EnableScheduling
-public class ApplicationConfig {
+@Import({
+        MockConfig.class,
+        CommonConfig.class
+})
+public class ApplicationTestConfig {
     @Bean
     FilterRegistrationBean corsFilterRegistration() {
         FilterRegistrationBean frb = new FilterRegistrationBean();
