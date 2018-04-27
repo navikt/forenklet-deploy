@@ -4,14 +4,14 @@ import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 import no.nav.fo.forenkletdeploy.domain.Commit;
 import no.nav.fo.forenkletdeploy.service.ApplicationService;
 import no.nav.fo.forenkletdeploy.service.CommitService;
-import org.springframework.stereotype.Component;
+import no.nav.fo.forenkletdeploy.util.NotFoundException;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
 import java.util.List;
 
-@Path("/commit")
-@Component
+@RequestMapping("/api/commit")
+@RestController
 public class CommitResource {
     private final ApplicationService applicationService;
     private final CommitService commitService;
@@ -22,12 +22,11 @@ public class CommitResource {
         this.commitService = commitService;
     }
 
-    @GET
-    @Path("/{application}")
+    @GetMapping("/{application}")
     public List<Commit> getCommitsForApplication(
-            @PathParam("application") String application,
-            @QueryParam("fromVersion") String fromVersion,
-            @QueryParam("toVersion") String toVersion
+            @PathVariable("application") String application,
+            @RequestParam("fromVersion") String fromVersion,
+            @RequestParam("toVersion") String toVersion
     ) {
         ApplicationConfig applicationConfig = applicationService.getAppByName(application);
         if (applicationConfig == null) {

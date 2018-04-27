@@ -2,11 +2,9 @@ package no.nav.fo.forenkletdeploy.commits;
 
 import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 import no.nav.fo.forenkletdeploy.domain.Commit;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
