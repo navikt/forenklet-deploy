@@ -8,10 +8,10 @@ port: 8800
 healthcheck:
   liveness:
     path: internal/isAlive
-    initialDelay: 20
+    initialDelay: 120
   readiness:
-    path: internal/selftest
-    initialDelay: 20
+    path: internal/isAlive
+    initialDelay: 120
 fasitResources:
   used:
   - alias: unleash-api
