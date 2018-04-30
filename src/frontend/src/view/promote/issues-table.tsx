@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
-import { JiraIssue } from '../../../models/jira-issue';
-import { AppState } from '../../../redux/reducer';
-import { selectIssuesForApplication } from '../../../redux/releasenote-duck';
-import { onlyUniqueIssues } from '../../../redux/jira-issue-duck';
+import { JiraIssue } from '../../models/jira-issue';
+import { AppState } from '../../redux/reducer';
+import { selectIssuesForApplication } from '../../redux/releasenote-duck';
+import { onlyUniqueIssues } from '../../redux/jira-issue-duck';
 import { Undertittel } from 'nav-frontend-typografi';
-import { getUrlForIssue } from '../../promote/promote-utils';
+import { getUrlForIssue } from './promote-utils';
 
 interface OwnProps {
     applications: string[];

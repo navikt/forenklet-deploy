@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { UndertekstBold } from 'nav-frontend-typografi';
 import CommitsForRelease from '../promote/commits-for-release';
-import IssuesTable from '../release-note/kvittering/issues-table';
+import IssuesTable from '../promote/issues-table';
 import { ReleaseWithCommits } from '../../models/release';
 import PromoteJenkinsAnchor from '../promote/promote-jenkins-anchor';
 

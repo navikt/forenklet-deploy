@@ -9,7 +9,7 @@ import { ReleaseWithCommits } from '../../models/release';
 import { selectDeploy } from '../../redux/deploy-duck';
 import { getEnvironmentByName } from '../../utils/environment';
 import { selectReleaseWithCommits, selectIsLoadingRelease } from '../../redux/selectors/release-selectors';
-import IssuesTable from '../release-note/kvittering/issues-table';
+import IssuesTable from './issues-table';
 import { selectIsLoadingIssues } from '../../redux/jira-issue-duck';
 import { getInfoForPromote } from '../../redux/promote-duck';
 import { TeamAwareLink } from '../team-aware-link';

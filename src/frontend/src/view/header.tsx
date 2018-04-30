@@ -35,7 +35,6 @@ function Header({error, showAll, doChangeShowAll}: HeaderStateProps & HeaderDisp
                 <FeatureIsEnabled name="forenkletdeploy.dashboard">
                     <li><TeamAwareAnchor href="/dashboard">Dashboard</TeamAwareAnchor></li>
                 </FeatureIsEnabled>
-                <li><TeamAwareAnchor href="/releasenote">Go/nogo</TeamAwareAnchor></li>
             </ul>
         </div>
     );
