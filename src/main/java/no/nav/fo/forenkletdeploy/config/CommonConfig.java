@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 @Import({
         TeamProvider.class,
         GithubCommitProvider.class,
+        WebMvcConfig.class,
         UnleashService.class,
         CommitService.class,
         TeamService.class
