@@ -15,11 +15,18 @@ public final class SSLUtil {
             }
     };
 
-    public static void turnOffSslChecking() throws NoSuchAlgorithmException, KeyManagementException {
-        // Install the all-trusting trust manager
-        final SSLContext sc = SSLContext.getInstance("SSL");
-        sc.init( null, UNQUESTIONING_TRUST_MANAGER, null );
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    public static SSLContext getInsecureSSLContext() {
+        try {
+            final SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, UNQUESTIONING_TRUST_MANAGER, null);
+            return sc;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void turnOffSslChecking() {
+        HttpsURLConnection.setDefaultSSLSocketFactory(getInsecureSSLContext().getSocketFactory());
     }
 
     public static void turnOnSslChecking() throws KeyManagementException, NoSuchAlgorithmException {

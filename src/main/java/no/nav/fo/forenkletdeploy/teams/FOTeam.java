@@ -71,7 +71,7 @@ public class FOTeam implements Team {
                 this.applicationConfigs = applications;
             }
         } catch (Throwable e) {
-            logger.error("Feil ved henting av applicationConfig for FO");
+            logger.error("Feil ved henting av applicationConfig for FO", e);
         }
     }
 

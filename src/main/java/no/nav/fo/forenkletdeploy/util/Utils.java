@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -18,9 +17,11 @@ public class Utils {
     }
 
     public static WebTarget withClient(String uri) {
-        Client client = ClientBuilder.newClient();
-        WebTarget webTarget = client.target(uri);
-        return webTarget;
+        Client client = ClientBuilder.newBuilder()
+                .sslContext(SSLUtil.getInsecureSSLContext())
+                .hostnameVerifier((s1, s2) -> true)
+                .build();
+        return client.target(uri);
     }
 
     public static <T> T fromJson(String json, Class<T> valueClass) throws IOException {
