@@ -12,6 +12,13 @@ healthcheck:
   readiness:
     path: internal/isAlive
     initialDelay: 120
+resources:
+    requests: # Ressursene applikasjonen blir instansiert med
+        cpu: 800m
+        memory: 1024Mi
+    limits:
+        cpu: 2000m # Hvis applikasjonen overgår denne grensen vil cpu tilgangen bli kvalt.
+        memory: 1536Mi # Overgår den derimot minne grensen vil den bli slettet ummidelbart.
 fasitResources:
   used:
   - alias: unleash-api
