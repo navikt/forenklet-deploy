@@ -1,5 +1,9 @@
 package no.nav.fo.forenkletdeploy;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import no.nav.fo.forenkletdeploy.config.ApplicationConfig;
 import no.nav.fo.forenkletdeploy.util.SSLUtil;
 import org.springframework.boot.SpringApplication;
@@ -7,9 +11,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-
+import javax.inject.Inject;
 
 @Configuration
 @Import({
@@ -17,7 +19,7 @@ import java.security.NoSuchAlgorithmException;
 })
 @EnableAutoConfiguration
 public class Main {
-    public static void main(String... args) throws KeyManagementException, NoSuchAlgorithmException {
+    public static void main(String... args) {
         System.setProperty("UNLEASH_API_URL", "https://unleash.nais.preprod.local/api/");
         if ("true".equalsIgnoreCase(System.getProperty("webproxy.enabled", "true"))) {
             SSLUtil.turnOffSslChecking();
@@ -31,4 +33,10 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
+    @Inject
+    void configureObjectMapper(final ObjectMapper mapper) {
+        mapper.registerModule(new ParameterNamesModule())
+                .registerModule(new Jdk8Module())
+                .registerModule(new JavaTimeModule());
+    }
 }

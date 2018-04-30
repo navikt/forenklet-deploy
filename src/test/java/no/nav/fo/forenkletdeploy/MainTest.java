@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
         ApplicationTestConfig.class
 })
 @EnableAutoConfiguration
-public class MainTest {
+public class MainTest extends Main {
     public static void main(String... args) {
         System.setProperty("webpeoxy.enabled", "false");
         System.setProperty("UNLEASH_API_URL", "https://unleash.herokuapp.com/api/");

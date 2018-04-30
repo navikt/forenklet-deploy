@@ -1,6 +1,7 @@
 package no.nav.fo.forenkletdeploy.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.glassfish.jersey.client.ClientConfig;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -19,6 +20,7 @@ public class Utils {
     public static WebTarget withClient(String uri) {
         Client client = ClientBuilder.newBuilder()
                 .sslContext(SSLUtil.getInsecureSSLContext())
+                .withConfig(new ClientConfig().register(JsonProvider.class))
                 .hostnameVerifier((s1, s2) -> true)
                 .build();
         return client.target(uri);
