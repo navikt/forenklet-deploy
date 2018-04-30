@@ -1,6 +1,5 @@
 package no.nav.fo.forenkletdeploy.mock;
 
-import no.nav.fo.forenkletdeploy.domain.ApplicationConfig;
 import no.nav.fo.forenkletdeploy.provider.TeamProvider;
 import no.nav.fo.forenkletdeploy.service.ApplicationService;
 import org.springframework.stereotype.Component;

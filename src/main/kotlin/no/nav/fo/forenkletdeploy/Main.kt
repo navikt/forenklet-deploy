@@ -1,0 +1,38 @@
+package no.nav.fo.forenkletdeploy
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
+import no.nav.fo.forenkletdeploy.config.ApplicationConfig
+import no.nav.fo.forenkletdeploy.util.SSLUtil
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
+import javax.inject.Inject
+
+@Configuration
+@EnableAutoConfiguration
+@Import(ApplicationConfig::class)
+open class Main
+
+fun main(args: Array<String>) {
+    if ("true".equals(System.getProperty("webproxy.enabled", "true"), ignoreCase = true)) {
+        SSLUtil.turnOffSslChecking()
+        System.setProperty("http.nonProxyHosts", "*.155.55.|*.192.168.|*.10.|*.local|*.rtv.gov|*.adeo.no|*.nav.no|*.aetat.no|*.devillo.no|*.oera.no")
+        System.setProperty("http.proxyHost", "webproxy-utvikler.nav.no")
+        System.setProperty("http.proxyPort", "8088")
+        System.setProperty("https.proxyHost", "webproxy-utvikler.nav.no")
+        System.setProperty("https.proxyPort", "8088")
+    }
+
+    SpringApplication.run(Main::class.java, *args)
+}
+
+@Inject
+fun configureObjectMapper(mapper: ObjectMapper) {
+    mapper.registerModule(ParameterNamesModule())
+            .registerModule(Jdk8Module())
+            .registerModule(JavaTimeModule())
+}

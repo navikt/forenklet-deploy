@@ -14,15 +14,13 @@
     <packaging>jar</packaging>
 
     <properties>
-        <mainclass>no.nav.fo.forenkletdeploy.Main</mainclass>
+        <mainclass>no.nav.fo.forenkletdeploy.MainKt</mainclass>
         <ehcache.version>3.4.0</ehcache.version>
         <javax.cache.version>1.1.0</javax.cache.version>
         <unleash.version>3.0.0</unleash.version>
-        <lombok.version>1.16.16</lombok.version>
-        <slf4j.version>1.7.25</slf4j.version>
-        <log4j.version>2.9.1</log4j.version>
-        <mustache.version>0.9.5</mustache.version>
         <javax.rs.version>2.0-m16</javax.rs.version>
+        <kotlin.version>1.2.40</kotlin.version>
+        <annotations.version>16.0.1</annotations.version>
     </properties>
 
     <dependencyManagement>
@@ -69,11 +67,6 @@
             <artifactId>unleash-client-java</artifactId>
             <version>${unleash.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.spullara.mustache.java</groupId>
-            <artifactId>compiler</artifactId>
-            <version>${mustache.version}</version>
-        </dependency>
 
         <!-- logging -->
         <dependency>
@@ -88,11 +81,6 @@
         </dependency>
 
         <!-- Utils -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-        </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -130,6 +118,29 @@
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
             <artifactId>jackson-jaxrs-json-provider</artifactId>
+        </dependency>
+
+        <!-- Kotlin -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${annotations.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>${kotlin.version}</version>
         </dependency>
 
         <!-- Test -->
@@ -173,6 +184,35 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <source>src/main/kotlin</source>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jvmTarget>1.8</jvmTarget>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
