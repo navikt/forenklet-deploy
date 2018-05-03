@@ -1,13 +1,8 @@
 package no.nav.fo.forenkletdeploy.util;
 
-import lombok.SneakyThrows;
-
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -29,9 +24,12 @@ public class AsyncUtils {
         return futures.stream().map(AsyncUtils::get);
     }
 
-    @SneakyThrows
     private static <R> R get(Future<R> future) {
-        return future.get(1, TimeUnit.MINUTES);
+        try {
+            return future.get(1, TimeUnit.MINUTES);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
