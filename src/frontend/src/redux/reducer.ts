@@ -24,12 +24,14 @@ export interface AppState {
 }
 
 function getSavedState<T>(name: string): T {
-    const savedState = localStorage.getItem(name);
+    const savedState = window.localStorage ? localStorage.getItem(name) : null;
     return savedState == null ? undefined : JSON.parse(savedState);
 }
 
 function saveState<T>(name: string, state: T) {
-    localStorage.setItem(name, JSON.stringify(state));
+    if(window.localStorage) {
+        localStorage.setItem(name, JSON.stringify(state));
+    }
 }
 
 function storedReducer<T>(name: string, reducer: (state: T, action: Action) => T): (state: T, action: Action) => T {
