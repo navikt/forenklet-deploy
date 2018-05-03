@@ -46,6 +46,7 @@ const appNames = [
     'veilarboppfolging',
     'veilarbaktivitetsplanfs',
     'aktivitetsplan',
+    'aktivitetsplan-felles',
     'feature',
     'veilarbdemo',
     'veilarbpersonflatefs',

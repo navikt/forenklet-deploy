@@ -20,7 +20,6 @@ public class FOTeam implements Team {
 
     private static List<String> IGNORED_APPLICATIONS = Arrays.asList(
             "veilarbdemo",
-            "aktivitetsplan-felles",
             "badkitty"
     );
 
