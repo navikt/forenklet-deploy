@@ -4,26 +4,17 @@
         xsi:schemaLocation="
             http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.2.xsd"
 >
-    <cache alias="veradeploys" uses-template="short">
+    <cache alias="veradeploys" uses-template="medium">
         <heap>100</heap>
     </cache>
-    <cache alias="jiraissues" uses-template="long">
-        <heap>100</heap>
+    <cache alias="teamconfig" uses-template="long">
+        <heap>1000</heap>
     </cache>
-    <cache alias="jiraissue" uses-template="medium">
+    <cache alias="stashcommits" uses-template="medium">
         <heap>200</heap>
     </cache>
-    <cache alias="applicationlist" uses-template="long">
-        <heap>100</heap>
-    </cache>
-    <cache alias="applicationlistbyteam" uses-template="long">
-        <heap>100</heap>
-    </cache>
-    <cache alias="appbyname" uses-template="long">
-        <heap>100</heap>
-    </cache>
-    <cache alias="commits" uses-template="medium">
-        <heap>5000</heap>
+    <cache alias="jiraissue" uses-template="medium">
+        <heap>300</heap>
     </cache>
 
     <!-- templates -->

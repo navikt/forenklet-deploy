@@ -46,3 +46,9 @@ data class JiraIssues(
         val startAt: Int,
         val total: Int
 )
+
+data class TeamAppConfig(
+        val gitUrl: String
+)
+
+class TeamAppConfigs: HashMap<String, TeamAppConfig>()

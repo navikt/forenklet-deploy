@@ -1,74 +1,20 @@
 package no.nav.fo.forenkletdeploy.service
 
-import com.github.javafaker.Faker
 import no.nav.fo.forenkletdeploy.ApplicationConfig
-import no.nav.fo.forenkletdeploy.provider.TeamProvider
-import no.nav.fo.forenkletdeploy.util.stringToSeed
-import org.slf4j.LoggerFactory
-import org.springframework.cache.annotation.Cacheable
-import org.springframework.scheduling.annotation.Scheduled
-import java.util.*
+import org.springframework.stereotype.Service
 import javax.inject.Inject
 
-interface IApplicationService {
-    fun getApps(): List<ApplicationConfig>
-    fun getAppsByTeam(teamId: String): List<ApplicationConfig>
-    fun getAppByName(name: String): ApplicationConfig?
-    fun getAllAppConfigurations(): List<ApplicationConfig>
-    fun lastAlleApplicationConfigs() {
-
-    }
-}
-
-open class ApplicationService @Inject
+@Service
+class ApplicationService @Inject
 constructor(
-        val teamProvider: TeamProvider
-): IApplicationService {
-    val logger = LoggerFactory.getLogger(this.javaClass.name)
+    val teamService: TeamService
+) {
+    fun getAllApplications() =
+            teamService.allTeams.flatMap { it.getApplicationConfigs() }
 
-    @Cacheable("applicationlist")
-    override fun getApps(): List<ApplicationConfig> =
-            getAllAppConfigurations()
+    fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
+            teamService.getAppsForTeam(teamId)
 
-    @Cacheable("applicationlistbyteam")
-    override fun getAppsByTeam(teamId: String): List<ApplicationConfig> =
-            teamProvider.teams
-                .filter { it.id == teamId }
-                .flatMap { it.applicationConfigs }
-
-    @Cacheable("appbyname")
-    override fun getAppByName(name: String): ApplicationConfig {
-        return getAllAppConfigurations()
-                .first { it.name.equals(name, ignoreCase = true) }
-    }
-
-    @Scheduled(fixedRate = 10 * 60 * 1000)
-    override fun lastAlleApplicationConfigs() {
-        logger.info("Henter og oppdaterer alle applicationConfigs")
-        teamProvider.teams.forEach({ it.hentApplicationConfigs() })
-    }
-
-    override fun getAllAppConfigurations(): List<ApplicationConfig> =
-            teamProvider.teams.flatMap { it.applicationConfigs }
-}
-
-class MockApplicationService @Inject
-constructor(
-        val teamProvider: TeamProvider
-): IApplicationService {
-
-    override fun getApps(): List<ApplicationConfig> =
-            getAllAppConfigurations()
-
-    override fun getAppsByTeam(teamId: String): List<ApplicationConfig> {
-        val faker = Faker(Random(stringToSeed(teamId)))
-        val numApps = faker.number().numberBetween(3, 10)
-        return (1..numApps).map { getAppByName(faker.zelda().game()) }
-    }
-
-    override fun getAppByName(name: String): ApplicationConfig =
-            ApplicationConfig(name = name, gitUrl = "ssh://git@github.com/$name")
-
-    override fun getAllAppConfigurations(): List<ApplicationConfig> =
-            teamProvider.teams.flatMap { getAppsByTeam(it.id) }
+    fun getAppByName(name: String): ApplicationConfig =
+            getAllApplications().first { it.name.equals(name, ignoreCase = true) }
 }

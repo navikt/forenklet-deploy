@@ -1,43 +1,27 @@
 package no.nav.fo.forenkletdeploy.rest
 
-import no.nav.fo.forenkletdeploy.ApplicationConfig
-import no.nav.fo.forenkletdeploy.VeraDeploy
-import no.nav.fo.forenkletdeploy.service.IApplicationService
-import no.nav.fo.forenkletdeploy.service.IVeraDeployService
-import no.nav.fo.forenkletdeploy.util.NotFoundException
+import no.nav.fo.forenkletdeploy.service.VeraDeployService
 import org.springframework.web.bind.annotation.*
 
 import javax.inject.Inject
-import java.util.Arrays
-import java.util.stream.Collectors
 
 @RestController
 @RequestMapping("/api/deploy")
 class DeployResource @Inject
 constructor(
-        val veraDeployService: IVeraDeployService,
-        val applicationService: IApplicationService
+        val veraDeployService: VeraDeployService
 ) {
-    private val gyldigeMiljoer = Arrays.asList("p", "q0", "q6", "t6")
-
     @GetMapping
     fun getAllDeploys(@RequestParam("team") teamId: String) =
-            getVeraDeploys(applicationService.getAppsByTeam(teamId))
+            veraDeployService.getDeploysForTeam(teamId)
 
     @GetMapping("/{application}")
     fun getAllDeploysForApplication(@PathVariable("application") application: String) =
-            getVeraDeploys(applicationService.getApps())
-                .filter { application.equals(it.application, ignoreCase = true) }
+            veraDeployService.getDeploysForApp(application)
 
     @GetMapping("/{application}/{environment}")
     fun getDeploy(@PathVariable("application") application: String, @PathVariable("environment") environment: String) =
-            getVeraDeploys(applicationService.getApps())
-                    .filter { it.application.equals(application, ignoreCase = true) }
+            veraDeployService.getDeploysForApp(application)
                     .filter { it.environment.equals(environment, ignoreCase = true) }
                     .first()
-
-    private fun getVeraDeploys(applicationConfigs: List<ApplicationConfig>) =
-            veraDeployService.getVeraDeploys()
-                    .filter { gyldigeMiljoer.contains(it.environment) }
-                    .filter { applicationConfigs.map { it.name }.contains(it.application) }
 }

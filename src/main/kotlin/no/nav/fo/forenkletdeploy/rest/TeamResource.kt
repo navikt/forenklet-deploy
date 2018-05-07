@@ -14,5 +14,11 @@ class TeamResource @Inject
 constructor(val teamService: TeamService) {
     @GetMapping
     fun allTeams(): List<Team> =
-            teamService.getTeams()
+            teamService.allTeams.map {
+                Team(
+                        id = it.id,
+                        jenkinsFolder = it.jenkinsFolder,
+                        displayName = it.displayName
+                )
+            }
 }
