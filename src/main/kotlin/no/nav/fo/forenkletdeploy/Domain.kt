@@ -10,14 +10,17 @@ data class Application(val name: String, val version: String, val issueKeys: Lis
 data class ReleaseNote(val url: URL, val applications: List<Application>)
 
 data class VeraDeploy(
-        val id: String,
-        val application: String,
-        val deployed_timestamp: ZonedDateTime,
-        val version: String,
-        val environment: String
+        val id: String = "",
+        val application: String = "",
+        val deployed_timestamp: ZonedDateTime? = null,
+        val version: String = "",
+        val environment: String = "",
+        val deployer: String = "",
+        val environmentClass: String? = null,
+        val replaced_timestamp: String? = null
 )
 
-class VeraDeploys() : ArrayList<VeraDeploy>()
+class VeraDeploys : ArrayList<VeraDeploy>()
 
 data class Commit(
         val hash: String,

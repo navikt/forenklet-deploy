@@ -30,7 +30,7 @@ class TeamOppfolging : Team {
 }
 
 data class OppfolgingConfig(
-        val gitUrl: String
+        val gitUrl: String = ""
 )
 
 class OppfolgingAppConfig: HashMap<String, OppfolgingConfig>()

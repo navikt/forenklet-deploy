@@ -42,20 +42,18 @@ class FOTeam : Team {
             }
 
         } catch (e: Throwable) {
-            logger.error("Feil ved henting av applicationConfig for FO")
+            logger.error("Feil ved henting av applicationConfig for FO", e)
         }
-
     }
-
 }
 
 
 data class FOConfig(
-        val gitUrl: String,
-        val sone: String?,
-        val team: String?,
-        val type: String?,
-        val downstream: String?
+        val gitUrl: String = "",
+        val sone: String? = null,
+        val team: String? = null,
+        val type: String? = null,
+        val downstream: String? = null
 )
 
 class FOAppConfig: HashMap<String, FOConfig>()

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.fasterxml.jackson.module.kotlin.KotlinModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
 import javax.ws.rs.Consumes;
@@ -32,6 +33,7 @@ public class JsonProvider extends JacksonJaxbJsonProvider {
     public static ObjectMapper createObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper()
                 .registerModule(new Jdk8Module())
+                .registerModule(new KotlinModule())
                 .registerModule(new JavaTimeModule())
                 .registerModule(new ParameterNamesModule())
                 .configure(FAIL_ON_UNKNOWN_PROPERTIES, false)

@@ -31,7 +31,7 @@ class StashCommitProvider: IStashCommitProvider {
     fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> =
             try {
                 val url = getRestUriForRepo(application)
-                LOG.info("Henter commits for ${application.name} ($fromTag -> $toTag)")
+                LOG.info("Henter commits for ${application.name} ($fromTag -> $toTag) via $url")
                 withClient(url)
                         .queryParam("since", tagRef(fromTag))
                         .queryParam("until", tagRef(toTag))
@@ -43,18 +43,6 @@ class StashCommitProvider: IStashCommitProvider {
                 LOG.error("Feil ved henting av commits for ${application.name}", e)
                 ArrayList()
             }
-
-    fun getRestUriForRepo(application: ApplicationConfig): String {
-        val projectRegex = "7999/([a-zA-Z]+)/".toRegex()
-        val project = projectRegex.matchEntire(application.gitUrl)?.groups?.get(1)?.value
-        return "http://stash.devillo.no/rest/api/1.0/projects/$project/repos/${application.name}/commits"
-    }
-
-    fun getLinkUriForCommit(application: ApplicationConfig, commit: String): String {
-        val projectRegex = "7999/([a-zA-Z]+)/".toRegex()
-        val project = projectRegex.matchEntire(application.gitUrl)?.groups?.get(1)?.value
-        return "http://stash.devillo.no/projects/$project/repos/${application.name}/commits/$commit"
-    }
 
     private fun tagRef(tag: String) =
             if ("null".equals(tag, ignoreCase = true)) "" else "refs%2Ftags%2F$tag"
@@ -85,6 +73,18 @@ class MockStashCommitProvider: IStashCommitProvider {
             (System.currentTimeMillis()) - (minutes * 60 * 1000)
 }
 
+fun getRestUriForRepo(application: ApplicationConfig): String {
+    val projectRegex = "7999/([a-zA-Z]+)/".toRegex()
+    val project = projectRegex.find(application.gitUrl)?.groups?.get(1)?.value
+    return "http://stash.devillo.no/rest/api/1.0/projects/$project/repos/${application.name}/commits"
+}
+
+fun getLinkUriForCommit(application: ApplicationConfig, commit: String): String {
+    val projectRegex = "7999/([a-zA-Z]+)/".toRegex()
+    val project = projectRegex.find(application.gitUrl)?.groups?.get(1)?.value
+    return "http://stash.devillo.no/projects/$project/repos/${application.name}/commits/$commit"
+}
+
 data class StashCommits (
         val isLastPage: Boolean,
         val limit: Int,
@@ -92,7 +92,6 @@ data class StashCommits (
         val size: Int,
         val start: Int,
         val values: List<StashCommit>
-
 )
 
 data class StashCommit (
@@ -109,12 +108,12 @@ data class StashCommit (
 data class CommitPerson (
         val active: Boolean,
         val displayName: String?,
-        val email: String,
+        val email: String?,
         val id: Int,
         val name: String,
-        val slug: String,
-        val type: String,
-        val links: PersonLinks
+        val slug: String?,
+        val type: String?,
+        val links: PersonLinks?
 )
 
 data class PersonLinks (

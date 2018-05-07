@@ -168,6 +168,8 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <finalName>forenklet-deploy</finalName>
         <plugins>
             <plugin>

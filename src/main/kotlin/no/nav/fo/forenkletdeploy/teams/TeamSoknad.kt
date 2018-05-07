@@ -46,8 +46,8 @@ class TeamSoknad : Team {
 }
 
 data class SDConfig(
-        val gitUrl: String,
-        val sone: String?
+        val gitUrl: String = "",
+        val sone: String? = null
 )
 
 class SDAppConfig: HashMap<String, SDConfig>()

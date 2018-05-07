@@ -1,18 +1,15 @@
 package no.nav.fo.forenkletdeploy.util
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
+import no.nav.fo.forenkletdeploy.util.JsonProvider.createObjectMapper
 import org.glassfish.jersey.client.ClientConfig
 
-import javax.ws.rs.client.Client
 import javax.ws.rs.client.ClientBuilder
 import javax.ws.rs.client.WebTarget
 import java.io.IOException
 import java.io.InputStream
 
 object Utils {
-    private val objectMapper = ObjectMapper()
-            .registerModule(KotlinModule())
+    private val objectMapper = createObjectMapper()
 
     fun getRequiredProperty(propName: String): String {
         val envProp = System.getenv(propName)
