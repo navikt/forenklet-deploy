@@ -27,7 +27,7 @@ abstract class ITeam constructor(
     private val teamConfigConsumer = getTeamConfigConsumer()
 
     fun getApplicationConfigs(): List<ApplicationConfig> =
-            teamConfigConsumer.hentTeamConfig(uri = configUrl)
+            teamConfigConsumer.hentTeamConfig(uri = configUrl, useAuth = true)
                     .entries
                     .map { ApplicationConfig( name = it.key, gitUrl = it.value.gitUrl ) }
                     .filter { !ignoredApplications.contains(it.name) }

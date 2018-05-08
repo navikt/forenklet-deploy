@@ -27,7 +27,7 @@ open class TeamConfigConsumer: ITeamConfigConsumer {
     private fun getConfigWithAuth(uri: String) =
             withClient(uri)
                     .request()
-                    .header("Authorization", TOKEN)
+                    .header("Authorization", "token $TOKEN")
                     .get(String::class.java)
 
     private fun getConfigNoAuth(uri: String) =

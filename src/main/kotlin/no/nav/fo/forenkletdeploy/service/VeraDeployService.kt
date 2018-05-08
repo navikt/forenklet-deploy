@@ -2,6 +2,7 @@ package no.nav.fo.forenkletdeploy.service
 
 import no.nav.fo.forenkletdeploy.VeraDeploy
 import no.nav.fo.forenkletdeploy.consumer.getVeraConsumer
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.*
 import javax.inject.Inject
@@ -12,6 +13,7 @@ constructor(
         val teamService: TeamService
 ) {
     val veraConsumer = getVeraConsumer()
+    private val LOG = LoggerFactory.getLogger(VeraDeployService::class.java)
     private val gyldigeMiljoer = Arrays.asList("p", "q0", "q6", "t6")
 
     fun getDeploysForTeam(teamId: String): List<VeraDeploy> =
@@ -19,6 +21,11 @@ constructor(
                     .flatMap { getDeploysForApp(it.name) }
 
     fun getDeploysForApp(app: String): List<VeraDeploy> =
-            veraConsumer.getDeploysForApp(app)
-                    .filter { gyldigeMiljoer.contains(it.environment) }
+            try {
+                veraConsumer.getDeploysForApp(app)
+                        .filter { gyldigeMiljoer.contains(it.environment) }
+            } catch (e: Throwable) {
+                LOG.error("Kunne ikke hente deploys for $app", e)
+                emptyList()
+            }
 }
