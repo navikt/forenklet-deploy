@@ -20,7 +20,7 @@ interface VeraConsumer {
 
 @Service
 @Profile("!mock")
-class VeraConsumerImpl: VeraConsumer {
+open class VeraConsumerImpl: VeraConsumer {
     private var nextUpdate = LocalDateTime.now()
     private var latestDeploys = getLatestDeploys()
 
