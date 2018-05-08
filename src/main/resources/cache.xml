@@ -13,6 +13,9 @@
     <cache alias="stashcommits" uses-template="medium">
         <heap>200</heap>
     </cache>
+    <cache alias="stashtags" uses-template="medium">
+        <heap>200</heap>
+    </cache>
     <cache alias="jiraissue" uses-template="medium">
         <heap>300</heap>
     </cache>
@@ -25,7 +28,7 @@
     </cache-template>
     <cache-template name="medium">
         <expiry>
-            <ttl unit="minutes">5</ttl>
+            <ttl unit="minutes">3</ttl>
         </expiry>
     </cache-template>
     <cache-template name="long">

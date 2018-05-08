@@ -1,8 +1,8 @@
 package no.nav.fo.forenkletdeploy.commits
 
 import no.nav.fo.forenkletdeploy.ApplicationConfig
+import no.nav.fo.forenkletdeploy.consumer.getRestUriForRepo
 import no.nav.fo.forenkletdeploy.service.getLinkUriForCommit
-import no.nav.fo.forenkletdeploy.service.getRestUriForRepo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 

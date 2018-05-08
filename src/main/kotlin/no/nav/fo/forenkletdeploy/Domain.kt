@@ -32,6 +32,12 @@ data class Commit(
         val mergecommit: Boolean = false
 )
 
+data class GitTag(
+        val displayId: String,
+        val latestcommit: String,
+        val application: String
+)
+
 data class JiraIssuePerson(val displayName: String)
 data class JiraIssueStatus(val name: String)
 data class JiraIssueFields(
