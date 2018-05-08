@@ -18,7 +18,7 @@ interface ITeamConfigConsumer {
 open class TeamConfigConsumer: ITeamConfigConsumer {
     val TOKEN = Utils.getRequiredProperty("GITHUB_JENKINSPUS_TOKEN")
 
-    @Cacheable("teamconfig", keyGenerator = "cacheKeygenerator")
+    @Cacheable("teamconfig", key = "#uri")
     override fun hentTeamConfig(uri: String, useAuth: Boolean): TeamAppConfigs {
         val json = if (useAuth) getConfigWithAuth(uri) else getConfigNoAuth(uri)
         return fromJson(json, TeamAppConfigs::class.java)

@@ -1,10 +1,15 @@
 # FO: Forenklet deploy
 
-[![CircleCI](https://circleci.com/gh/navikt/fo-forenklet-deploy/tree/master.svg?style=svg)](https://circleci.com/gh/navikt/fo-forenklet-deploy/tree/master)
-
-En applikasjon som viser oversikt over deploy av et team sine applikasjoner, per miljø.
+En applikasjon som viser oversikt over versjoner av et team sine applikasjoner, per miljø.
 Applikasjonen henter ut data fra ulike baksystemet og presenterer endringene mellom ulike
-miljøer ved å preentere git-commits mellom ulike versjoner. 
+miljøer ved å presentere git-commits mellom ulike versjoner.
+
+Målet for applikasjonen er å gi en oversikt over hva som blir rullet ut til en hver tid,
+spesielt når man har en stor applikasjonsportefølje (f.eks. mange microservices) og i
+tillegg flere test-miljøer man bruker.
+
+Applikasjonen blir til en hver tid deployet til et test-miljø i heroku og kan testes ut
+ved å besøke https://forenklet-deploy-staging.herokuapp.com/
 
 ## Utvikling
 
@@ -30,3 +35,14 @@ Det er lettest å starte backend og frontend helt uavhengig av hverandre når ma
 Mockdataen skal til en hver tid være representativ
 for reelle data. Heroku starter opp en instans av alle pull-requestene, hvor den bruker mockdata.
 Slik at man kan få verifisert frontend-endringer funksjonelt før man merger.
+
+## Henvendelser
+
+Spørsmål knyttet til koden eller prosjektet kan rettes til Team Pus.
+
+For eksterne kontakt en av følgende:
+
+* Steffen Hageland (steffen.hagelan@nav.no)
+* Jan Berge Ommedal (jan.berge.ommedal@nav.no)
+
+For NAV-ansatte kan henvendelser sendes via slack i kanalen #pus

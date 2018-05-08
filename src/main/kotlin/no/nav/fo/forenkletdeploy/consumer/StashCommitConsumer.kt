@@ -17,7 +17,7 @@ open class StashCommitConsumer: IStashCommitConsumer {
     val LOG = LoggerFactory.getLogger(this.javaClass)
     val LIMIT = 1000
 
-    @Cacheable("stashcommits", keyGenerator = "cacheKeygenerator")
+    @Cacheable("stashcommits")
     override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> =
             try {
                 val url = application.gitUrl
@@ -46,7 +46,7 @@ class MockStashCommitConsumer: IStashCommitConsumer {
         return (1..numCommits).map {
             val person = CommitPerson(
                     id = faker.number().randomDigitNotZero(),
-                    name = faker.zelda().character(),
+                    name = faker.gameOfThrones().character(),
                     active = true
             )
             StashCommit(
@@ -61,7 +61,7 @@ class MockStashCommitConsumer: IStashCommitConsumer {
     }
 
     fun getMessage(faker: Faker): String =
-            faker.numerify("PUS-### ${faker.gameOfThrones().city()}\n\n${faker.chuckNorris().fact()}")
+            faker.numerify("PUS-### ${faker.book().title()}\n\n${faker.chuckNorris().fact()}")
 
     fun getMinutesAgo(minutes: Int): Long =
             (System.currentTimeMillis()) - (minutes * 60 * 1000)

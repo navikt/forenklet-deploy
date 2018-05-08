@@ -16,15 +16,7 @@ interface IJiraConsumer {
 }
 
 open class JiraConsumer: IJiraConsumer {
-    val IKKE_INTERESSANTE_STATUSER = arrayOf(
-            "Analyse",
-            "Verifisering",
-            "Klar til utvikling",
-            "Ferdig"
-    ).joinToString(separator = ",")
-    val FO_JQL = "project=fo AND status not in ($IKKE_INTERESSANTE_STATUSER)"
-
-    @Cacheable("jiraissue", keyGenerator = "cacheKeygenerator")
+    @Cacheable("jiraissue")
     override fun getUserStory(issueId: String): JiraIssue =
             withClient("https://jira.adeo.no/rest/api/2/issue/$issueId")
                     .request()
@@ -46,8 +38,8 @@ class MockJiraConsumer: IJiraConsumer {
                 id = issueId,
                 key = issueId,
                 fields = JiraIssueFields(
-                        assignee = JiraIssuePerson(displayName = faker.pokemon().name()),
-                        summary = faker.rickAndMorty().quote(),
+                        assignee = JiraIssuePerson(displayName = faker.harryPotter().character()),
+                        summary = faker.harryPotter().book(),
                         status = JiraIssueStatus(
                                 name = STATUSKODER[faker.number().numberBetween(0, STATUSKODER.size-1)]
                         )

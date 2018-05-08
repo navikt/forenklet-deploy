@@ -1,6 +1,6 @@
 package no.nav.fo.forenkletdeploy.config
 
-import no.nav.fo.forenkletdeploy.CorsFilter
+import no.nav.fo.forenkletdeploy.util.CorsFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.boot.web.servlet.FilterRegistrationBean

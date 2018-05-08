@@ -17,7 +17,7 @@ interface IVeraConsumer {
 }
 
 open class VeraConsumer: IVeraConsumer {
-    @Cacheable("veradeploys", keyGenerator = "cacheKeygenerator")
+    @Cacheable("veradeploys")
     override fun getDeploysForApp(app: String): List<VeraDeploy> =
         withClient("https://vera.adeo.no/api/v1/deploylog?onlyLatest=true&filterUndeployed=true&application=$app")
                 .request()

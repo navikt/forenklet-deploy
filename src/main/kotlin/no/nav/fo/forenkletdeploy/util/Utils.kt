@@ -1,6 +1,5 @@
 package no.nav.fo.forenkletdeploy.util
 
-import no.nav.fo.forenkletdeploy.util.JsonProvider.createObjectMapper
 import org.glassfish.jersey.client.ClientConfig
 
 import javax.ws.rs.client.ClientBuilder
@@ -20,7 +19,7 @@ object Utils {
         val client = ClientBuilder.newBuilder()
                 .sslContext(SSLUtil.getInsecureSSLContext())
                 .withConfig(ClientConfig().register(JsonProvider::class.java))
-                .hostnameVerifier { s1, s2 -> true }
+                .hostnameVerifier { _, _ -> true }
                 .build()
         return client.target(uri)
     }
