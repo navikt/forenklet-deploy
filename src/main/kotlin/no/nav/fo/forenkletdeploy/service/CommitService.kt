@@ -2,12 +2,15 @@ package no.nav.fo.forenkletdeploy.service
 
 import no.nav.fo.forenkletdeploy.ApplicationConfig
 import no.nav.fo.forenkletdeploy.Commit
-import no.nav.fo.forenkletdeploy.consumer.getStashCommitConsumer
+import no.nav.fo.forenkletdeploy.consumer.StashCommitConsumer
 import org.springframework.stereotype.Service
+import javax.inject.Inject
 
 @Service
-open class CommitService {
-    val stashCommitConsumer = getStashCommitConsumer()
+open class CommitService @Inject
+constructor(
+        val stashCommitConsumer: StashCommitConsumer
+) {
 
     fun getCommitsForRelease(application: ApplicationConfig, fromVersion: String, toVersion: String): List<Commit> {
         if (isGithubCommit(application.gitUrl)) {

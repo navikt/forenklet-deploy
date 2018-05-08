@@ -1,19 +1,20 @@
 package no.nav.fo.forenkletdeploy.service
 
 import no.nav.fo.forenkletdeploy.ApplicationConfig
-import no.nav.fo.forenkletdeploy.consumer.getTeamConfigConsumer
+import no.nav.fo.forenkletdeploy.consumer.TeamConfigConsumer
 import org.springframework.stereotype.Service
+import javax.inject.Inject
 
 @Service
-class TeamService {
+class TeamService @Inject
+constructor(
+        val teamConfigConsumer: TeamConfigConsumer
+) {
     val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamOppfolging())
-
-    fun getTeam(teamId: String): ITeam =
-            allTeams.first{ it.id.equals(teamId, ignoreCase = true) }
 
     fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
             allTeams.find { it.id.equals(teamId, ignoreCase = true) }
-                    ?.getApplicationConfigs()?: emptyList()
+                    ?.getApplicationConfigs(teamConfigConsumer)?: emptyList()
 }
 
 abstract class ITeam constructor(
@@ -24,10 +25,8 @@ abstract class ITeam constructor(
         val ignoredApplications: List<String>,
         val extraApps: List<ApplicationConfig>
 ) {
-    private val teamConfigConsumer = getTeamConfigConsumer()
-
-    fun getApplicationConfigs(): List<ApplicationConfig> =
-            teamConfigConsumer.hentTeamConfig(uri = configUrl, useAuth = true)
+    fun getApplicationConfigs(configConsumer: TeamConfigConsumer): List<ApplicationConfig> =
+            configConsumer.hentTeamConfig(uri = configUrl, useAuth = true)
                     .entries
                     .map { ApplicationConfig( name = it.key, gitUrl = it.value.gitUrl ) }
                     .filter { !ignoredApplications.contains(it.name) }

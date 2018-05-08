@@ -1,6 +1,5 @@
 package no.nav.fo.forenkletdeploy
 
-import no.nav.fo.forenkletdeploy.util.enableMock
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
@@ -10,6 +9,5 @@ open class MainTest: Main()
 fun main(args: Array<String>) {
     System.setProperty("webpeoxy.enabled", "false")
     System.setProperty("UNLEASH_API_URL", "https://unleash.herokuapp.com/api/")
-    enableMock()
     SpringApplication.run(MainTest::class.java, *args)
 }

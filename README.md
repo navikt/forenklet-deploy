@@ -23,8 +23,8 @@ prøve å hente data fra reelle baksystemer. Proxy-instillinger kan disables ved
 `webproxy.enabled` til `false`.
 
 Om man ønsker å kjøre opp backenden med Mock-data kan man starte Main-metoden man finner under `src/test/kotlin`.
-Denne starter opp appen uten proxy-instillinger og med alle baksystemer mocket ut.
-
+Denne starter opp appen uten proxy-instillinger og med alle baksystemer mocket ut. Om man bruker mock eller ikke
+defineres av om spring-profilen `mock` er aktivert. Dette kan endres i `application.yml` som man finner under resources.
 
 For å starte opp frontenden lokalt kjør `npm install && npm start` i `src/frontend`. Frontenden kommer også med egne
 mockdata, slik at man kan utvikler på den uten å trenge å starte opp backeden. For å utvikle med mockdata kan man starte

@@ -5,20 +5,23 @@ import no.nav.fo.forenkletdeploy.TeamAppConfig
 import no.nav.fo.forenkletdeploy.TeamAppConfigs
 import no.nav.fo.forenkletdeploy.util.Utils
 import no.nav.fo.forenkletdeploy.util.Utils.fromJson
+import no.nav.fo.forenkletdeploy.util.Utils.stringToSeed
 import no.nav.fo.forenkletdeploy.util.Utils.withClient
-import no.nav.fo.forenkletdeploy.util.mockEnabled
-import no.nav.fo.forenkletdeploy.util.stringToSeed
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.context.annotation.Profile
+import org.springframework.stereotype.Service
 import java.util.*
 
-interface ITeamConfigConsumer {
+interface TeamConfigConsumer {
     fun hentTeamConfig(uri: String, useAuth: Boolean = false): TeamAppConfigs
 }
 
-open class TeamConfigConsumer: ITeamConfigConsumer {
+@Service
+@Profile("!mock")
+open class TeamConfigConsumerImpl: TeamConfigConsumer {
     val TOKEN = Utils.getRequiredProperty("GITHUB_JENKINSPUS_TOKEN")
 
-    @Cacheable("teamconfig", key = "#uri")
+    @Cacheable("teamconfig")
     override fun hentTeamConfig(uri: String, useAuth: Boolean): TeamAppConfigs {
         val json = if (useAuth) getConfigWithAuth(uri) else getConfigNoAuth(uri)
         return fromJson(json, TeamAppConfigs::class.java)
@@ -34,8 +37,9 @@ open class TeamConfigConsumer: ITeamConfigConsumer {
             withClient(uri).request().get(String::class.java)
 }
 
-
-class MockTeamConfigConsumer: ITeamConfigConsumer {
+@Service
+@Profile("mock")
+class MockTeamConfigConsumer: TeamConfigConsumer {
     override fun hentTeamConfig(uri: String, useAuth: Boolean): TeamAppConfigs {
         val faker = Faker(Random(stringToSeed(uri)))
         val numApps = faker.number().numberBetween(3, 10)
@@ -46,6 +50,3 @@ class MockTeamConfigConsumer: ITeamConfigConsumer {
         return teamApps
     }
 }
-
-fun getTeamConfigConsumer(): ITeamConfigConsumer =
-        if (mockEnabled()) MockTeamConfigConsumer() else TeamConfigConsumer()

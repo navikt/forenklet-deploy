@@ -2,18 +2,21 @@ package no.nav.fo.forenkletdeploy.consumer
 
 import com.github.javafaker.Faker
 import no.nav.fo.forenkletdeploy.ApplicationConfig
+import no.nav.fo.forenkletdeploy.util.Utils.stringToSeed
 import no.nav.fo.forenkletdeploy.util.Utils.withClient
-import no.nav.fo.forenkletdeploy.util.mockEnabled
-import no.nav.fo.forenkletdeploy.util.stringToSeed
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.context.annotation.Profile
+import org.springframework.stereotype.Service
 import java.util.*
 
-interface IStashCommitConsumer {
+interface StashCommitConsumer {
     fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit>
 }
 
-open class StashCommitConsumer: IStashCommitConsumer {
+@Service
+@Profile("!mock")
+open class StashCommitConsumerImpl: StashCommitConsumer {
     val LOG = LoggerFactory.getLogger(this.javaClass)
     val LIMIT = 1000
 
@@ -38,7 +41,9 @@ open class StashCommitConsumer: IStashCommitConsumer {
             if ("null".equals(tag, ignoreCase = true)) "" else "refs%2Ftags%2F$tag"
 }
 
-class MockStashCommitConsumer: IStashCommitConsumer {
+@Service
+@Profile("mock")
+class MockStashCommitConsumer: StashCommitConsumer {
     override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> {
         val faker = Faker(Random(stringToSeed(application.name + fromTag + toTag)))
         val numCommits = faker.number().numberBetween(1, 8)
@@ -66,9 +71,6 @@ class MockStashCommitConsumer: IStashCommitConsumer {
     fun getMinutesAgo(minutes: Int): Long =
             (System.currentTimeMillis()) - (minutes * 60 * 1000)
 }
-
-fun getStashCommitConsumer(): IStashCommitConsumer =
-        if (mockEnabled()) MockStashCommitConsumer() else StashCommitConsumer()
 
 data class StashCommits (
         val isLastPage: Boolean,

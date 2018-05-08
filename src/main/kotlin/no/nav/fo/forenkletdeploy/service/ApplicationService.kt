@@ -10,7 +10,7 @@ constructor(
     val teamService: TeamService
 ) {
     fun getAllApplications() =
-            teamService.allTeams.flatMap { it.getApplicationConfigs() }
+            teamService.allTeams.flatMap { getAppsForTeam(it.id) }
 
     fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
             teamService.getAppsForTeam(teamId)

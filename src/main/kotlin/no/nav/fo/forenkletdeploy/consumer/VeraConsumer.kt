@@ -3,28 +3,46 @@ package no.nav.fo.forenkletdeploy.consumer
 import com.github.javafaker.Faker
 import no.nav.fo.forenkletdeploy.VeraDeploy
 import no.nav.fo.forenkletdeploy.VeraDeploys
+import no.nav.fo.forenkletdeploy.util.Utils.stringToSeed
 import no.nav.fo.forenkletdeploy.util.Utils.withClient
-import no.nav.fo.forenkletdeploy.util.mockEnabled
-import no.nav.fo.forenkletdeploy.util.stringToSeed
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.context.annotation.Profile
+import org.springframework.stereotype.Service
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 
-interface IVeraConsumer {
+interface VeraConsumer {
     fun getDeploysForApp(app: String): List<VeraDeploy>
 }
 
-open class VeraConsumer: IVeraConsumer {
+@Service
+@Profile("!mock")
+class VeraConsumerImpl: VeraConsumer {
+    private var nextUpdate = LocalDateTime.now()
+    private var latestDeploys = getLatestDeploys()
+
     @Cacheable("veradeploys")
     override fun getDeploysForApp(app: String): List<VeraDeploy> =
-        withClient("https://vera.adeo.no/api/v1/deploylog?onlyLatest=true&filterUndeployed=true&application=$app")
-                .request()
-                .get(VeraDeploys::class.java)
+        getLatestDeploys()
+                .filter { it.application.equals(app, ignoreCase = true) }
+
+    private fun getLatestDeploys(): List<VeraDeploy> {
+        if (LocalDateTime.now() > nextUpdate) {
+            latestDeploys = withClient("https://vera.adeo.no/api/v1/deploylog?onlyLatest=true&filterUndeployed=true")
+                    .request()
+                    .get(VeraDeploys::class.java)
+            nextUpdate = LocalDateTime.now().plusMinutes(3)
+        }
+        return latestDeploys
+    }
 }
 
-class MockVeraConsumer: IVeraConsumer {
+@Service
+@Profile("mock")
+class MockVeraConsumer: VeraConsumer {
     val MILJO = arrayOf("t6", "q6", "q0", "p")
 
     override fun getDeploysForApp(app: String): List<VeraDeploy> {
@@ -45,6 +63,3 @@ class MockVeraConsumer: IVeraConsumer {
         return instant.atZone(ZoneId.of("Europe/Oslo"))
     }
 }
-
-fun getVeraConsumer(): IVeraConsumer =
-        if (mockEnabled()) MockVeraConsumer() else VeraConsumer()

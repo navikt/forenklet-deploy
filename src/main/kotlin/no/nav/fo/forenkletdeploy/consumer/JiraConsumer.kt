@@ -5,17 +5,20 @@ import no.nav.fo.forenkletdeploy.JiraIssue
 import no.nav.fo.forenkletdeploy.JiraIssueFields
 import no.nav.fo.forenkletdeploy.JiraIssuePerson
 import no.nav.fo.forenkletdeploy.JiraIssueStatus
+import no.nav.fo.forenkletdeploy.util.Utils.stringToSeed
 import no.nav.fo.forenkletdeploy.util.Utils.withClient
-import no.nav.fo.forenkletdeploy.util.mockEnabled
-import no.nav.fo.forenkletdeploy.util.stringToSeed
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.context.annotation.Profile
+import org.springframework.stereotype.Service
 import java.util.*
 
-interface IJiraConsumer {
+interface JiraConsumer {
     fun getUserStory(issueId: String): JiraIssue
 }
 
-open class JiraConsumer: IJiraConsumer {
+@Service
+@Profile("!mock")
+open class JiraConsumerImpl: JiraConsumer {
     @Cacheable("jiraissue")
     override fun getUserStory(issueId: String): JiraIssue =
             withClient("https://jira.adeo.no/rest/api/2/issue/$issueId")
@@ -24,7 +27,9 @@ open class JiraConsumer: IJiraConsumer {
 
 }
 
-class MockJiraConsumer: IJiraConsumer {
+@Service
+@Profile("mock")
+class MockJiraConsumer: JiraConsumer {
     val STATUSKODER = arrayOf(
             "Under utvikling",
             "Fagfellevurdering",
@@ -47,6 +52,3 @@ class MockJiraConsumer: IJiraConsumer {
         )
     }
 }
-
-fun getJiraConsumer(): IJiraConsumer =
-        if (mockEnabled()) MockJiraConsumer() else JiraConsumer()

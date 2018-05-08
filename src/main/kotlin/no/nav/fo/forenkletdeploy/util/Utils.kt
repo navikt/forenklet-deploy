@@ -36,4 +36,8 @@ object Utils {
 
     fun getEnvironment(): String =
             System.getenv("FASIT_ENVIRONMENT_NAME") ?: "local"
+
+    fun stringToSeed(text: String): Long =
+            text.map { it.toLong() }
+                    .fold(11L) { acc, i -> (acc * 31 ) + i }
 }
