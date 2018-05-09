@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build-frontend:
     docker:
       - image: circleci/node:8.9.4
 
@@ -24,3 +24,21 @@ jobs:
       - run: npm run lint
       - run: npm run test
       - run: npm run build
+
+  build-backend:
+    docker:
+      - image: circleci/java:8-jdk
+
+    working_directory: ~/forenklet-deploy
+    steps:
+      - checkout:
+          path: ~/forenklet-deploy
+
+      - run: mvn verify
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build-frontend
+      - build-backend
