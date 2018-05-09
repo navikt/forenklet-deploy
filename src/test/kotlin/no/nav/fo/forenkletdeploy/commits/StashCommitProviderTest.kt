@@ -16,7 +16,7 @@ class StashCommitProviderTest {
                 name = "testapp",
                 gitUrl = "ssh://git@stash.devillo.no:7999/$project/$appname.git"
         )
-        val expected = "http://stash.devillo.no/rest/api/1.0/projects/$project/repos/$appname/commits"
+        val expected = "http://stash.devillo.no/rest/api/1.0/projects/$project/repos/$appname"
         assertThat(getRestUriForRepo(appConfig))
                 .isEqualToIgnoringCase(expected)
     }
