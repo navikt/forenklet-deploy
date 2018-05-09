@@ -38,7 +38,7 @@ data class GitTag(
 data class JiraIssuePerson(val displayName: String)
 data class JiraIssueStatus(val name: String)
 data class JiraIssueFields(
-        val assignee: JiraIssuePerson,
+        val assignee: JiraIssuePerson? = null,
         val summary: String,
         val status: JiraIssueStatus
 )
