@@ -2,8 +2,8 @@ import { JiraIssue } from '../models/jira-issue';
 import { AppState } from './reducer';
 import { Dispatch } from 'redux';
 import { Action } from 'redux';
-import * as api from '../api/jira-api';
-import { onlyUnique } from '../utils/utils';
+import { onlyUnique, chunk } from '../utils/utils';
+import { getJiraIssues } from '../api/jira-api';
 
 export interface JiraIssueState {
     loading: boolean;
@@ -72,9 +72,14 @@ export function selectIssue(state: AppState, issue: string): JiraIssue | undefin
 export function getIssues(issueIds: string[]) {
     return (dispatch: Dispatch<Action>) => {
         dispatch({ type: actionNames.LOADING });
-        const issuePromises = onlyUnique(issueIds).map(api.getJiraIssue);
+        const issuesPromises = chunk(onlyUnique(issueIds), 10)
+            .map((issues) => getJiraIssues(issues));
 
-        Promise.all(issuePromises)
-            .then((issues: JiraIssue[]) => dispatch({ type: actionNames.FETCH_SUCCESS, issues }));
+        Promise.all(issuesPromises)
+            .then((issues: JiraIssue[][]) => {
+                issues.map((i: JiraIssue[]) => {
+                    dispatch({ type: actionNames.FETCH_SUCCESS, issues: i });
+                });
+            });
     };
 }
