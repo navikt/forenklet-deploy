@@ -25,7 +25,7 @@ function Header({error, showAll, doChangeShowAll}: HeaderStateProps & HeaderDisp
             <div className="container">
                 <div className="left-side">
                     <Undertittel className="logo"><TeamAwareAnchor href="/">Forenklet Deploy</TeamAwareAnchor></Undertittel>
-                    <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle applikasjoner" checked={showAll} />
+                    <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle" checked={showAll} />
                     {error && <div className="header__error">{error}</div>}
                 </div>
                 <TeamVelger />

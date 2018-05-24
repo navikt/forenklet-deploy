@@ -15,6 +15,7 @@ interface StateProps {
     releases: ReleaseWithCommits[];
     isLoading: boolean;
     openApplication: string;
+    showAll: boolean;
 }
 
 interface DispatchProps {
@@ -45,14 +46,24 @@ class Promotering extends React.Component<PromoteringProps> {
         this.props.doOpenApplication(app);
     }
 
+    shouldDisplayRelease(release: ReleaseWithCommits): boolean {
+        if (this.props.showAll) {
+            return true;
+        }
+        const fromMajor = release.fromVersion.split('.')[0];
+        const toMajor = release.toVersion.split('.')[0];
+        return fromMajor !== toMajor;
+    }
+
     render() {
+        const releasesToDisplay = this.props.releases.filter((r1: ReleaseWithCommits) => this.shouldDisplayRelease(r1));
         return (
             <article>
                 <Sidetittel className="blokk-s">Promotering og oversikt</Sidetittel>
                 <Miljovelger onChange={this.handleChangeMiljo} fromEnv={this.props.valgtFromEnv} toEnv={this.props.valgtToEnv} />
                 { this.props.isLoading
                     ? <NavFrontendSpinner type="L" />
-                    : <PromoteReleases releases={this.props.releases} openApplication={this.props.openApplication} doOpenApplication={this.handleOpenApplication} />
+                    : <PromoteReleases releases={releasesToDisplay} openApplication={this.props.openApplication} doOpenApplication={this.handleOpenApplication} />
                 }
             </article>
         );
@@ -68,7 +79,8 @@ function mapStateToProps(state: AppState): StateProps {
         valgtToEnv: toEnv,
         isLoading: state.commit.loading || state.deploy.loading || state.jira.loading,
         releases: selectAllReleasesWithCommitsForEnvironments(state, fromEnv, toEnv),
-        openApplication: state.promotering.openApplication
+        openApplication: state.promotering.openApplication,
+        showAll: state.view.showAll
     };
 }
 
