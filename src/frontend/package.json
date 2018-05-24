@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "caniuse-db": "1.0.30000845",
     "classnames": "^2.2.5",
     "fetch-mock": "^6.4.2",
     "history": "^4.7.2",
