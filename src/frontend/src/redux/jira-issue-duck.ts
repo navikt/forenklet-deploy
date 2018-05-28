@@ -72,7 +72,8 @@ export function selectIssue(state: AppState, issue: string): JiraIssue | undefin
 export function getIssues(issueIds: string[]) {
     return (dispatch: Dispatch<Action>) => {
         dispatch({ type: actionNames.LOADING });
-        const issuesPromises = chunk(onlyUnique(issueIds), 10)
+        const issuesNoKaizen = issueIds.filter((issue: string) => !issue.toLowerCase().startsWith('kaizen'));
+        const issuesPromises = chunk(onlyUnique(issuesNoKaizen), 10)
             .map((issues) => getJiraIssues(issues));
 
         Promise.all(issuesPromises)
