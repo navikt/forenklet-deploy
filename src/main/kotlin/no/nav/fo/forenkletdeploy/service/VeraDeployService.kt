@@ -23,6 +23,10 @@ constructor(
     fun getDeploysForApp(app: String): List<VeraDeploy> =
             try {
                 veraConsumer.getDeploysForApp(app)
+                        .map {
+                            VeraDeploy(it.id, it.application, it.deployed_timestamp, it.version,
+                                    if (it.environment == "t1") "t6" else it.environment,
+                                    it.deployer, it.environmentClass, it.replaced_timestamp)}
                         .filter { gyldigeMiljoer.contains(it.environment) }
             } catch (e: Throwable) {
                 LOG.error("Kunne ikke hente deploys for $app", e)

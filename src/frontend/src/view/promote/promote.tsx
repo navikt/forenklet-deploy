@@ -61,7 +61,7 @@ class Promote extends React.PureComponent<PromoteProps> {
                     <ConmmitsForRelease release={props.release} />
                 </div>
                 <div className="knapperad-promoter">
-                    <PromoteJenkinsAnchor application={app} env={env}/>
+                    <PromoteJenkinsAnchor application={app} env={env} version={props.release.toVersion}/>
                     <TeamAwareLink className="knapp" to="/">
                         Avbryt
                     </TeamAwareLink>
