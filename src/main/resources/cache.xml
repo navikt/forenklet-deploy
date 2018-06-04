@@ -13,7 +13,13 @@
     <cache alias="stashcommits" uses-template="medium">
         <heap>200</heap>
     </cache>
+    <cache alias="githubcommits" uses-template="medium">
+        <heap>200</heap>
+    </cache>
     <cache alias="stashtags" uses-template="medium">
+        <heap>200</heap>
+    </cache>
+    <cache alias="githubtags" uses-template="medium">
         <heap>200</heap>
     </cache>
     <cache alias="jiraissue" uses-template="medium">

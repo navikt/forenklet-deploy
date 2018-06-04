@@ -16,7 +16,7 @@ interface StashConsumer {
     fun getTags(application: ApplicationConfig): List<StashTag>
 }
 
-@Service
+@Service("StashConsumer")
 @Profile("!mock")
 open class StashConsumerImpl: StashConsumer {
     val LOG = LoggerFactory.getLogger(this.javaClass)
@@ -39,7 +39,7 @@ open class StashConsumerImpl: StashConsumer {
                 ArrayList()
             }
 
-    @Cacheable("stashtahs")
+    @Cacheable("stashtags")
     override fun getTags(application: ApplicationConfig): List<StashTag> =
             try {
                 val url = "${getRestUriForRepo(application)}/tags"

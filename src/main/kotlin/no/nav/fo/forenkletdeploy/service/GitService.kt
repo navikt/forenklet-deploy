@@ -6,12 +6,17 @@ import no.nav.fo.forenkletdeploy.GitTag
 import no.nav.fo.forenkletdeploy.consumer.StashConsumer
 import org.springframework.stereotype.Service
 import javax.inject.Inject
+import javax.inject.Named
 
 @Service
 open class GitService @Inject
 constructor(
-        val stashConsumer: StashConsumer
+        @Named("StashConsumer") val stashConsumer: StashConsumer,
+        @Named("GithubConsumer") val githubConsumer: StashConsumer
 ) {
+    // Hvis det skaper problemer for eksisterende teamkode, så bør
+    // Denne konfigurajonen endres til å gjelde pr team
+    val preferGithubChangelog: Boolean = true
 
     fun getCommitsForRelease(application: ApplicationConfig, fromVersion: String, toVersion: String): List<Commit> {
         if (isGithubRepo(application.gitUrl)) {
@@ -40,11 +45,25 @@ constructor(
                     ) }
 
     private fun getGithubCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<Commit> =
-            getStashCommits(
-                    fromTag = fromTag,
-                    toTag = toTag,
-                    application = getGithubConfig(application.name)
-            )
+            if (preferGithubChangelog) {
+                githubConsumer.getCommits(application, fromTag, toTag)
+                    .map { Commit(
+                        timestamp = it.committerTimestamp,
+                        author = it.author.displayName ?: it.author.name,
+                        url = getLinkUriForGithubCommit(application, it.id),
+                        message = it.message,
+                        hash = it.id,
+                        mergecommit = it.parents.size > 1,
+                        application = application.name
+                    )}
+            } else {
+                getStashCommits(
+                        fromTag = fromTag,
+                        toTag = toTag,
+                        application = getGithubConfig(application.name)
+                )
+            }
+
 
     private fun getStashTags(application: ApplicationConfig): List<GitTag> =
             stashConsumer.getTags(application)
@@ -55,7 +74,15 @@ constructor(
                     ) }
 
     private fun getGithubTags(application: ApplicationConfig): List<GitTag> =
-            getStashTags(getGithubConfig(application.name))
+            if (preferGithubChangelog)
+                githubConsumer.getTags(application)
+                    .map { GitTag(
+                            displayId = it.displayId,
+                            latestcommit = it.latestCommit,
+                            application = application.name
+                    ) }
+            else
+                getStashTags(getGithubConfig(application.name))
 
     private fun getGithubConfig(application: String): ApplicationConfig =
             ApplicationConfig(
@@ -65,6 +92,9 @@ constructor(
 
     private fun isGithubRepo(repoUri: String): Boolean =
             repoUri.contains("github.com")
+}
+private fun getLinkUriForGithubCommit(application: ApplicationConfig, id: String): String {
+    return "https://github.com/navikt/${application.name}/commit/${id}"
 }
 
 fun getLinkUriForCommit(application: ApplicationConfig, commit: String): String {
