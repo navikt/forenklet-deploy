@@ -15,8 +15,7 @@ interface StateProps {
 }
 
 function PromoteJenkinsAnchor(props: OwnProps & StateProps) {
-    // const buildName = props.env === 'p' ? '-release-' : `-promotering-${props.env}-`;
-    const buildName = props.env === 'p' ? '-release-' : `-promotering-q0-`;
+    const buildName = props.env === 'p' ? '-release-' : `-promotering-${props.env}-`;
     const jenkinsFolder = props.valgtTeam ? props.valgtTeam.jenkinsFolder : '';
     const jenkinsUrl = props.valgtTeam ? props.valgtTeam.jenkinsUrl : 'http://bekkci.devillo.no';
     let linkUrl = `${jenkinsUrl}/job/${jenkinsFolder}/job/${props.application}/job/${buildName}/`;
