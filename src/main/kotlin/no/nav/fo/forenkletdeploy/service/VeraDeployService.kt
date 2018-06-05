@@ -25,7 +25,7 @@ constructor(
                 veraConsumer.getDeploysForApp(app)
                         .map {
                             VeraDeploy(it.id, it.application, it.deployed_timestamp, it.version,
-                                    if (it.environment == "t1") "t6" else it.environment,
+                                    if (it.environment == "t1") "t6" else it.environment, // TODO Dette må bort før pull-request!!!
                                     it.deployer, it.environmentClass, it.replaced_timestamp)}
                         .filter { gyldigeMiljoer.contains(it.environment) }
             } catch (e: Throwable) {
