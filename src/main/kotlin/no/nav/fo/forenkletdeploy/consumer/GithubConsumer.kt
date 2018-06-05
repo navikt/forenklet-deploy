@@ -16,7 +16,7 @@ import java.util.*
 open class GithubConsumer : StashConsumer {
     val LOG = LoggerFactory.getLogger(this.javaClass)
     val LIMIT = 1000
-    val NAVIKT_GITHUB_TOKEN = Utils.getRequiredProperty("GITHUB_NAVIKT_TOKEN")
+    val TOKEN = Utils.getRequiredProperty("GITHUB_JENKINSPUS_TOKEN")
 
     @Cacheable("githubcommits")
     override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> =
@@ -28,7 +28,7 @@ open class GithubConsumer : StashConsumer {
                 LOG.info("Henter commits for ${application.name} ($fromTag -> $toTag) via $url")
                 Utils.withClient(url)
                         .request()
-                        .header("Authorization", "token ${NAVIKT_GITHUB_TOKEN}")
+                        .header("Authorization", "token ${TOKEN}")
                         .get(GithubCommits::class.java)
                         .commits
                         .map { StashCommit(
@@ -58,7 +58,7 @@ open class GithubConsumer : StashConsumer {
                 Utils.withClient(url)
                         .queryParam("limit", LIMIT)
                         .request()
-                        .header("Authorization", "token ${NAVIKT_GITHUB_TOKEN}")
+                        .header("Authorization", "token ${TOKEN}")
                         .get(GithubTags::class.java)
                         .values
                         .map {StashTag(
