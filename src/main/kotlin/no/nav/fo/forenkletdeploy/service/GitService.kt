@@ -14,10 +14,6 @@ constructor(
         @Named("StashConsumer") val stashConsumer: StashConsumer,
         @Named("GithubConsumer") val githubConsumer: StashConsumer
 ) {
-    // Hvis det skaper problemer for eksisterende teamkode, så bør
-    // Denne konfigurajonen endres til å gjelde pr team
-    val preferGithubChangelog: Boolean = true
-
     fun getCommitsForRelease(application: ApplicationConfig, fromVersion: String, toVersion: String): List<Commit> {
         if (isGithubRepo(application.gitUrl)) {
             return getGithubCommits(application, fromVersion, toVersion)
@@ -45,24 +41,16 @@ constructor(
                     ) }
 
     private fun getGithubCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<Commit> =
-            if (preferGithubChangelog) {
-                githubConsumer.getCommits(application, fromTag, toTag)
-                    .map { Commit(
-                        timestamp = it.committerTimestamp,
-                        author = it.author.displayName ?: it.author.name,
-                        url = getLinkUriForGithubCommit(application, it.id),
-                        message = it.message,
-                        hash = it.id,
-                        mergecommit = it.parents.size > 1,
-                        application = application.name
-                    )}
-            } else {
-                getStashCommits(
-                        fromTag = fromTag,
-                        toTag = toTag,
-                        application = getGithubConfig(application.name)
-                )
-            }
+            githubConsumer.getCommits(application, fromTag, toTag)
+                .map { Commit(
+                    timestamp = it.committerTimestamp,
+                    author = it.author.displayName ?: it.author.name,
+                    url = getLinkUriForGithubCommit(application, it.id),
+                    message = it.message,
+                    hash = it.id,
+                    mergecommit = it.parents.size > 1,
+                    application = application.name
+                )}
 
 
     private fun getStashTags(application: ApplicationConfig): List<GitTag> =
@@ -74,15 +62,12 @@ constructor(
                     ) }
 
     private fun getGithubTags(application: ApplicationConfig): List<GitTag> =
-            if (preferGithubChangelog)
-                githubConsumer.getTags(application)
-                    .map { GitTag(
-                            displayId = it.displayId,
-                            latestcommit = it.latestCommit,
-                            application = application.name
-                    ) }
-            else
-                getStashTags(getGithubConfig(application.name))
+            githubConsumer.getTags(application)
+                .map { GitTag(
+                        displayId = it.displayId,
+                        latestcommit = it.latestCommit,
+                        application = application.name
+                ) }
 
     private fun getGithubConfig(application: String): ApplicationConfig =
             ApplicationConfig(
