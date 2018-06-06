@@ -80,7 +80,7 @@ open class GithubConsumer : StashConsumer {
 @Profile("mock")
 class MockGithubConsumer: StashConsumer {
     val delegate : StashConsumer = MockStashConsumer()
-    
+
     override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> =
         delegate.getCommits(application, fromTag, toTag)
     override fun getTags(application: ApplicationConfig): List<StashTag> =
