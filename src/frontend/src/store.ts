@@ -3,17 +3,12 @@ import thunkMiddleware from 'redux-thunk';
 import reducer from './redux/reducer';
 import { AppState } from './redux/reducer';
 
-function create() {
-    /* tslint:disable-next-line */
-    const useExtension = (window as any).__REDUX_DEVTOOLS_EXTENSION__ !== undefined;
-    /* tslint:disable-next-line */
-    const composer = useExtension ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
-
-    const composed = composer(
+function create(): Store<AppState> {
+    const composed = compose(
         applyMiddleware(thunkMiddleware)
     );
 
-    return composed(createStore)(reducer, {});
+    return createStore(reducer, composed);
 }
 
 let store: Store<AppState>;

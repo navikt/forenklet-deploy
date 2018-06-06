@@ -19,7 +19,7 @@ interface TeamVelgerDispatchProps {
 
 type TeamVelgerProps = StateProps;
 
-function TeamVelger({ teams, doChangeValgtTeam, valgtTeamId}: TeamVelgerProps & TeamVelgerDispatchProps) {
+function TeamVelger({ teams, doChangeValgtTeam, valgtTeamId }: TeamVelgerProps & TeamVelgerDispatchProps) {
     function handleChange(event: any) {
         doChangeValgtTeam(event.target.value);
     }
