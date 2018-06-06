@@ -76,6 +76,17 @@ open class GithubConsumer : StashConsumer {
             if ("null".equals(tag, ignoreCase = true)) "" else "refs%2Ftags%2F$tag"
 }
 
+@Service("GithubConsumer")
+@Profile("mock")
+class MockGithubConsumer: StashConsumer {
+    val delegate : StashConsumer = MockStashConsumer()
+    
+    override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> =
+        delegate.getCommits(application, fromTag, toTag)
+    override fun getTags(application: ApplicationConfig): List<StashTag> =
+        delegate.getTags(application)
+}
+
 data class GithubCommits (
         val commits: List<GithubCommit>
 )

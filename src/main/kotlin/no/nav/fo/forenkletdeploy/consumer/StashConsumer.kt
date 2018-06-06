@@ -58,7 +58,7 @@ open class StashConsumerImpl: StashConsumer {
             if ("null".equals(tag, ignoreCase = true)) "" else "refs%2Ftags%2F$tag"
 }
 
-@Service
+@Service("StashConsumer")
 @Profile("mock")
 class MockStashConsumer: StashConsumer {
     override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> {
