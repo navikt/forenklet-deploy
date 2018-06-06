@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
-import { connect, DispatchProp } from 'react-redux';
+import { connect } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { selectValgtTeamId } from '../redux/team-velger-duck';
 
@@ -8,25 +8,28 @@ interface LinkStateProps {
     valgtTeamId: string;
 }
 
-type TeamAwareLinkProps = LinkStateProps & NavLinkProps & DispatchProp<string>;
+type TeamAwareLinkProps = LinkStateProps & NavLinkProps;
 
-function TeamAwareLink(props: TeamAwareLinkProps) {
-    const {children, valgtTeamId, to, dispatch, ...linkProps} = props;
+const TeamAwareLink: React.SFC<TeamAwareLinkProps> = ({children, valgtTeamId, to, ...linkProps}) => {
     const toWithTeam = `${to}?team=${valgtTeamId}`;
     return (
         <NavLink to={toWithTeam} {...linkProps}>{children}</NavLink>
     );
+};
+
+interface OwnProps {
+    href: string;
 }
 
-type TeamAwareAnchorProps = LinkStateProps & React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement> & DispatchProp<string>;
+type TeamAwareAnchorProps = LinkStateProps & OwnProps;
 
-function TeamAwareAnchor(props: TeamAwareAnchorProps) {
-    const {children, valgtTeamId, dispatch, href, ...anchorProps} = props;
+const TeamAwareAnchor: React.SFC<TeamAwareAnchorProps> = (props) => {
+    const {children, valgtTeamId, href, ...anchorProps} = props;
     const hrefWithTeam = `${href}?team=${valgtTeamId}`;
     return (
         <a href={hrefWithTeam} {...anchorProps}>{children}</a>
     );
-}
+};
 
 const mapStateToProps = (state: AppState): LinkStateProps => ({
     valgtTeamId: selectValgtTeamId(state),

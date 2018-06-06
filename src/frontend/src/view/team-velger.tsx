@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { AppState } from '../redux/reducer';
-import { connect, Dispatch } from 'react-redux';
-import { Action } from 'redux';
+import { connect } from 'react-redux';
 import { Select } from 'nav-frontend-skjema';
 import { selectTeams } from '../redux/team-duck';
 import { Team } from '../models/team';
 import { selectValgtTeamId, velgTeam } from '../redux/team-velger-duck';
 import { getAllDeploys } from '../redux/deploy-duck';
+import { AsyncDispatch } from '../redux/redux-utils';
 
 interface StateProps {
     teams: Team[];
@@ -37,7 +37,7 @@ const mapStateToProps = (state: AppState): StateProps => ({
     valgtTeamId: selectValgtTeamId(state)
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>): TeamVelgerDispatchProps => ({
+const mapDispatchToProps = (dispatch: AsyncDispatch): TeamVelgerDispatchProps => ({
     doChangeValgtTeam: (team: string) => {
         location.search = `team=${team}`;
         dispatch(velgTeam(team));

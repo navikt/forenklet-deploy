@@ -1,9 +1,9 @@
-import { Action, Dispatch } from 'redux';
 import { clearCommits, getCommitsForApplication } from './commit-duck';
 import { commitToIssues, getInfoForReleaseNote } from './releasenote-duck';
 import { Commit } from '../models/commit';
 import { getIssues } from './jira-issue-duck';
 import { AppState } from './reducer';
+import { AsyncDispatch } from './redux-utils';
 
 export interface PromoteState {
     fromEnvironment: string;
@@ -58,7 +58,7 @@ export function openApplication(app: string): OpenApplication {
 }
 
 export function getInformationForPromotion() {
-    return (dispatch: Dispatch<any>, getState: () => AppState) => {
+    return (dispatch: AsyncDispatch, getState: () => AppState) => {
         const state = getState();
         const fromEnv = state.promotering.fromEnvironment;
         const toEnv = state.promotering.toEnvironment;
@@ -68,7 +68,7 @@ export function getInformationForPromotion() {
 }
 
 export function getInfoForPromote(app: string, fromVersion: string, toVersion: string) {
-    return (dispatch: Dispatch<Action>) => {
+    return (dispatch: AsyncDispatch) => {
         dispatch(clearCommits());
         dispatch(getCommitsForApplication(app, fromVersion, toVersion))
             .then((commits: Commit[]) => {

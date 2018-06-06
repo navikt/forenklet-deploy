@@ -1,5 +1,3 @@
-import { Dispatch } from 'redux';
-import { Action } from 'redux';
 import { AppState } from './reducer';
 import { ReleaseWithCommits, Release, ReleaseWithCommitsAndIssues } from '../models/release';
 import { Commit } from '../models/commit';
@@ -11,6 +9,7 @@ import { selectApplicationsWithChangesForEnvironments } from './selectors/applic
 import { getIssuesFromMessage, Issue } from '../view/promote/promote-utils';
 import { getIssues, selectIssue, onlyUniqueIssues } from './jira-issue-duck';
 import { JiraIssue } from '../models/jira-issue';
+import { AsyncDispatch } from './redux-utils';
 
 export function selectIsLoadingReleaseNote(state: AppState): boolean {
     return state.deploy.loading || state.commit.loading || state.jira.loading;
@@ -70,7 +69,7 @@ export function commitToIssues(commit: Commit): Issue[] {
 }
 
 export function getInfoForReleaseNote(fromEnv: string = 'q6', toEnv: string = 'p') {
-    return (dispatch: Dispatch<Action>, getState: () => AppState) => {
+    return (dispatch: AsyncDispatch, getState: () => AppState) => {
         const state = getState();
         dispatch(clearCommits());
         dispatch({ type: commitAN.LOADING });
