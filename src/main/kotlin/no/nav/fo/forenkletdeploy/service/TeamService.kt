@@ -10,7 +10,7 @@ class TeamService @Inject
 constructor(
         val teamConfigConsumer: TeamConfigConsumer
 ) {
-    val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamOppfolging())
+    val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamOppfolging(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ())
 
     fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
             allTeams.find { it.id.equals(teamId, ignoreCase = true) }
@@ -22,6 +22,8 @@ abstract class ITeam constructor(
         val displayName: String,
         val configUrl: String,
         val jenkinsFolder: String,
+        val jenkinsUrl: String = "http://bekkci.devillo.no",
+        val provideVersion: Boolean = false,
         val ignoredApplications: List<String>,
         val extraApps: List<ApplicationConfig>
 ) {
@@ -59,6 +61,39 @@ class TeamOppfolging: ITeam(
         displayName = "Team Oppfølging",
         configUrl = "http://stash.devillo.no/projects/OPP/repos/team-oppfolging/raw/applikasjonsportefolje/config.json",
         jenkinsFolder = "teamoppfolging",
+        extraApps = emptyList(),
+        ignoredApplications = emptyList()
+)
+
+class TeamPAMAasmund: ITeam(
+        id = "teampamaasmund",
+        displayName = "Team PAM Aasmund",
+        configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamaasmund.json",
+        jenkinsFolder = "teamaasmund",
+        jenkinsUrl = "https://jenkins-pam.adeo.no",
+        provideVersion = true,
+        extraApps = emptyList(),
+        ignoredApplications = emptyList()
+)
+
+class TeamPAMTuan: ITeam(
+        id = "teampamtuan",
+        displayName = "Team PAM Tuan",
+        configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamtuan.json",
+        jenkinsFolder = "teamtuan",
+        jenkinsUrl = "https://jenkins-pam.adeo.no",
+        provideVersion = true,
+        extraApps = emptyList(),
+        ignoredApplications = emptyList()
+)
+
+class TeamPAMJ: ITeam(
+        id = "teampamj",
+        displayName = "Team PAM J",
+        configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamj.json",
+        jenkinsFolder = "teamj",
+        jenkinsUrl = "https://jenkins-pam.adeo.no",
+        provideVersion = true,
         extraApps = emptyList(),
         ignoredApplications = emptyList()
 )

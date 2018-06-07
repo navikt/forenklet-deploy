@@ -18,7 +18,9 @@ constructor(val teamService: TeamService) {
                 Team(
                         id = it.id,
                         jenkinsFolder = it.jenkinsFolder,
-                        displayName = it.displayName
+                        displayName = it.displayName,
+                        jenkinsUrl = it.jenkinsUrl,
+                        provideVersion = it.provideVersion
                 )
             }
 }
