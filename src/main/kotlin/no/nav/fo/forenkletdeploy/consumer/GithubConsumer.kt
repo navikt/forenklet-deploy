@@ -21,32 +21,34 @@ open class GithubConsumer : StashConsumer {
     @Cacheable("githubcommits")
     override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> =
             try {
-                val useFromTag = if (fromTag == null || fromTag == "null") "1" else "${fromTag}"
-                val useToTag = if (toTag == null || toTag == "null") "HEAD" else "${toTag}"
+                val useFromTag = if (fromTag == "null") "1" else fromTag
+                val useToTag = if (toTag == "null") "HEAD" else toTag
 
-                val url = "${getRestUriForGithubRepo(application)}/compare/${useFromTag}...${useToTag}"
+                val url = "${getRestUriForGithubRepo(application)}/compare/$useFromTag...$useToTag"
                 LOG.info("Henter commits for ${application.name} ($fromTag -> $toTag) via $url")
                 Utils.withClient(url)
                         .request()
                         .header("Authorization", "token ${TOKEN}")
                         .get(GithubCommits::class.java)
                         .commits
-                        .map { StashCommit(
-                                id = it.sha,
-                                author = CommitPerson(true, 1,
-                                        it.commit.author.name, it.commit.author.email, it.commit.author.name, null, null, null),
-                                authorTimestamp = toTimestamp(it.commit.author.date),
-                                committer = CommitPerson(true, 1,
-                                        it.commit.committer.name, it.commit.committer.email, it.commit.committer.name, null, null, null),
-                                committerTimestamp = toTimestamp(it.commit.committer.date),
-                                message = it.commit.message,
-                                displayId = "",
-                                parents = it.parents
-                                        .map { ParentCommit(it.url, it.sha) }
-                        ) }
+                        .map {
+                            StashCommit(
+                                    id = it.sha,
+                                    author = CommitPerson(true, 1,
+                                            it.commit.author.name, it.commit.author.email, it.commit.author.name, null, null, null),
+                                    authorTimestamp = toTimestamp(it.commit.author.date),
+                                    committer = CommitPerson(true, 1,
+                                            it.commit.committer.name, it.commit.committer.email, it.commit.committer.name, null, null, null),
+                                    committerTimestamp = toTimestamp(it.commit.committer.date),
+                                    message = it.commit.message,
+                                    displayId = "",
+                                    parents = it.parents
+                                            .map { ParentCommit(it.url, it.sha) }
+                            )
+                        }
             } catch (e: Throwable) {
                 LOG.error("Feil ved henting av commits for ${application.name}", e)
-                ArrayList()
+                emptyList()
             }
 
 
@@ -58,7 +60,7 @@ open class GithubConsumer : StashConsumer {
                 Utils.withClient(url)
                         .queryParam("limit", LIMIT)
                         .request()
-                        .header("Authorization", "token ${TOKEN}")
+                        .header("Authorization", "token $TOKEN")
                         .get(GithubTags::class.java)
                         .values
                         .map {StashTag(
@@ -138,6 +140,5 @@ fun toTimestamp(githubTimestamp: String): Long {
 
 fun getRestUriForGithubRepo(application: ApplicationConfig): String {
     val projectRegex = "/\\/(.+)\\/(.+).git/".toRegex()
-    val project = projectRegex.find(application.gitUrl)?.groups?.get(1)?.value
     return "https://api.github.com/repos/navikt/${application.name}"
 }
