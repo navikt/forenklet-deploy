@@ -1,25 +1,29 @@
 package no.nav.fo.forenkletdeploy.consumer
 
+import com.github.javafaker.Faker
 import no.nav.fo.forenkletdeploy.ApplicationConfig
 import no.nav.fo.forenkletdeploy.util.Utils
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
 import java.util.*
+
+interface GithubConsumer {
+    fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<GithubCommit>
+    fun getTags(application: ApplicationConfig): List<GithubTag>
+}
 
 @Service("GithubConsumer")
 @Profile("!mock")
-open class GithubConsumer : StashConsumer {
+open class GithubConsumerImpl : GithubConsumer {
     val LOG = LoggerFactory.getLogger(this.javaClass)
     val LIMIT = 1000
     val TOKEN = Utils.getRequiredProperty("GITHUB_JENKINSPUS_TOKEN")
 
     @Cacheable("githubcommits")
-    override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> =
+    override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<GithubCommit> =
             try {
                 val useFromTag = if (fromTag == "null") "1" else fromTag
                 val useToTag = if (toTag == "null") "HEAD" else toTag
@@ -31,21 +35,6 @@ open class GithubConsumer : StashConsumer {
                         .header("Authorization", "token ${TOKEN}")
                         .get(GithubCommits::class.java)
                         .commits
-                        .map {
-                            StashCommit(
-                                    id = it.sha,
-                                    author = CommitPerson(true, 1,
-                                            it.commit.author.name, it.commit.author.email, it.commit.author.name, null, null, null),
-                                    authorTimestamp = toTimestamp(it.commit.author.date),
-                                    committer = CommitPerson(true, 1,
-                                            it.commit.committer.name, it.commit.committer.email, it.commit.committer.name, null, null, null),
-                                    committerTimestamp = toTimestamp(it.commit.committer.date),
-                                    message = it.commit.message,
-                                    displayId = "",
-                                    parents = it.parents
-                                            .map { ParentCommit(it.url, it.sha) }
-                            )
-                        }
             } catch (e: Throwable) {
                 LOG.error("Feil ved henting av commits for ${application.name}", e)
                 emptyList()
@@ -53,7 +42,7 @@ open class GithubConsumer : StashConsumer {
 
 
     @Cacheable("githubtags")
-    override fun getTags(application: ApplicationConfig): List<StashTag> =
+    override fun getTags(application: ApplicationConfig): List<GithubTag> =
             try {
                 val url = "${getRestUriForRepo(application)}/tags"
                 LOG.info("Henter tags for ${application.name} via $url")
@@ -63,82 +52,113 @@ open class GithubConsumer : StashConsumer {
                         .header("Authorization", "token $TOKEN")
                         .get(GithubTags::class.java)
                         .values
-                        .map {StashTag(
-                                displayId = it.name,
-                                id = it.node_id,
-                                latestCommit = it.commit.sha,
-                                latestChangeset = it.commit.sha
-                        )}
             } catch (e: Throwable) {
                 LOG.error("Feil ved henting av tags for ${application.name}", e)
-                ArrayList()
+                emptyList()
             }
-
-    private fun tagRef(tag: String) =
-            if ("null".equals(tag, ignoreCase = true)) "" else "refs%2Ftags%2F$tag"
 }
 
 @Service("GithubConsumer")
 @Profile("mock")
-class MockGithubConsumer: StashConsumer {
-    val delegate : StashConsumer = MockStashConsumer()
+class MockGithubConsumer : GithubConsumer {
+    override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<GithubCommit> {
+        val faker = Faker(Random(Utils.stringToSeed(application.name + fromTag + toTag)))
+        val numCommits = faker.number().numberBetween(1, 8)
 
-    override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> =
-        delegate.getCommits(application, fromTag, toTag)
-    override fun getTags(application: ApplicationConfig): List<StashTag> =
-        delegate.getTags(application)
+        return (1..numCommits).map {
+            val person = GithubCommitPerson(
+                    name = faker.gameOfThrones().character(),
+                    date = getMinutesAgo(faker.number().numberBetween(it*10, it*11)),
+                    email = faker.internet().safeEmailAddress()
+            )
+            val id = faker.code().imei()
+            GithubCommit(
+                    node_id = id,
+                    sha = id,
+                    parents = emptyList(),
+                    url = "http://github.com/commit/$id",
+                    commit = GithubCommitDetail(
+                            author = person,
+                            committer = person,
+                            message = getMessage(faker),
+                            url = "http://github.com/commit/$id"
+                    )
+            )
+        }
+    }
+
+    override fun getTags(application: ApplicationConfig): List<GithubTag> {
+        val faker = Faker(Random(Utils.stringToSeed(application.name)))
+        val numTags = faker.number().numberBetween(8, 25)
+
+        return (1..numTags).map {
+            val id = faker.numerify("####.########.###")
+            GithubTag(
+                    node_id = id,
+                    name = id,
+                    commit = GithubTagCommit(sha = faker.code().imei(), url = "http://github.com/tag/$id")
+            )
+        }
+    }
+
+    fun getMinutesAgo(minutes: Int): String {
+        val date = Date((System.currentTimeMillis()) - (minutes * 60 * 1000))
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss z")
+        sdf.timeZone = TimeZone.getDefault()
+        return sdf.format(date)
+    }
+
+
+    fun getMessage(faker: Faker): String =
+            faker.numerify("PUS-### ${faker.book().title()}\n\n${faker.chuckNorris().fact()}")
 }
 
-data class GithubCommits (
+data class GithubCommits(
         val commits: List<GithubCommit>
 )
 
-data class GithubCommit (
+data class GithubCommit(
         val node_id: String,
         val commit: GithubCommitDetail,
         val sha: String,
         val url: String,
-        val parents: List<GithubParentCommit> = ArrayList()
+        val parents: List<GithubParentCommit> = emptyList()
 )
 
-data class GithubCommitDetail (
+data class GithubCommitDetail(
         val author: GithubCommitPerson,
         val committer: GithubCommitPerson,
         val message: String,
         val url: String
 )
-data class GithubCommitPerson (
-    val date: String,
-    val email: String,
-    val name : String
+
+data class GithubCommitPerson(
+        val date: String,
+        val email: String,
+        val name: String
 
 )
-data class GithubParentCommit (
+
+data class GithubParentCommit(
         val sha: String,
         val url: String
 )
 
-data class GithubTags (
+data class GithubTags(
         val values: List<GithubTag>
 )
 
-data class GithubTagCommit (
-    val sha: String,
-    val url: String
+data class GithubTagCommit(
+        val sha: String,
+        val url: String
 )
 
-data class GithubTag (
+data class GithubTag(
         val name: String,
         val node_id: String,
         val commit: GithubTagCommit
 )
 
-fun toTimestamp(githubTimestamp: String): Long {
-    val dt = LocalDateTime.parse(githubTimestamp, DateTimeFormatter.ISO_DATE_TIME)
-    return dt.atZone(ZoneId.systemDefault()).toEpochSecond()*1000
-}
-
 fun getRestUriForGithubRepo(application: ApplicationConfig): String {
-    val projectRegex = "/\\/(.+)\\/(.+).git/".toRegex()
     return "https://api.github.com/repos/navikt/${application.name}"
 }
