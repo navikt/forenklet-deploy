@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Action, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { AppState } from '../redux/reducer';
@@ -8,6 +7,7 @@ import { velgTeam } from '../redux/team-velger-duck';
 import { Team } from '../models/team';
 import { getAllDeploys } from '../redux/deploy-duck';
 import { getInitialValgtTeam } from '../redux/initial-data-loader-duck';
+import { AsyncDispatch } from '../redux/redux-utils';
 
 interface DispatchProps {
     requestInitialData: () => void;
@@ -49,7 +49,7 @@ class Dashboard extends React.Component<DashboardProps> {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>): DispatchProps => ({
+const mapDispatchToProps = (dispatch: AsyncDispatch): DispatchProps => ({
     requestInitialData: () => {
         dispatch(getAllTeams())
             .then((teams: Team[]) => {

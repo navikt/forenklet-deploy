@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import { Action } from 'redux';
 import { onlyUnique, chunk } from '../utils/utils';
 import { getJiraIssues } from '../api/jira-api';
+import { ThunkAction } from 'redux-thunk';
 
 export interface JiraIssueState {
     loading: boolean;
@@ -69,10 +70,11 @@ export function selectIssue(state: AppState, issue: string): JiraIssue | undefin
     return state.jira.issues.find((jiraissue) => jiraissue.key === issue);
 }
 
-export function getIssues(issueIds: string[]) {
+export function getIssues(issueIds: string[]): ThunkAction<any, any, any, any> {
     return (dispatch: Dispatch<Action>) => {
         dispatch({ type: actionNames.LOADING });
-        const issuesPromises = chunk(onlyUnique(issueIds), 10)
+        const issuesNoKaizen = issueIds.filter((issue: string) => !issue.toLowerCase().startsWith('kaizen'));
+        const issuesPromises = chunk(onlyUnique(issuesNoKaizen), 10)
             .map((issues) => getJiraIssues(issues));
 
         Promise.all(issuesPromises)

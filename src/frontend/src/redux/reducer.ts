@@ -52,6 +52,6 @@ export default combineReducers<AppState>({
     jira: jiraIssueReducer,
     team: teamReducer,
     valgtTeam: valgTeamReducer,
-    promotering: storedReducer('promotering', promoteringReducer),
+    promotering: storedReducer<PromoteState>('promotering', promoteringReducer),
     kvittering: kvitteringReducer
 });

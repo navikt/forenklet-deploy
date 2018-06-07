@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Dispatch } from 'redux';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 import { Innholdstittel, Undertittel } from 'nav-frontend-typografi';
@@ -17,6 +16,7 @@ import { TeamAwareLink } from '../team-aware-link';
 import { selectValgtTeam } from '../../redux/team-velger-duck';
 import { Team } from '../../models/team';
 import PromoteJenkinsAnchor from './promote-jenkins-anchor';
+import { AsyncDispatch } from '../../redux/redux-utils';
 
 interface PromoteRouteProps {
     app: string;
@@ -85,7 +85,7 @@ function mapStateToProps(state: AppState, ownProps: RouteComponentProps<PromoteR
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<any>): DispatchProps {
+function mapDispatchToProps(dispatch: AsyncDispatch): DispatchProps {
     return {
         doGetInfoForPromote: (app, fromVersion, toVersion) => dispatch(getInfoForPromote(app, fromVersion, toVersion))
     };

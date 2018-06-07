@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { Sidetittel } from 'nav-frontend-typografi';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { AppState } from '../../redux/reducer';
@@ -8,6 +8,7 @@ import { setEnvironments, getInformationForPromotion, openApplication } from '..
 import Miljovelger from './miljovelger';
 import { selectAllReleasesWithCommitsForEnvironments } from '../../redux/releasenote-duck';
 import PromoteReleases from './promote-releases';
+import { AsyncDispatch } from '../../redux/redux-utils';
 
 interface StateProps {
     valgtFromEnv: string;
@@ -84,7 +85,7 @@ function mapStateToProps(state: AppState): StateProps {
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<any>): DispatchProps {
+function mapDispatchToProps(dispatch: AsyncDispatch): DispatchProps {
     return {
         doHentInfoForPromotering: () => dispatch(getInformationForPromotion()),
         doEndreValgtMiljo: (fromEnv: string, toEnv: string) => dispatch(setEnvironments(fromEnv, toEnv)),
