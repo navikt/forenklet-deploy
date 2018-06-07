@@ -1,5 +1,5 @@
 import { AppState } from './reducer';
-import { ReleaseWithCommits, Release, ReleaseWithCommitsAndIssues } from '../models/release';
+import { ReleaseWithCommits } from '../models/release';
 import { Commit } from '../models/commit';
 import { getEnvironmentByName } from '../utils/environment';
 import * as commitApi from '../api/commit-api';
@@ -11,44 +11,15 @@ import { getIssues, selectIssue, onlyUniqueIssues } from './jira-issue-duck';
 import { JiraIssue } from '../models/jira-issue';
 import { AsyncDispatch } from './redux-utils';
 
-export function selectIsLoadingReleaseNote(state: AppState): boolean {
-    return state.deploy.loading || state.commit.loading || state.jira.loading;
-}
-
 function getApplicationsWithChanges(state: AppState, fromEnv: string = 'q6', toEnv: string = 'p'): string[] {
     return selectApplicationsWithChangesForEnvironments(state, [getEnvironmentByName(fromEnv), getEnvironmentByName(toEnv)])
         .filter((application) => application.hasChanges)
         .map((application) => application.name);
 }
 
-export function selectAllReleases(state: AppState): Release[] {
-    return getApplicationsWithChanges(state)
-        .map((application) => selectRelease(state, application, 'q6', 'p'));
-}
-
-export function selectAllReleasesWithCommits(state: AppState): ReleaseWithCommits[] {
-    return getApplicationsWithChanges(state)
-        .map((application) => selectReleaseWithCommits(state, application, 'q6', 'p'));
-}
-
 export function selectAllReleasesWithCommitsForEnvironments(state: AppState, fromEnv: string, toEnv: string): ReleaseWithCommits[] {
     return getApplicationsWithChanges(state, fromEnv, toEnv)
         .map((application) => selectReleaseWithCommits(state, application, fromEnv, toEnv));
-}
-
-export function selectReleases(state: AppState, applications: string[]): Release[] {
-    return applications.map((application) => selectRelease(state, application, 'q6', 'p'));
-}
-
-export function selectReleasesWithCommits(state: AppState, applications: string[]): ReleaseWithCommits[] {
-    return applications.map((application) => selectReleaseWithCommits(state, application, 'q6', 'p'));
-}
-
-export function selectReleasesWithCommitsAndIssues(state: AppState, applications: string[]): ReleaseWithCommitsAndIssues[] {
-    return selectReleasesWithCommits(state, applications).map((a) => ({
-        ...a,
-        issues: selectIssuesForApplication(state, a.application)
-    }));
 }
 
 export function selectIssuesForApplication(state: AppState, application: string): JiraIssue[] {
