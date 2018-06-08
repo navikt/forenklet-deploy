@@ -5,11 +5,6 @@ import getStore from './store';
 import Routing from './routing';
 import InitialDataLoader from './view/initial-data-loader';
 import Header from './view/header';
-import { setupMock } from './mock/setup-mock';
-
-if (process.env.REACT_APP_MOCK === 'true') {
-    setupMock();
-}
 
 const store = getStore();
 

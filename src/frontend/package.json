@@ -5,14 +5,13 @@
   "scripts": {
     "start:ts": "react-scripts-ts start",
     "build:ts": "react-scripts-ts build",
-    "test": "cross-env REACT_APP_MOCK=true CI=true react-scripts-ts test --env=jsdom",
+    "test": "CI=true react-scripts-ts test --env=jsdom",
     "lint": "tslint src/**/*.ts{,x} --fix",
     "test:coverage": "npm test -- --coverage",
     "eject": "react-scripts-ts eject",
     "start:less": "less-watch-compiler ./src ./public index.less",
     "build:less": "node ./node_modules/less/bin/lessc -x src/index.less ./public/index.css",
     "start": "npm-run-all -p start:*",
-    "start-mock": "cross-env REACT_APP_MOCK=true npm run start",
     "build": "npm run build:less && npm run build:ts"
   },
   "dependencies": {
@@ -79,7 +78,6 @@
     "@types/react-router": "^4.0.25",
     "@types/react-router-dom": "^4.2.6",
     "@types/react-table": "^6.7.11",
-    "cross-env": "^5.1.6",
     "less": "^3.0.4",
     "less-watch-compiler": "^1.11.3",
     "npm-run-all": "^4.1.3",

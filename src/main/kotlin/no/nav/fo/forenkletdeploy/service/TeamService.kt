@@ -24,8 +24,9 @@ abstract class ITeam constructor(
         val jenkinsFolder: String,
         val jenkinsUrl: String = "http://bekkci.devillo.no",
         val provideVersion: Boolean = false,
-        val ignoredApplications: List<String>,
-        val extraApps: List<ApplicationConfig>
+        val ignoredApplications: List<String> = emptyList(),
+        val extraApps: List<ApplicationConfig> = emptyList(),
+        val environments: List<String> = listOf("T6", "Q6", "Q0", "P")
 ) {
     fun getApplicationConfigs(configConsumer: TeamConfigConsumer): List<ApplicationConfig> =
             configConsumer.hentTeamConfig(uri = configUrl, useAuth = true)
@@ -40,9 +41,9 @@ class FOTeam: ITeam(
         id = "fo",
         displayName = "Forenklet Oppfølging",
         configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json",
-        extraApps = emptyList(),
         jenkinsFolder = "forenklet_oppfolging",
-        ignoredApplications = arrayListOf("badkitty", "veilarbdemo")
+        ignoredApplications = arrayListOf("badkitty", "veilarbdemo"),
+        environments = listOf("Q6", "Q0", "P")
 )
 
 class TeamSoknad: ITeam(
@@ -50,7 +51,6 @@ class TeamSoknad: ITeam(
         displayName = "Team søknad",
         configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/team_soknad/config.json",
         jenkinsFolder = "team_soknad",
-        ignoredApplications = emptyList(),
         extraApps = arrayListOf(
                 ApplicationConfig( name = "henvendelse", gitUrl = "ssh://git@stash.devillo.no:7999/dial/henvendelse.git" )
         )
@@ -60,9 +60,7 @@ class TeamOppfolging: ITeam(
         id = "teamoppfolging",
         displayName = "Team Oppfølging",
         configUrl = "http://stash.devillo.no/projects/OPP/repos/team-oppfolging/raw/applikasjonsportefolje/config.json",
-        jenkinsFolder = "teamoppfolging",
-        extraApps = emptyList(),
-        ignoredApplications = emptyList()
+        jenkinsFolder = "teamoppfolging"
 )
 
 class TeamPAMAasmund: ITeam(
@@ -71,9 +69,7 @@ class TeamPAMAasmund: ITeam(
         configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamaasmund.json",
         jenkinsFolder = "teamaasmund",
         jenkinsUrl = "https://jenkins-pam.adeo.no",
-        provideVersion = true,
-        extraApps = emptyList(),
-        ignoredApplications = emptyList()
+        provideVersion = true
 )
 
 class TeamPAMTuan: ITeam(
@@ -82,9 +78,7 @@ class TeamPAMTuan: ITeam(
         configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamtuan.json",
         jenkinsFolder = "teamtuan",
         jenkinsUrl = "https://jenkins-pam.adeo.no",
-        provideVersion = true,
-        extraApps = emptyList(),
-        ignoredApplications = emptyList()
+        provideVersion = true
 )
 
 class TeamPAMJ: ITeam(
@@ -93,7 +87,5 @@ class TeamPAMJ: ITeam(
         configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamj.json",
         jenkinsFolder = "teamj",
         jenkinsUrl = "https://jenkins-pam.adeo.no",
-        provideVersion = true,
-        extraApps = emptyList(),
-        ignoredApplications = emptyList()
+        provideVersion = true
 )

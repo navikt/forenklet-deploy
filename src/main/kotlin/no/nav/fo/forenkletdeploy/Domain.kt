@@ -4,7 +4,7 @@ import java.time.ZonedDateTime
 
 data class ApplicationConfig(val name: String, val gitUrl: String)
 data class FeatureToggle(val name: String, val enabled: Boolean)
-data class Team(val id: String, val displayName: String, val jenkinsFolder: String, val jenkinsUrl: String, val provideVersion: Boolean)
+data class Team(val id: String, val displayName: String, val jenkinsFolder: String, val jenkinsUrl: String, val provideVersion: Boolean, val environments: List<String>)
 
 data class VeraDeploy(
         val id: String = "",

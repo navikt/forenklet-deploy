@@ -20,7 +20,8 @@ constructor(val teamService: TeamService) {
                         jenkinsFolder = it.jenkinsFolder,
                         displayName = it.displayName,
                         jenkinsUrl = it.jenkinsUrl,
-                        provideVersion = it.provideVersion
+                        provideVersion = it.provideVersion,
+                        environments = it.environments.map { it.toLowerCase() }
                 )
             }
 }

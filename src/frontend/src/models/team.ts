@@ -4,4 +4,5 @@ export interface Team {
     jenkinsFolder: string;
     jenkinsUrl: string;
     provideVersion: boolean;
+    environments: string[];
 }
