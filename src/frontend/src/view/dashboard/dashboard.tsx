@@ -7,20 +7,21 @@ import { Undertittel } from 'nav-frontend-typografi';
 import { selectIsLoadingDeploys } from '../../redux/deploy-duck';
 import { selectApplicationsWithChanges } from '../../redux/selectors/application-selectors';
 import { ApplicationWithChanges } from '../../models/application';
-import { getEnvironments } from '../../utils/environment';
 import { Environment } from '../../models/environment';
+import { selectMiljoerForValgtTeam } from '../../redux/team-velger-duck';
 
 interface ApplicationRowProps {
     application: ApplicationWithChanges;
+    environments: Environment[];
 }
 
-function ApplicationRow({ application }: ApplicationRowProps) {
+function ApplicationRow({ application, environments }: ApplicationRowProps) {
     return (
         <section className="dashboard--applicationrow blokk-m">
             <Undertittel className="blokk-xxs">{application.name}</Undertittel>
 
             <div className="dashboard--deployments">
-                {getEnvironments().map((env: Environment) => (
+                {environments.map((env: Environment) => (
                     <Deployment
                         key={`${application.name}-${env.name}`}
                         application={application.name}
@@ -37,6 +38,7 @@ interface StateProps {
     isLoadingData: boolean;
     applications: ApplicationWithChanges[];
     showAll: boolean;
+    environments: Environment[];
 }
 
 interface DispatchProps {
@@ -45,7 +47,7 @@ interface DispatchProps {
 
 type DashboardProps = StateProps & DispatchProps;
 
-function Dashboard({ isLoadingData, applications, showAll }: DashboardProps) {
+function Dashboard({ isLoadingData, applications, showAll, environments }: DashboardProps) {
     if (isLoadingData) {
         return <NavFrontendSpinner type="L" />;
     }
@@ -56,6 +58,7 @@ function Dashboard({ isLoadingData, applications, showAll }: DashboardProps) {
         <div className="dashboard__wrapper">
             {applicationsToDisplay.map((app) => (
                 <ApplicationRow
+                    environments={environments}
                     key={app.name}
                     application={app}
                 />
@@ -67,6 +70,7 @@ function Dashboard({ isLoadingData, applications, showAll }: DashboardProps) {
 const mapStateToProps = (state: AppState): StateProps => ({
     isLoadingData: selectIsLoadingDeploys(state),
     applications: selectApplicationsWithChanges(state),
+    environments: selectMiljoerForValgtTeam(state),
     showAll: state.view.showAll
 });
 

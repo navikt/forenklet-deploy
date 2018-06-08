@@ -1,5 +1,7 @@
 import { AppState } from './reducer';
 import { Team } from '../models/team';
+import { Environment } from '../models/environment';
+import { getEnvironments } from '../utils/environment';
 
 export interface ValgtTeamState {
     teamId: string;
@@ -32,6 +34,14 @@ export function selectValgtTeamId(state: AppState): string {
 
 export function selectValgtTeam(state: AppState): Team | undefined {
     return state.team.teams.find((team) => team.id === selectValgtTeamId(state));
+}
+
+export function selectMiljoerForValgtTeam(state: AppState): Environment[] {
+    const valgtTeam = selectValgtTeam(state);
+    if (valgtTeam != null) {
+        return getEnvironments().filter((env) => valgtTeam.environments.includes(env.name));
+    }
+    return [];
 }
 
 export default function valgtTeamReducer(state: ValgtTeamState = initialState, action: TeamVelgerActions) {
