@@ -68,7 +68,7 @@ class MockGithubConsumer : GithubConsumer {
         return (1..numCommits).map {
             val person = GithubCommitPerson(
                     name = faker.gameOfThrones().character(),
-                    date = getMinutesAgo(faker.number().numberBetween(it*10, it*11)),
+                    date = getMinutesAgo(faker.number().numberBetween(it*10, (it+1)*10)),
                     email = faker.internet().safeEmailAddress()
             )
             val id = faker.code().imei()
@@ -103,7 +103,7 @@ class MockGithubConsumer : GithubConsumer {
 
     fun getMinutesAgo(minutes: Int): String {
         val date = Date((System.currentTimeMillis()) - (minutes * 60 * 1000))
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss z")
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
         sdf.timeZone = TimeZone.getDefault()
         return sdf.format(date)
     }
