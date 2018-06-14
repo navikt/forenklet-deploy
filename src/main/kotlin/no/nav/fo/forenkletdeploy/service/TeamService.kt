@@ -52,7 +52,9 @@ class TeamSoknad: ITeam(
         configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/team_soknad/config.json",
         jenkinsFolder = "team_soknad",
         extraApps = arrayListOf(
-                ApplicationConfig( name = "henvendelse", gitUrl = "ssh://git@stash.devillo.no:7999/dial/henvendelse.git" )
+                ApplicationConfig( name = "soknad-kontantstotte", gitUrl = "https://github.com/navikt/soknad-kontantstotte.git" ),
+                ApplicationConfig( name = "soknad-aap-utland", gitUrl = "https://github.com/navikt/soknad-aap-utland.git" ),
+                ApplicationConfig( name = "soknad-kontantstotte-api", gitUrl = "https://github.com/navikt/soknad-kontantstotte-api.git" )
         )
 )
 
