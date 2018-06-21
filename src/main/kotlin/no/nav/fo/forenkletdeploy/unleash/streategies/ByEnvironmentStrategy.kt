@@ -10,9 +10,8 @@ class ByEnvironmentStrategy : Strategy {
         return "byEnvironment"
     }
 
-    override fun isEnabled(parameters: Map<String, String>): Boolean {
-        val env = getEnvironment()
-        val enabledEnvs = parameters.getOrDefault("miljø", "").split(",")
-        return enabledEnvs.contains(env)
+    override fun isEnabled(parameters: Map<String, String>?): Boolean {
+        val enabledEnvs = parameters?.getOrDefault("miljø", "")?.split(",") ?: emptyList()
+        return enabledEnvs.contains(getEnvironment())
     }
 }

@@ -3,6 +3,7 @@ package no.nav.fo.forenkletdeploy.consumer
 import com.github.javafaker.Faker
 import no.nav.fo.forenkletdeploy.ApplicationConfig
 import no.nav.fo.forenkletdeploy.util.Utils
+import no.nav.fo.forenkletdeploy.util.Utils.getRestUriForGithubRepo
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.context.annotation.Profile
@@ -158,7 +159,3 @@ data class GithubTag(
         val node_id: String,
         val commit: GithubTagCommit
 )
-
-fun getRestUriForGithubRepo(application: ApplicationConfig): String {
-    return "https://api.github.com/repos/navikt/${application.name}"
-}

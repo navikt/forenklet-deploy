@@ -1,5 +1,6 @@
 package no.nav.fo.forenkletdeploy.util
 
+import no.nav.fo.forenkletdeploy.ApplicationConfig
 import org.glassfish.jersey.client.ClientConfig
 
 import javax.ws.rs.client.ClientBuilder
@@ -40,4 +41,10 @@ object Utils {
     fun stringToSeed(text: String): Long =
             text.map { it.toLong() }
                     .fold(11L) { acc, i -> (acc * 31 ) + i }
+
+    fun getRestUriForGithubRepo(application: ApplicationConfig): String {
+        val appNameRegex = "navikt/(.*)\\.git".toRegex()
+        val appNameFromUri = appNameRegex.find(application.gitUrl)?.groups?.get(1)?.value
+        return "https://api.github.com/repos/navikt/${appNameFromUri ?: application.name}"
+    }
 }
