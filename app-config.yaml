@@ -1,3 +1,4 @@
+# jeg vil ikke ha hjelp fra pus
 # ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
 image: docker.adeo.no:5000/pus/forenklet-deploy
 team: pus
