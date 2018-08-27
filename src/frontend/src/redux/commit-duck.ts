@@ -63,7 +63,6 @@ export function clearCommits(): Clear {
 
 export function getCommitsForApplication(application: string, fromVersion: string, toVersion: string) {
     return (dispatch: Dispatch<Action>) => {
-        dispatch({ type: errorActionNames.HIDE_ERROR });
         dispatch({ type: actionNames.LOADING });
         return api.getCommitsForApplication(application, fromVersion, toVersion)
             .then((commits: Commit[]) => {
