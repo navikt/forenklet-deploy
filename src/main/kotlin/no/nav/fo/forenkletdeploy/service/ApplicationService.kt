@@ -27,5 +27,9 @@ constructor(
             teamService.getAppsForTeam(teamId)
 
     fun getAppByName(name: String): ApplicationConfig =
-            getAllApplications().first { it.name.equals(name, ignoreCase = true) }
+            try {
+                getAllApplications().first { it.name.equals(name, ignoreCase = true) }
+            } catch (e: NoSuchElementException) {
+                throw RuntimeException("Kunne ikke finne '$name' blandt konfigurerte applikasjoner.", e)
+            }
 }
