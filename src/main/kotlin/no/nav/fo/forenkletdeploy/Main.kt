@@ -20,9 +20,9 @@ fun main(args: Array<String>) {
     if ("true".equals(System.getProperty("webproxy.enabled", "true"), ignoreCase = true)) {
         SSLUtil.turnOffSslChecking()
         System.setProperty("http.nonProxyHosts", "*.155.55.|*.192.168.|*.10.|*.local|*.rtv.gov|*.adeo.no|*.nav.no|*.aetat.no|*.devillo.no|*.oera.no")
-        System.setProperty("http.proxyHost", "webproxy-utvikler.nav.no")
+        System.setProperty("http.proxyHost", "webproxy-nais.nav.no")
         System.setProperty("http.proxyPort", "8088")
-        System.setProperty("https.proxyHost", "webproxy-utvikler.nav.no")
+        System.setProperty("https.proxyHost", "webproxy-nais.nav.no")
         System.setProperty("https.proxyPort", "8088")
     }
 
