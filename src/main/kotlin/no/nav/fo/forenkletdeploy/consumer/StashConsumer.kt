@@ -35,8 +35,7 @@ open class StashConsumerImpl: StashConsumer {
                         .get(StashCommits::class.java)
                         .values
             } catch (e: Throwable) {
-                LOG.error("Feil ved henting av commits for ${application.name}", e)
-                ArrayList()
+                throw RuntimeException("Feil ved henting av commits for ${application.name} via ${getRestUriForRepo(application)}/commits", e)
             }
 
     @Cacheable("stashtags")
