@@ -3,7 +3,7 @@ import { AppState } from './reducer';
 import { Dispatch } from 'redux';
 import { Action } from 'redux';
 import * as api from '../api/commit-api';
-import {errorActionNames} from './error-duck';
+import { errorActionNames } from './error-duck';
 
 export interface CommitState {
     loading: boolean;
@@ -71,7 +71,7 @@ export function getCommitsForApplication(application: string, fromVersion: strin
                 return commits;
             })
             .catch(() => {
-                dispatch({ type: errorActionNames.DISPLAY_ERROR, error: "Det var problemer med å hente commits for enkelte applikasjoner." });
+                dispatch({ type: errorActionNames.DISPLAY_ERROR, error: 'Det var problemer med å hente commits for enkelte applikasjoner.' });
                 return [];
             });
     };
