@@ -78,6 +78,10 @@ export function getCommitsForApplication(application: string, fromVersion: strin
             .then((commits: Commit[]) => {
                 dispatch({ type: actionNames.FETCH_SUCCESS, commits });
                 return commits;
+            })
+            .catch(() => {
+                dispatch({ type: actionNames.FETCH_ERROR, error: "Kunne ikke hente commits!" });
+                return [];
             });
     };
 }
