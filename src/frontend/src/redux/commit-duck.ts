@@ -3,23 +3,21 @@ import { AppState } from './reducer';
 import { Dispatch } from 'redux';
 import { Action } from 'redux';
 import * as api from '../api/commit-api';
+import {errorActionNames} from './error-duck';
 
 export interface CommitState {
     loading: boolean;
     commits: Commit[];
-    error: string | null;
 }
 
 const initialState: CommitState = {
     loading: true,
     commits: [],
-    error: null
 };
 
 export enum actionNames {
     LOADING = 'commit/SET_PENDING',
     FETCH_SUCCESS = 'commit/FETCH_SUCCESS',
-    FETCH_ERROR = 'commit/FETCH_ERROR',
     CLEAR = 'commit/CLEAR'
 }
 
@@ -32,11 +30,6 @@ export interface FetchSuccess {
     commits: Commit[];
 }
 
-export interface FetchError {
-    type: actionNames.FETCH_ERROR;
-    error: string;
-}
-
 export interface Clear {
     type: actionNames.CLEAR;
 }
@@ -44,7 +37,6 @@ export interface Clear {
 type ReleaseActions =
     | Loading
     | FetchSuccess
-    | FetchError
     | Clear
     ;
 
@@ -54,8 +46,6 @@ export default function commitReducer(state: CommitState = initialState, action:
             return {...state, loading: true};
         case actionNames.FETCH_SUCCESS:
             return {...state, loading: false, commits: state.commits.concat(action.commits)};
-        case actionNames.FETCH_ERROR:
-            return {...state, loading: false, error: action.error};
         case actionNames.CLEAR:
             return {...state, commits: []};
         default:
@@ -73,6 +63,7 @@ export function clearCommits(): Clear {
 
 export function getCommitsForApplication(application: string, fromVersion: string, toVersion: string) {
     return (dispatch: Dispatch<Action>) => {
+        dispatch({ type: errorActionNames.HIDE_ERROR });
         dispatch({ type: actionNames.LOADING });
         return api.getCommitsForApplication(application, fromVersion, toVersion)
             .then((commits: Commit[]) => {
@@ -80,7 +71,7 @@ export function getCommitsForApplication(application: string, fromVersion: strin
                 return commits;
             })
             .catch(() => {
-                dispatch({ type: actionNames.FETCH_ERROR, error: "Kunne ikke hente commits!" });
+                dispatch({ type: errorActionNames.DISPLAY_ERROR, error: "Det var problemer med å hente commits for enkelte applikasjoner." });
                 return [];
             });
     };
