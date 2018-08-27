@@ -12,18 +12,21 @@ import javax.inject.Inject
 
 import com.fasterxml.jackson.databind.DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
+import no.nav.fo.forenkletdeploy.util.Utils.getRequiredProperty
+import java.net.URL
 
 @SpringBootApplication
 open class Main
 
 fun main(args: Array<String>) {
     if ("true".equals(System.getProperty("webproxy.enabled", "true"), ignoreCase = true)) {
+        val url = URL(getRequiredProperty("HTTP_PROXY"))
         SSLUtil.turnOffSslChecking()
-        System.setProperty("http.nonProxyHosts", "*.155.55.|*.192.168.|*.10.|*.local|*.rtv.gov|*.adeo.no|*.nav.no|*.aetat.no|*.devillo.no|*.oera.no")
-        System.setProperty("http.proxyHost", "webproxy-nais.nav.no")
-        System.setProperty("http.proxyPort", "8088")
-        System.setProperty("https.proxyHost", "webproxy-nais.nav.no")
-        System.setProperty("https.proxyPort", "8088")
+        System.setProperty("http.nonProxyHosts", getRequiredProperty("NO_PROXY"))
+        System.setProperty("http.proxyHost", url.host)
+        System.setProperty("http.proxyPort", url.port.toString())
+        System.setProperty("https.proxyHost", url.host)
+        System.setProperty("https.proxyPort", url.port.toString())
     }
 
     SpringApplication.run(Main::class.java, *args)
