@@ -53,7 +53,7 @@ export default function commitReducer(state: CommitState = initialState, action:
         case actionNames.LOADING:
             return {...state, loading: true};
         case actionNames.FETCH_SUCCESS:
-            return {...state, loading: false, error: null, commits: state.commits.concat(action.commits)};
+            return {...state, loading: false, commits: state.commits.concat(action.commits)};
         case actionNames.FETCH_ERROR:
             return {...state, loading: false, error: action.error};
         case actionNames.CLEAR:
