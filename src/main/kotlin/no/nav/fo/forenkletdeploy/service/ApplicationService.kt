@@ -11,7 +11,7 @@ class ApplicationService @Inject
 constructor(
     val teamService: TeamService
 ) {
-    val logger: Logger = LoggerFactory.getLogger(ApplicationService::class.java);
+    val logger: Logger = LoggerFactory.getLogger(ApplicationService::class.java)
 
     fun getAllApplications() =
             teamService.allTeams.flatMap {
@@ -19,7 +19,7 @@ constructor(
                     getAppsForTeam(it.id)
                 } catch (e: Exception) {
                     logger.error("Kunne ikke hente appConfig for ${it.displayName} via ${it.configUrl}", e)
-                    return emptyList<ApplicationConfig>()
+                    emptyList<ApplicationConfig>()
                 }
             }
 
