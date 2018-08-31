@@ -9,24 +9,25 @@ import { selectApplicationsWithChanges } from '../../redux/selectors/application
 import { ApplicationWithChanges } from '../../models/application';
 import { Environment } from '../../models/environment';
 import { selectMiljoerForValgtTeam } from '../../redux/team-velger-duck';
+import { filterFunction, selectFilter } from '../../redux/application-filter-duck';
 
 interface ApplicationRowProps {
     application: ApplicationWithChanges;
     environments: Environment[];
 }
 
-function ApplicationRow({ application, environments }: ApplicationRowProps) {
+function ApplicationRow({application, environments}: ApplicationRowProps) {
     return (
         <section className="dashboard--applicationrow blokk-m">
             <Undertittel className="blokk-xxs">{application.name}</Undertittel>
 
             <div className="dashboard--deployments">
                 {environments.map((env: Environment) => (
-                    <Deployment
-                        key={`${application.name}-${env.name}`}
-                        application={application.name}
-                        environment={env}
-                    />
+                        <Deployment
+                            key={`${application.name}-${env.name}`}
+                            application={application.name}
+                            environment={env}
+                        />
                     )
                 )}
             </div>
@@ -39,6 +40,7 @@ interface StateProps {
     applications: ApplicationWithChanges[];
     showAll: boolean;
     environments: Environment[];
+    filter: string;
 }
 
 interface DispatchProps {
@@ -47,12 +49,14 @@ interface DispatchProps {
 
 type DashboardProps = StateProps & DispatchProps;
 
-function Dashboard({ isLoadingData, applications, showAll, environments }: DashboardProps) {
+function Dashboard({isLoadingData, applications, showAll, environments, filter}: DashboardProps) {
     if (isLoadingData) {
-        return <NavFrontendSpinner type="L" />;
+        return <NavFrontendSpinner type="L"/>;
     }
 
-    const applicationsToDisplay = applications.filter((application) => application.hasChanges || showAll);
+    const applicationsToDisplay = applications
+        .filter((application) => application.hasChanges || showAll)
+        .filter((application) => filterFunction(application.name, filter));
 
     return (
         <div className="dashboard__wrapper">
@@ -71,7 +75,8 @@ const mapStateToProps = (state: AppState): StateProps => ({
     isLoadingData: selectIsLoadingDeploys(state),
     applications: selectApplicationsWithChanges(state),
     environments: selectMiljoerForValgtTeam(state),
-    showAll: state.view.showAll
+    showAll: state.view.showAll,
+    filter: selectFilter(state),
 });
 
 export default connect(mapStateToProps)(Dashboard);

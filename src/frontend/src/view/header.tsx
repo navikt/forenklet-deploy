@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Action } from 'redux';
 import { Undertittel } from 'nav-frontend-typografi';
 import TeamVelger from './team-velger';
+import ApplicationFilter from './application-filter';
 import { connect, Dispatch } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { selectError } from '../redux/error-duck';
@@ -23,12 +24,16 @@ function Header({error, showAll, doChangeShowAll}: HeaderStateProps & HeaderDisp
     return (
         <div className="header">
             <div className="container">
-                <div className="left-side">
-                    <Undertittel className="logo"><TeamAwareAnchor href="/">Forenklet Deploy</TeamAwareAnchor></Undertittel>
-                    <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle" checked={showAll} />
+                <div>
+                    <Undertittel className="logo"><TeamAwareAnchor href="/">Forenklet
+                        Deploy</TeamAwareAnchor></Undertittel>
+                    <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle" checked={showAll}/>
                     {error && <div className="header__error">{error}</div>}
                 </div>
-                <TeamVelger />
+                <div className="right-side">
+                    <ApplicationFilter/>
+                    <TeamVelger/>
+                </div>
             </div>
             <ul className="navigasjonslinje">
                 <li><TeamAwareAnchor href="/promote">Promotering</TeamAwareAnchor></li>
