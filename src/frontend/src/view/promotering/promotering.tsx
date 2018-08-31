@@ -74,7 +74,7 @@ class Promotering extends React.Component<PromoteringProps> {
 function mapStateToProps(state: AppState): StateProps {
     const fromEnv = selectFromEnvironment(state);
     const toEnv = selectToEnvironment(state);
-    
+
     return {
         valgtFromEnv: fromEnv,
         valgtToEnv: toEnv,
