@@ -16,7 +16,7 @@ interface DispatchProps {
 type ApplicationFilterProps = StateProps & DispatchProps;
 
 function ApplicationFilter({doFilter, filter}: ApplicationFilterProps) {
-    return <Input label="Filter" onChange={(e) => doFilter(e.target.value)} value={filter}/>;
+    return <Input label="Filter" onChange={(e) => doFilter(e.target.value)} value={filter} autoFocus={true}/>;
 }
 
 const mapStateToProps = (state: AppState): StateProps => ({
