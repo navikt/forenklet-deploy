@@ -5,6 +5,9 @@ import { ReleaseWithCommits } from '../../models/release';
 import { Commit } from '../../models/commit';
 import { getAlder } from '../alder';
 import { PromoteApplication } from './promote-application';
+import { connect } from 'react-redux';
+import { AppState } from '../../redux/reducer';
+import { filterFunction, selectFilter } from '../../redux/application-filter-duck';
 
 interface PromoteReleasesProps {
     doOpenApplication: (application: string) => void;
@@ -12,7 +15,13 @@ interface PromoteReleasesProps {
     releases: ReleaseWithCommits[];
 }
 
-class PromoteReleases extends React.Component<PromoteReleasesProps> {
+interface StateProps {
+    filter: string;
+}
+
+type Props = StateProps & PromoteReleasesProps;
+
+class PromoteReleases extends React.Component<Props> {
 
     openNextApplication(application: string) {
         const nextApplicationIndex = this.props.releases.findIndex((release) => release.application === application) + 1;
@@ -36,8 +45,9 @@ class PromoteReleases extends React.Component<PromoteReleasesProps> {
         return '';
     }
 
-    getReleasesSortedByAge(): ReleaseWithCommits[] {
+    getReleasesFilteredAndSortedByAge(): ReleaseWithCommits[] {
         return this.props.releases
+            .filter((release) => filterFunction(release.application, this.props.filter))
             .sort((r1, r2) => {
                 const lastCommitR1 = r1.commits[r1.commits.length - 1];
                 const lastCommitR2 = r2.commits[r2.commits.length - 1];
@@ -66,10 +76,16 @@ class PromoteReleases extends React.Component<PromoteReleasesProps> {
         return (
             <div>
                 <Undertittel className="blokk-xs">Applikasjoner ({this.props.releases.length}):</Undertittel>
-                { this.getReleasesSortedByAge().map((release: ReleaseWithCommits) => this.createApplicationRow(release)) }
+                {this.getReleasesFilteredAndSortedByAge().map((release: ReleaseWithCommits) => this.createApplicationRow(release))}
             </div>
         );
     }
 }
 
-export default PromoteReleases;
+function mapStateToProps(state: AppState): StateProps {
+    return {
+        filter: selectFilter(state)
+    };
+}
+
+export default connect(mapStateToProps, null)(PromoteReleases);

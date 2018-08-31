@@ -1,4 +1,4 @@
-import { combineReducers, Action } from 'redux';
+import { Action, combineReducers } from 'redux';
 import errorReducer, { ErrorState } from './error-duck';
 import viewReducer, { ViewState } from './view-duck';
 import goNogoViewReducer, { GoNogoViewState } from './gonogo-view-duck';
@@ -9,6 +9,7 @@ import teamReducer, { TeamState } from './team-duck';
 import valgTeamReducer, { ValgtTeamState } from './team-velger-duck';
 import promoteringReducer, { PromoteState } from './promote-duck';
 import kvitteringReducer, { KvitteringState } from './kvittering-duck';
+import applicationFilterReducer, { ApplicationFilterState } from './application-filter-duck';
 
 export interface AppState {
     error: ErrorState;
@@ -21,6 +22,7 @@ export interface AppState {
     valgtTeam: ValgtTeamState;
     promotering: PromoteState;
     kvittering: KvitteringState;
+    applicationFilter: ApplicationFilterState;
 }
 
 function getSavedState<T>(name: string): T {
@@ -29,7 +31,7 @@ function getSavedState<T>(name: string): T {
 }
 
 function saveState<T>(name: string, state: T) {
-    if(window.localStorage) {
+    if (window.localStorage) {
         localStorage.setItem(name, JSON.stringify(state));
     }
 }
@@ -53,5 +55,6 @@ export default combineReducers<AppState>({
     team: teamReducer,
     valgtTeam: valgTeamReducer,
     promotering: storedReducer<PromoteState>('promotering', promoteringReducer),
-    kvittering: kvitteringReducer
+    kvittering: kvitteringReducer,
+    applicationFilter: applicationFilterReducer
 });
