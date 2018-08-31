@@ -4,7 +4,7 @@ import { Sidetittel } from 'nav-frontend-typografi';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { AppState } from '../../redux/reducer';
 import { ReleaseWithCommits } from '../../models/release';
-import { setEnvironments, getInformationForPromotion, openApplication } from '../../redux/promote-duck';
+import { setEnvironments, getInformationForPromotion, openApplication, selectFromEnvironment, selectToEnvironment } from '../../redux/promote-duck';
 import Miljovelger from './miljovelger';
 import { selectAllReleasesWithCommitsForEnvironments } from '../../redux/releasenote-duck';
 import PromoteReleases from './promote-releases';
@@ -72,9 +72,9 @@ class Promotering extends React.Component<PromoteringProps> {
 }
 
 function mapStateToProps(state: AppState): StateProps {
-    const fromEnv = state.promotering.fromEnvironment;
-    const toEnv = state.promotering.toEnvironment;
-
+    const fromEnv = selectFromEnvironment(state);
+    const toEnv = selectToEnvironment(state);
+    
     return {
         valgtFromEnv: fromEnv,
         valgtToEnv: toEnv,

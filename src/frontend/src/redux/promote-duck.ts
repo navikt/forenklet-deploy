@@ -4,6 +4,8 @@ import { Commit } from '../models/commit';
 import { getIssues } from './jira-issue-duck';
 import { AppState } from './reducer';
 import { AsyncDispatch } from './redux-utils';
+import { selectMiljoerForValgtTeam } from './team-velger-duck';
+import { Environment } from '../models/environment';
 
 export interface PromoteState {
     fromEnvironment: string;
@@ -12,8 +14,8 @@ export interface PromoteState {
 }
 
 const initialState: PromoteState = {
-    fromEnvironment: 't6',
-    toEnvironment: 'q6',
+    fromEnvironment: '',
+    toEnvironment: '',
     openApplication: ''
 };
 
@@ -60,8 +62,8 @@ export function openApplication(app: string): OpenApplication {
 export function getInformationForPromotion() {
     return (dispatch: AsyncDispatch, getState: () => AppState) => {
         const state = getState();
-        const fromEnv = state.promotering.fromEnvironment;
-        const toEnv = state.promotering.toEnvironment;
+        const fromEnv = selectFromEnvironment(state);
+        const toEnv = selectToEnvironment(state);
 
         dispatch(getInfoForReleaseNote(fromEnv, toEnv));
     };
@@ -78,4 +80,26 @@ export function getInfoForPromote(app: string, fromVersion: string, toVersion: s
                 dispatch(getIssues(issues));
             });
     };
+}
+
+function isValidEnvironment(environments: Environment[], environmentName: string): boolean {
+    return environments.some((environment) => environment.name === environmentName);
+}
+
+export function selectFromEnvironment(state: AppState): string {
+    const environments = selectMiljoerForValgtTeam(state);
+    if (isValidEnvironment(environments, state.promotering.fromEnvironment)) {
+        return state.promotering.fromEnvironment;
+    } else {
+        return environments[0].name;
+    }
+}
+
+export function selectToEnvironment(state: AppState): string {
+    const environments = selectMiljoerForValgtTeam(state);
+    if (isValidEnvironment(environments, state.promotering.toEnvironment)) {
+        return state.promotering.toEnvironment;
+    } else {
+        return environments[environments.length - 1].name;
+    }
 }
