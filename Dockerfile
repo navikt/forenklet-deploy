@@ -15,4 +15,4 @@ COPY --from=maven-builder /source/target /app
 EXPOSE 8800
 
 WORKDIR /app
-CMD java -jar ./forenklet-deploy.jar
+CMD java $JAVA_PROXY_OPTIONS -jar ./forenklet-deploy.jar
