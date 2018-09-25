@@ -21,6 +21,11 @@ import java.net.URL
 open class Main
 
 fun main(args: Array<String>) {
+    val LOG = LoggerFactory.getLogger(Main::class.java)
+    LOG.info("Using proxy {} on port {}",getRequiredProperty("http.proxyHost"), getRequiredProperty("http.proxyPort"))
+    LOG.info("Using non proxy settings {}",getRequiredProperty("http.nonProxyHosts"))
+
+    SSLUtil.turnOffSslChecking() // Ellers vil det feile mot unleash-apiet -_-
     SpringApplication.run(Main::class.java, *args)
 }
 
