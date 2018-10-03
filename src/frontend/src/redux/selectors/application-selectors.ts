@@ -2,6 +2,7 @@ import { AppState } from '../reducer';
 import { ApplicationWithChanges } from '../../models/application';
 import { getEnvironments } from '../../utils/environment';
 import { Environment } from '../../models/environment';
+import { selectMiljoerForValgtTeam } from '../team-velger-duck';
 
 export function selectApplications(state: AppState): string[] {
     const applications = state.deploy.deploys.map((deploy) => deploy.application);
@@ -34,5 +35,6 @@ export function selectApplicationsWithChangesForEnvironments(state: AppState, en
 }
 
 export function selectApplicationsWithChanges(state: AppState): ApplicationWithChanges[] {
-    return selectApplicationsWithChangesForEnvironments(state, getEnvironments());
+    const validEnvironments = selectMiljoerForValgtTeam(state);
+    return selectApplicationsWithChangesForEnvironments(state, validEnvironments);
 }
