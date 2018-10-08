@@ -99,5 +99,5 @@ class TeamVEDFP: ITeam(
         displayName = "Team Foreldrepenger",
         configUrl = "http://stash.devillo.no/projects/VEDFP/repos/team-vedtak/raw/applikasjonsportefolje/config.json",
         jenkinsFolder = "teamforeldrepenger",
-        environments = listOf("T10", "Q10", "Q7", "Q1", "Q0" "P")
+        environments = listOf("T10", "Q10", "Q7", "Q1", "Q0", "P")
 )
