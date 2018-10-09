@@ -10,7 +10,7 @@ class TeamService @Inject
 constructor(
         val teamConfigConsumer: TeamConfigConsumer
 ) {
-    val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamOppfolging(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ())
+    val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamOppfolging(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ(), TeamVEDFP())
 
     fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
             allTeams.find { it.id.equals(teamId, ignoreCase = true) }
@@ -92,4 +92,12 @@ class TeamPAMJ: ITeam(
         jenkinsFolder = "teamj",
         jenkinsUrl = "https://jenkins-pam.adeo.no",
         provideVersion = true
+)
+
+class TeamVEDFP: ITeam(
+        id = "teamforeldrepenger",
+        displayName = "Team Foreldrepenger",
+        configUrl = "http://stash.devillo.no/projects/VEDFP/repos/team-vedtak/raw/applikasjonsportefolje/config.json",
+        jenkinsFolder = "teamforeldrepenger",
+        environments = listOf("T10", "Q10", "Q7", "Q1", "Q0", "P")
 )
