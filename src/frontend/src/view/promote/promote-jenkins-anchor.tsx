@@ -15,16 +15,26 @@ interface StateProps {
 }
 
 function PromoteJenkinsAnchor(props: OwnProps & StateProps) {
-    const buildName = props.env === 'p' ? '-release-' : `-promotering-${props.env}-`;
-    const jenkinsFolder = props.valgtTeam ? props.valgtTeam.jenkinsFolder : '';
-    const jenkinsUrl = props.valgtTeam ? props.valgtTeam.jenkinsUrl : 'http://bekkci.devillo.no';
-    let linkUrl = `${jenkinsUrl}/job/${jenkinsFolder}/job/${props.application}/job/${buildName}/`;
+    const environment = props.env;
+    const valgtTeam = props.valgtTeam;
+    const application = props.application;
+
+    const buildName = environment === 'p' ? '-release-' : `-promotering-${environment}-`;
+    const jenkinsFolder = valgtTeam ? valgtTeam.jenkinsFolder : '';
+    const jenkinsUrl = valgtTeam ? valgtTeam.jenkinsUrl : 'http://bekkci.devillo.no';
+    let linkUrl = `${jenkinsUrl}/job/${jenkinsFolder}/job/${application}/job/${buildName}/`;
     const version = props.version;
-    const provideVersion = props.valgtTeam != null ? props.valgtTeam.provideVersion : false;
+    const provideVersion = valgtTeam != null ? valgtTeam.provideVersion : false;
 
     if (provideVersion) {
         linkUrl += `parambuild?versjon=${version}`;
     }
+
+    // litt quick-n-dirty løsning her for å passe med jobb-strukturen til foreldrepenger sin byggserver
+    if(valgtTeam && ('teamforeldrepenger' === valgtTeam.id)) {
+        linkUrl = `http://a34apvl063.devillo.no:8080/jenkins/job/${application}-BUILD/job/master/parambuild/?miljo=${environment}`;
+    }
+
     return (
         <a className="knapp knapp--hoved" href={linkUrl} target="_blank" rel="noopener noreferrer">
             Promoter

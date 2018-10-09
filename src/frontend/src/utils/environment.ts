@@ -2,9 +2,19 @@ import { DeployType, Environment } from '../models/environment';
 
 const environments: Environment[] = [
     {
+        name: 't10',
+        deployType: DeployType.PROMOTE,
+        promotesTo: 'q10'
+    },
+    {
         name: 't6',
         deployType: DeployType.PROMOTE,
         promotesTo: 'q6'
+    },
+    {
+        name: 'q10',
+        deployType: DeployType.PROMOTE,
+        promotesTo: 'q0'
     },
     {
         name: 'q6',
