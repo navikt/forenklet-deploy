@@ -97,7 +97,7 @@ class TeamPAMJ: ITeam(
 class TeamVEDFP: ITeam(
         id = "teamforeldrepenger",
         displayName = "Team Foreldrepenger",
-        configUrl = "http://stash.devillo.no/projects/VEDFP/repos/team-vedtak/raw/applikasjonsportefolje/config.json",
+        configUrl = "https://raw.githubusercontent.com/navikt/team-vedtak/master/applikasjonsportefolje/config.json",
         jenkinsFolder = "teamforeldrepenger",
         environments = listOf("T10", "Q10", "Q7", "Q1", "Q0", "P")
 )
