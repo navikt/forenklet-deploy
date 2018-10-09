@@ -11,12 +11,12 @@ class StashCommitProviderTest {
     @Test
     fun getCorrectRestUriForStashRepo() {
         val project = "testproject"
-        val appname = "testapp"
+        val reponame = "testrepo"
         val appConfig = ApplicationConfig(
                 name = "testapp",
-                gitUrl = "ssh://git@stash.devillo.no:7999/$project/$appname.git"
+                gitUrl = "ssh://git@stash.devillo.no:7999/$project/$reponame.git"
         )
-        val expected = "http://stash.devillo.no/rest/api/1.0/projects/$project/repos/$appname"
+        val expected = "http://stash.devillo.no/rest/api/1.0/projects/$project/repos/$reponame"
         assertThat(getRestUriForRepo(appConfig))
                 .isEqualToIgnoringCase(expected)
     }
@@ -24,13 +24,13 @@ class StashCommitProviderTest {
     @Test
     fun getCorrectLinkUriForStashRepo() {
         val project = "testproject"
-        val appname = "testapp"
+        val reponame = "testrepo"
         val commit = "commithash"
         val appConfig = ApplicationConfig(
                 name = "testapp",
-                gitUrl = "ssh://git@stash.devillo.no:7999/$project/$appname.git"
+                gitUrl = "ssh://git@stash.devillo.no:7999/$project/$reponame.git"
         )
-        val expected = "http://stash.devillo.no/projects/$project/repos/$appname/commits/$commit"
+        val expected = "http://stash.devillo.no/projects/$project/repos/$reponame/commits/$commit"
         assertThat(getLinkUriForCommit(appConfig, commit))
                 .isEqualToIgnoringCase(expected)
     }

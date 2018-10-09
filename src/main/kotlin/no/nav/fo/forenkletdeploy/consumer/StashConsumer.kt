@@ -104,9 +104,11 @@ class MockStashConsumer: StashConsumer {
 }
 
 fun getRestUriForRepo(application: ApplicationConfig): String {
-    val projectRegex = "7999/([a-zA-Z]+)/".toRegex()
-    val project = projectRegex.find(application.gitUrl)?.groups?.get(1)?.value
-    return "http://stash.devillo.no/rest/api/1.0/projects/$project/repos/${application.name}"
+    val projectRegex = "7999/([a-zA-Z]+)/([a-zA-Z]+)".toRegex()
+    val groups = projectRegex.find(application.gitUrl)?.groups
+    val project = groups?.get(1)?.value
+    val repo = groups?.get(2)?.value
+    return "http://stash.devillo.no/rest/api/1.0/projects/$project/repos/${repo}"
 }
 
 data class StashCommits (

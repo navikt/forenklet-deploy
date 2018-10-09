@@ -92,7 +92,9 @@ private fun getLinkUriForGithubCommit(application: ApplicationConfig, id: String
 }
 
 fun getLinkUriForCommit(application: ApplicationConfig, commit: String): String {
-    val projectRegex = "7999/([a-zA-Z]+)/".toRegex()
-    val project = projectRegex.find(application.gitUrl)?.groups?.get(1)?.value
-    return "http://stash.devillo.no/projects/$project/repos/${application.name}/commits/$commit"
+    val projectRegex = "7999/([a-zA-Z]+)/([a-zA-Z]+)".toRegex()
+    val groups = projectRegex.find(application.gitUrl)?.groups
+    val project = groups?.get(1)?.value
+    val repo = groups?.get(2)?.value
+    return "http://stash.devillo.no/projects/$project/repos/${repo}/commits/$commit"
 }
