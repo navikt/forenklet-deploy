@@ -11,7 +11,7 @@ class StashCommitProviderTest {
     @Test
     fun getCorrectRestUriForStashRepo() {
         val project = "testproject"
-        val reponame = "testrepo"
+        val reponame = "test-repo"
         val appConfig = ApplicationConfig(
                 name = "testapp",
                 gitUrl = "ssh://git@stash.devillo.no:7999/$project/$reponame.git"
@@ -24,7 +24,7 @@ class StashCommitProviderTest {
     @Test
     fun getCorrectLinkUriForStashRepo() {
         val project = "testproject"
-        val reponame = "testrepo"
+        val reponame = "test-repo"
         val commit = "commithash"
         val appConfig = ApplicationConfig(
                 name = "testapp",

@@ -104,7 +104,7 @@ class MockStashConsumer: StashConsumer {
 }
 
 fun getRestUriForRepo(application: ApplicationConfig): String {
-    val projectRegex = "7999/([a-zA-Z]+)/([a-zA-Z]+)".toRegex()
+    val projectRegex = "7999/([a-zA-Z]+)/([a-zA-Z-]+)".toRegex()
     val groups = projectRegex.find(application.gitUrl)?.groups
     val project = groups?.get(1)?.value
     val repo = groups?.get(2)?.value
