@@ -35,8 +35,21 @@ open class StashConsumerImpl: StashConsumer {
                         .get(StashCommits::class.java)
                         .values
             } catch (e: Throwable) {
-                throw RuntimeException("Feil ved henting av commits for ${application.name} via ${getRestUriForRepo(application)}/commits", e)
+                val message = "Feil ved henting av commits for ${application.name} via ${getRestUriForRepo(application)}/commits"
+                LOG.error(message,e)
+                checkTags(application, fromTag, toTag)
+                throw RuntimeException(message, e)
             }
+
+
+    private fun checkTags(application: ApplicationConfig, vararg tags: String) {
+        val gitTags = getTags(application).map { s -> s.id }
+        tags.forEach { tag ->
+            if (!gitTags.contains(tag)) {
+                throw IllegalStateException("mangler tag: $tag")
+            }
+        }
+    }
 
     @Cacheable("stashtags")
     override fun getTags(application: ApplicationConfig): List<StashTag> =
