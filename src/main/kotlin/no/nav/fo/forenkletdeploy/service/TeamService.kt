@@ -55,6 +55,7 @@ class TeamSoknad: ITeam(
                 ApplicationConfig( name = "soknad-kontantstotte", gitUrl = "https://github.com/navikt/soknad-kontantstotte.git" ),
                 ApplicationConfig( name = "soknad-aap-utland", gitUrl = "https://github.com/navikt/soknad-aap-utland.git" ),
                 ApplicationConfig( name = "soknad-kontantstotte-api", gitUrl = "https://github.com/navikt/soknad-kontantstotte-api.git" ),
+                ApplicationConfig( name = "soknad-html-generator", gitUrl = "https://github.com/navikt/soknad-html-generator.git" ),
                 ApplicationConfig( name = "soknad-kontantstotte-proxy", gitUrl = "https://github.com/navikt/soknad-kontantstotte-proxy.git" )
         ),
         environments = listOf("T6", "Q0", "P")
