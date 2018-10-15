@@ -1,6 +1,7 @@
 import { apiBaseUri } from '../utils/config';
 import { Deploy } from '../models/deploy';
 import { getEnvironmentByName } from '../utils/environment';
+import { fetchToJson } from './utils';
 
 export interface VeraDeploy {
     id: string;
@@ -25,7 +26,8 @@ export function veraDeployToDeploy(veraDeploy: VeraDeploy): Deploy {
 
 export function getAllDeploys(teamId: string): Promise<Deploy[]> {
     const uri = `${apiBaseUri}/deploy?team=${teamId}`;
-    return fetch(uri)
-        .then((response) => response.json())
-        .then((deploys: VeraDeploy[]) => Promise.resolve(deploys.map(veraDeployToDeploy)));
+    return fetchToJson(uri).then((deploys: VeraDeploy[]) => {
+            const value = deploys.map(veraDeployToDeploy);
+            return Promise.resolve(value);
+        });
 }

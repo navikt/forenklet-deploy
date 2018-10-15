@@ -46,7 +46,7 @@ open class StashConsumerImpl: StashConsumer {
         val gitTags = getTags(application).map { s -> s.id }
         tags.forEach { tag ->
             if (!gitTags.contains(tag)) {
-                throw IllegalStateException("mangler tag: $tag")
+                throw IllegalStateException("mangler tag: $tag i ${application.gitUrl}")
             }
         }
     }

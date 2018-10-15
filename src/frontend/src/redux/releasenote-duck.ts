@@ -10,6 +10,7 @@ import { getIssuesFromMessage, Issue } from '../view/promote/promote-utils';
 import { getIssues, selectIssue, onlyUniqueIssues } from './jira-issue-duck';
 import { JiraIssue } from '../models/jira-issue';
 import { AsyncDispatch } from './redux-utils';
+import { errorActionNames } from './error-duck';
 
 function getApplicationsWithChanges(state: AppState, fromEnv: string = 'q6', toEnv: string = 'p'): string[] {
     return selectApplicationsWithChangesForEnvironments(state, [getEnvironmentByName(fromEnv), getEnvironmentByName(toEnv)])
@@ -60,6 +61,13 @@ export function getInfoForReleaseNote(fromEnv: string = 'q6', toEnv: string = 'p
                 .reduce((agg, current) => agg.concat(current), [])
                 .map((issue) => issue.name)
             )
-            .then((issues: string[]) => dispatch(getIssues(issues)));
+            .then((issues: string[]) => dispatch(getIssues(issues)))
+            .catch((error) => {
+                dispatch({
+                    type: errorActionNames.DISPLAY_ERROR,
+                    error: error ? error.toString() : 'Det var problemer med å generere releasenote for enkelte applikasjoner.'
+                });
+                return [];
+            });
     };
 }
