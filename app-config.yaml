@@ -13,7 +13,7 @@ healthcheck:
     path: internal/isAlive
     initialDelay: 60
   readiness:
-    path: internal/isAlive
+    path: internal/isReady
     initialDelay: 60
 resources:
     requests: # Ressursene applikasjonen blir instansiert med
