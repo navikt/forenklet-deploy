@@ -74,7 +74,8 @@ class TeamPAMAasmund: ITeam(
         configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamaasmund.json",
         jenkinsFolder = "teamaasmund",
         jenkinsUrl = "https://jenkins-pam.adeo.no",
-        provideVersion = true
+        provideVersion = true,
+        environments = listOf("Q6", "Q0", "P")
 )
 
 class TeamPAMTuan: ITeam(
