@@ -30,6 +30,6 @@ constructor(
                         .filter { gyldigeMiljoer.contains(it.environment) }
             } catch (e: Throwable) {
                 LOG.error("Kunne ikke hente deploys for $app", e)
-                emptyList()
+                throw e
             }
 }

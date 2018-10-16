@@ -1,5 +1,6 @@
 package no.nav.fo.forenkletdeploy.rest
 
+import no.nav.fo.forenkletdeploy.ApplicationConfig
 import no.nav.fo.forenkletdeploy.Commit
 import no.nav.fo.forenkletdeploy.GitTag
 import no.nav.fo.forenkletdeploy.service.ApplicationService
@@ -18,7 +19,7 @@ constructor(
 
     @GetMapping("/{application}")
     fun getCommitsForApplication(@PathVariable("application") application: String, @RequestParam("fromVersion") fromVersion: String, @RequestParam("toVersion") toVersion: String): List<Commit> {
-        val appConfig = applicationService.getAppByName(application)
+        val appConfig = appByName(application)
 
         return gitService.getCommitsForRelease(
                 application = appConfig,
@@ -27,9 +28,9 @@ constructor(
             )
     }
 
-    @GetMapping("/{application}/tags")
-    fun getTagsForApplication(@PathVariable("application") application: String): List<GitTag> {
-        val appConfig = applicationService.getAppByName(application)
-        return gitService.getTagsForApplication(appConfig)
+
+    private fun appByName(application: String): ApplicationConfig {
+        return applicationService.getAppByName(application) ?: throw RuntimeException("Kunne ikke finne '$application' blandt konfigurerte applikasjoner.")
     }
+
 }

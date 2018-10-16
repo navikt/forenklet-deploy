@@ -1,35 +1,34 @@
 package no.nav.fo.forenkletdeploy.service
 
+import arrow.core.Try
+import arrow.core.getOrElse
+import arrow.core.orNull
 import no.nav.fo.forenkletdeploy.ApplicationConfig
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import no.nav.fo.forenkletdeploy.util.flatMapParallell
 import org.springframework.stereotype.Service
+import java.util.Collections.singletonList
 import javax.inject.Inject
+
 
 @Service
 class ApplicationService @Inject
 constructor(
-    val teamService: TeamService
+        private val teamService: TeamService
 ) {
-    val logger: Logger = LoggerFactory.getLogger(ApplicationService::class.java)
 
-    fun getAllApplications() =
-            teamService.allTeams.flatMap {
-                try {
-                    getAppsForTeam(it.id)
-                } catch (e: Exception) {
-                    logger.error("Kunne ikke hente appConfig for ${it.displayName} via ${it.configUrl}", e)
-                    emptyList<ApplicationConfig>()
-                }
-            }
+    fun getAllApplications(): List<Try<ApplicationConfig>> {
+        return teamService.allTeams.flatMapParallell{getAppsForTeam(it)}
+    }
 
-    fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
-            teamService.getAppsForTeam(teamId)
+    fun getAppByName(name: String): ApplicationConfig? = getAllApplications()
+            .map { it.orNull() }
+            .firstOrNull { it != null && it.name.equals(name, ignoreCase = true) }
 
-    fun getAppByName(name: String): ApplicationConfig =
-            try {
-                getAllApplications().first { it.name.equals(name, ignoreCase = true) }
-            } catch (e: NoSuchElementException) {
-                throw RuntimeException("Kunne ikke finne '$name' blandt konfigurerte applikasjoner.", e)
-            }
+    private fun getAppsForTeam(team: ITeam): List<Try<ApplicationConfig>> {
+        return Try.invoke { teamService.getAppsForTeam(team.id) }
+                .map { applicationConfigs -> applicationConfigs.map { Try.just(it) } }
+                .getOrElse { singletonList(Try.raise(it)) }
+    }
+
 }
+
