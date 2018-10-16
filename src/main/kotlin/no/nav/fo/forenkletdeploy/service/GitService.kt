@@ -18,18 +18,17 @@ constructor(
         val stashConsumer: StashConsumer,
         val githubConsumer: GithubConsumer
 ) {
+
+    fun ping() {
+        stashConsumer.ping()
+        githubConsumer.ping()
+    }
+
     fun getCommitsForRelease(application: ApplicationConfig, fromVersion: String, toVersion: String): List<Commit> {
         if (isGithubRepo(application.gitUrl)) {
             return getGithubCommits(application, fromVersion, toVersion)
         }
         return getStashCommits(application, fromVersion, toVersion)
-    }
-
-    fun getTagsForApplication(application: ApplicationConfig): List<GitTag> {
-        if (isGithubRepo(application.gitUrl)) {
-            return getGithubTags(application)
-        }
-        return getStashTags(application)
     }
 
     private fun getStashCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<Commit> =
@@ -61,31 +60,9 @@ constructor(
         return dt.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000
     }
 
-
-    private fun getStashTags(application: ApplicationConfig): List<GitTag> =
-            stashConsumer.getTags(application)
-                    .map { GitTag(
-                            displayId = it.displayId,
-                            latestcommit = it.latestCommit,
-                            application = application.name
-                    ) }
-
-    private fun getGithubTags(application: ApplicationConfig): List<GitTag> =
-            githubConsumer.getTags(application)
-                .map { GitTag(
-                        displayId = it.name,
-                        latestcommit = it.commit.sha,
-                        application = application.name
-                ) }
-
-    private fun getGithubConfig(application: String): ApplicationConfig =
-            ApplicationConfig(
-                    gitUrl = "ssh://git@stash.devillo.no:7999/fa/$application.git",
-                    name = application
-            )
-
     private fun isGithubRepo(repoUri: String): Boolean =
             repoUri.contains("github.com")
+
 }
 private fun getLinkUriForGithubCommit(application: ApplicationConfig, id: String): String {
     return "https://github.com/navikt/${application.name}/commit/${id}"
