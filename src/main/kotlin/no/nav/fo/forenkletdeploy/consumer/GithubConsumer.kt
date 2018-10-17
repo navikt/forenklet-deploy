@@ -3,7 +3,6 @@ package no.nav.fo.forenkletdeploy.consumer
 import com.github.javafaker.Faker
 import no.nav.fo.forenkletdeploy.ApplicationConfig
 import no.nav.fo.forenkletdeploy.util.Utils
-import no.nav.fo.forenkletdeploy.util.Utils.getRestUriForGithubRepo
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.context.annotation.Profile
@@ -13,7 +12,7 @@ import java.util.*
 
 interface GithubConsumer {
     fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<GithubCommit>
-    fun getTags(application: ApplicationConfig): List<GithubTag>
+    fun ping()
 }
 
 @Service("GithubConsumer")
@@ -23,13 +22,21 @@ open class GithubConsumerImpl : GithubConsumer {
     val LIMIT = 1000
     val TOKEN = Utils.getRequiredProperty("GITHUB_JENKINSPUS_TOKEN")
 
+    override fun ping() {
+        LOG.info(Utils.withClient("https://api.github.com/user")
+                .request()
+                .header("Authorization", "token ${TOKEN}")
+                .get(String::class.java)
+        )
+    }
+
     @Cacheable("githubcommits")
     override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<GithubCommit> =
             try {
                 val useFromTag = if (fromTag == "null") "1" else fromTag
                 val useToTag = if (toTag == "null") "HEAD" else toTag
 
-                val url = "${getRestUriForGithubRepo(application)}/compare/$useFromTag...$useToTag"
+                val url = "${getApiUriForGithubRepo(application)}/compare/$useFromTag...$useToTag"
                 LOG.info("Henter commits for ${application.name} ($fromTag -> $toTag) via $url")
                 Utils.withClient(url)
                         .request()
@@ -38,25 +45,14 @@ open class GithubConsumerImpl : GithubConsumer {
                         .commits
             } catch (e: Throwable) {
                 LOG.error("Feil ved henting av commits for ${application.name}", e)
-                emptyList()
+                throw e
             }
+}
 
-
-    @Cacheable("githubtags")
-    override fun getTags(application: ApplicationConfig): List<GithubTag> =
-            try {
-                val url = "${getRestUriForRepo(application)}/tags"
-                LOG.info("Henter tags for ${application.name} via $url")
-                Utils.withClient(url)
-                        .queryParam("limit", LIMIT)
-                        .request()
-                        .header("Authorization", "token $TOKEN")
-                        .get(GithubTags::class.java)
-                        .values
-            } catch (e: Throwable) {
-                LOG.error("Feil ved henting av tags for ${application.name}", e)
-                emptyList()
-            }
+fun getApiUriForGithubRepo(application: ApplicationConfig): String {
+    val appNameRegex = "navikt/(.*)\\.git".toRegex()
+    val appNameFromUri = appNameRegex.find(application.gitUrl)?.groups?.get(1)?.value
+    return "https://api.github.com/repos/navikt/${appNameFromUri ?: application.name}"
 }
 
 @Service("GithubConsumer")
@@ -88,19 +84,7 @@ class MockGithubConsumer : GithubConsumer {
         }
     }
 
-    override fun getTags(application: ApplicationConfig): List<GithubTag> {
-        val faker = Faker(Random(Utils.stringToSeed(application.name)))
-        val numTags = faker.number().numberBetween(8, 25)
-
-        return (1..numTags).map {
-            val id = faker.numerify("####.########.###")
-            GithubTag(
-                    node_id = id,
-                    name = id,
-                    commit = GithubTagCommit(sha = faker.code().imei(), url = "http://github.com/tag/$id")
-            )
-        }
-    }
+    override fun ping() {}
 
     fun getMinutesAgo(minutes: Int): String {
         val date = Date((System.currentTimeMillis()) - (minutes * 60 * 1000))
@@ -143,19 +127,4 @@ data class GithubCommitPerson(
 data class GithubParentCommit(
         val sha: String,
         val url: String
-)
-
-data class GithubTags(
-        val values: List<GithubTag>
-)
-
-data class GithubTagCommit(
-        val sha: String,
-        val url: String
-)
-
-data class GithubTag(
-        val name: String,
-        val node_id: String,
-        val commit: GithubTagCommit
 )

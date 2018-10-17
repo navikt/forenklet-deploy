@@ -1,21 +1,18 @@
 package no.nav.fo.forenkletdeploy
 
+import com.fasterxml.jackson.databind.DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT
+import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import no.nav.fo.forenkletdeploy.util.SSLUtil
+import no.nav.fo.forenkletdeploy.util.Utils.getRequiredProperty
+import org.slf4j.LoggerFactory
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import javax.inject.Inject
-
-import com.fasterxml.jackson.databind.DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT
-import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
-import no.nav.fo.forenkletdeploy.rest.JiraIssueResource
-import no.nav.fo.forenkletdeploy.util.Utils.getRequiredProperty
-import org.slf4j.LoggerFactory
-import java.net.URL
 
 @SpringBootApplication
 open class Main

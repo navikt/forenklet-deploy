@@ -9,7 +9,6 @@ import { selectError } from '../redux/error-duck';
 import { changeShowAll } from '../redux/view-duck';
 import { Checkbox } from 'nav-frontend-skjema';
 import { TeamAwareAnchor } from './team-aware-link';
-import { FeatureIsEnabled } from '../unleash-react/unleash-feature';
 
 interface HeaderStateProps {
     error: string | null;
@@ -37,9 +36,7 @@ function Header({error, showAll, doChangeShowAll}: HeaderStateProps & HeaderDisp
             </div>
             <ul className="navigasjonslinje">
                 <li><TeamAwareAnchor href="/promote">Promotering</TeamAwareAnchor></li>
-                <FeatureIsEnabled name="forenkletdeploy.dashboard">
-                    <li><TeamAwareAnchor href="/dashboard">Dashboard</TeamAwareAnchor></li>
-                </FeatureIsEnabled>
+                <li><TeamAwareAnchor href="/dashboard">Dashboard</TeamAwareAnchor></li>
             </ul>
         </div>
     );

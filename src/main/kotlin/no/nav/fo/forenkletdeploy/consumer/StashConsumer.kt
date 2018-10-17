@@ -13,7 +13,7 @@ import java.util.*
 
 interface StashConsumer {
     fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit>
-    fun getTags(application: ApplicationConfig): List<StashTag>
+    fun ping() {}
 }
 
 @Service("StashConsumer")
@@ -21,6 +21,10 @@ interface StashConsumer {
 open class StashConsumerImpl: StashConsumer {
     val LOG = LoggerFactory.getLogger(this.javaClass)
     val LIMIT = 1000
+
+    override fun ping() {
+        LOG.info(withClient("http://stash.devillo.no/rest/api/1.0/projects/").request().get(String::class.java))
+    }
 
     @Cacheable("stashcommits")
     override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> =
@@ -51,8 +55,7 @@ open class StashConsumerImpl: StashConsumer {
         }
     }
 
-    @Cacheable("stashtags")
-    override fun getTags(application: ApplicationConfig): List<StashTag> =
+    private fun getTags(application: ApplicationConfig): List<StashTag> =
             try {
                 val url = "${getRestUriForRepo(application)}/tags"
                 LOG.info("Henter tags for ${application.name} via $url")
@@ -63,7 +66,7 @@ open class StashConsumerImpl: StashConsumer {
                         .values
             } catch (e: Throwable) {
                 LOG.error("Feil ved henting av tags for ${application.name}", e)
-                ArrayList()
+                throw e
             }
 
     private fun tagRef(tag: String) =
@@ -94,20 +97,7 @@ class MockStashConsumer: StashConsumer {
         }
     }
 
-    override fun getTags(application: ApplicationConfig): List<StashTag> {
-        val faker = Faker(Random(stringToSeed(application.name)))
-        val numTags = faker.number().numberBetween(8, 25)
-
-        return (1..numTags).map {
-            val id = faker.numerify("####.########.###")
-            StashTag(
-                    id = id,
-                    displayId = id,
-                    latestCommit = faker.code().imei(),
-                    latestChangeset = faker.code().imei()
-            )
-        }
-    }
+    override fun ping() {}
 
     fun getMessage(faker: Faker): String =
             faker.numerify("PUS-### ${faker.book().title()}\n\n${faker.chuckNorris().fact()}")
