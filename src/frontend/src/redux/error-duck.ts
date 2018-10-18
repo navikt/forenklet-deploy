@@ -1,11 +1,12 @@
 import { AppState } from './reducer';
+import { AsyncDispatch } from './redux-utils';
 
 export interface ErrorState {
-    error: string | null;
+    errors: string[];
 }
 
 const initialState: ErrorState = {
-    error: null
+    errors: []
 };
 
 export enum errorActionNames {
@@ -29,14 +30,18 @@ type ErrorAction =
 export default function reducer(state: ErrorState = initialState, action: ErrorAction): ErrorState {
     switch (action.type) {
         case errorActionNames.DISPLAY_ERROR:
-            return { ...state, error: action.error };
+            return { ...state, errors: [...state.errors, action.error] };
         case errorActionNames.HIDE_ERROR:
-            return { ...state, error: null };
+            return { ...state, errors: [] };
         default:
             return state;
     }
 }
 
-export function selectError(state: AppState) {
-    return state.error.error;
+export function selectErrors(state: AppState) {
+    return state.error.errors;
+}
+
+export function hideErrors() {
+    return (dispatch: AsyncDispatch) => dispatch({ type: errorActionNames.HIDE_ERROR});
 }

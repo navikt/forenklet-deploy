@@ -11,6 +11,7 @@ import { getIssues, selectIssue, onlyUniqueIssues } from './jira-issue-duck';
 import { JiraIssue } from '../models/jira-issue';
 import { AsyncDispatch } from './redux-utils';
 import { errorActionNames } from './error-duck';
+import { logError } from '../utils/log';
 
 function getApplicationsWithChanges(state: AppState, fromEnv: string = 'q6', toEnv: string = 'p'): string[] {
     return selectApplicationsWithChangesForEnvironments(state, [getEnvironmentByName(fromEnv), getEnvironmentByName(toEnv)])
@@ -32,10 +33,6 @@ export function selectIssuesForApplication(state: AppState, application: string)
         .map((issue) => selectIssue(state, issue.name)!));
 }
 
-function responseToCommits(response: Commit[][]): Commit[] {
-    return response.reduce((agg, current) => agg.concat(current), []);
-}
-
 export function commitToIssues(commit: Commit): Issue[] {
     return getIssuesFromMessage(commit.message);
 }
@@ -50,10 +47,17 @@ export function getInfoForReleaseNote(fromEnv: string = 'q6', toEnv: string = 'p
             .map((application) => selectRelease(state, application, fromEnv, toEnv))
             .map((release) => commitApi.getCommitsForApplication(release.application, release.fromVersion, release.toVersion));
 
-        Promise.all(commitPromises)
-            .then(responseToCommits)
+        commitPromises.forEach(resolveCommitPromise(dispatch));
+
+        Promise.all(commitPromises).then(doneLoading(dispatch)).catch(doneLoading(dispatch));
+    };
+}
+
+function resolveCommitPromise(dispatch: AsyncDispatch) {
+    return (promise: Promise<Commit[]>) => {
+        promise
             .then((commits: Commit[]) => {
-                dispatch({ type: commitAN.FETCH_SUCCESS, commits });
+                dispatch({type: commitAN.FETCH_SUCCESS, commits});
                 return commits;
             })
             .then((commits) => commits
@@ -63,11 +67,18 @@ export function getInfoForReleaseNote(fromEnv: string = 'q6', toEnv: string = 'p
             )
             .then((issues: string[]) => dispatch(getIssues(issues)))
             .catch((error) => {
+                logError(error);
+                const errorMessage = error ? error.toString() : 'Det var problemer med å generere releasenote for enkelte applikasjoner.';
+                dispatch({type: commitAN.FETCH_FAILED, error: errorMessage});
                 dispatch({
                     type: errorActionNames.DISPLAY_ERROR,
-                    error: error ? error.toString() : 'Det var problemer med å generere releasenote for enkelte applikasjoner.'
+                    error: errorMessage
                 });
                 return [];
             });
     };
+}
+
+function doneLoading(dispatch: AsyncDispatch) {
+    return () => dispatch({type: commitAN.FETCH_COMPLETE});
 }

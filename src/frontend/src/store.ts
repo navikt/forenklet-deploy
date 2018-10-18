@@ -3,8 +3,10 @@ import thunkMiddleware from 'redux-thunk';
 import reducer from './redux/reducer';
 import { AppState } from './redux/reducer';
 
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 function create(): Store<AppState> {
-    const composed = compose(
+    const composed = composeEnhancers(
         applyMiddleware(thunkMiddleware)
     );
 

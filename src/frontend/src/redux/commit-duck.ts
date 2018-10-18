@@ -1,5 +1,4 @@
 import { Commit } from '../models/commit';
-import { AppState } from './reducer';
 import { Dispatch } from 'redux';
 import { Action } from 'redux';
 import * as api from '../api/commit-api';
@@ -7,17 +6,21 @@ import { errorActionNames } from './error-duck';
 
 export interface CommitState {
     loading: boolean;
+    error: boolean;
     commits: Commit[];
 }
 
 const initialState: CommitState = {
-    loading: true,
+    loading: false,
+    error: false,
     commits: [],
 };
 
 export enum actionNames {
     LOADING = 'commit/SET_PENDING',
     FETCH_SUCCESS = 'commit/FETCH_SUCCESS',
+    FETCH_FAILED = 'commit/FETCH_FAILED',
+    FETCH_COMPLETE = 'commit/FETCH_COMPLETE',
     CLEAR = 'commit/CLEAR'
 }
 
@@ -30,6 +33,14 @@ export interface FetchSuccess {
     commits: Commit[];
 }
 
+export interface FetchFailed {
+    type: actionNames.FETCH_FAILED;
+}
+
+export interface FetchComplete {
+    type: actionNames.FETCH_COMPLETE;
+}
+
 export interface Clear {
     type: actionNames.CLEAR;
 }
@@ -37,24 +48,26 @@ export interface Clear {
 type ReleaseActions =
     | Loading
     | FetchSuccess
+    | FetchFailed
+    | FetchComplete
     | Clear
     ;
 
 export default function commitReducer(state: CommitState = initialState, action: ReleaseActions): CommitState {
     switch (action.type) {
         case actionNames.LOADING:
-            return {...state, loading: true};
+            return {...state, loading: true, error: false};
         case actionNames.FETCH_SUCCESS:
-            return {...state, loading: false, commits: state.commits.concat(action.commits)};
+            return {...state, commits: state.commits.concat(action.commits)};
+        case actionNames.FETCH_FAILED:
+            return {...state, error: true};
+        case actionNames.FETCH_COMPLETE:
+            return {...state, loading: false};
         case actionNames.CLEAR:
             return {...state, commits: []};
         default:
             return state;
     }
-}
-
-export function selectIsLoadingDeploys(state: AppState): boolean {
-    return state.commit.loading;
 }
 
 export function clearCommits(): Clear {

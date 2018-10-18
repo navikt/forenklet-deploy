@@ -13,7 +13,7 @@ export interface JiraIssueState {
 }
 
 const initialState: JiraIssueState = {
-    loading: true,
+    loading: false,
     issues: [],
     error: null
 };

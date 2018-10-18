@@ -9,12 +9,14 @@ import Miljovelger from './miljovelger';
 import { selectAllReleasesWithCommitsForEnvironments } from '../../redux/releasenote-duck';
 import PromoteReleases from './promote-releases';
 import { AsyncDispatch } from '../../redux/redux-utils';
+import { hideErrors } from '../../redux/error-duck';
 
 interface StateProps {
     valgtFromEnv: string;
     valgtToEnv: string;
     releases: ReleaseWithCommits[];
     isLoading: boolean;
+    noErrors: boolean;
     openApplication: string;
     showAll: boolean;
 }
@@ -66,6 +68,7 @@ class Promotering extends React.Component<PromoteringProps> {
                     ? <NavFrontendSpinner type="L" />
                     : <PromoteReleases releases={releasesToDisplay} openApplication={this.props.openApplication} doOpenApplication={this.handleOpenApplication} />
                 }
+                { this.props.noErrors || <div className="warning_data">Advarsel: klarte ikke å hente alle data, listen kan være ufullstendig</div> }
             </article>
         );
     }
@@ -74,12 +77,14 @@ class Promotering extends React.Component<PromoteringProps> {
 function mapStateToProps(state: AppState): StateProps {
     const fromEnv = selectFromEnvironment(state);
     const toEnv = selectToEnvironment(state);
+    const releases = selectAllReleasesWithCommitsForEnvironments(state, fromEnv, toEnv);
 
     return {
         valgtFromEnv: fromEnv,
         valgtToEnv: toEnv,
         isLoading: state.commit.loading || state.deploy.loading || state.jira.loading,
-        releases: selectAllReleasesWithCommitsForEnvironments(state, fromEnv, toEnv),
+        noErrors: !state.commit.error,
+        releases,
         openApplication: state.promotering.openApplication,
         showAll: state.view.showAll
     };
@@ -87,7 +92,10 @@ function mapStateToProps(state: AppState): StateProps {
 
 function mapDispatchToProps(dispatch: AsyncDispatch): DispatchProps {
     return {
-        doHentInfoForPromotering: () => dispatch(getInformationForPromotion()),
+        doHentInfoForPromotering: () => {
+            dispatch(hideErrors());
+            dispatch(getInformationForPromotion());
+        },
         doEndreValgtMiljo: (fromEnv: string, toEnv: string) => dispatch(setEnvironments(fromEnv, toEnv)),
         doOpenApplication: (app: string) => dispatch(openApplication(app))
     };
