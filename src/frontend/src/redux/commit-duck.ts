@@ -80,9 +80,11 @@ export function getCommitsForApplication(application: string, fromVersion: strin
         return api.getCommitsForApplication(application, fromVersion, toVersion)
             .then((commits: Commit[]) => {
                 dispatch({ type: actionNames.FETCH_SUCCESS, commits });
+                dispatch({ type: actionNames.FETCH_COMPLETE });
                 return commits;
             })
             .catch(() => {
+                dispatch({ type: actionNames.FETCH_COMPLETE });
                 dispatch({ type: errorActionNames.DISPLAY_ERROR, error: 'Det var problemer med å hente commits for enkelte applikasjoner.' });
                 return [];
             });
