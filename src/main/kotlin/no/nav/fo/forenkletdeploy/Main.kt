@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import javax.inject.Inject
-import java.net.URL
 
 @SpringBootApplication
 open class Main
@@ -22,24 +21,21 @@ fun main(args: Array<String>) {
     val LOG = LoggerFactory.getLogger(Main::class.java)
 
     if ("true".equals(System.getProperty("webproxy.enabled", "true"), ignoreCase = true)) {
-        val url = URL(getRequiredProperty("HTTP_PROXY"))
-        val noProxy = getRequiredProperty("NO_PROXY")
-                .split(",")
-                .joinToString("|") {
-                    if (it.startsWith(".")) "*$it" else it
-                }
-
-
         SSLUtil.turnOffSslChecking() // Ellers vil det feile mot unleash-apiet -_-
 
-        LOG.info("Setting web proxy to {} on port {}", url.host, url.port)
-        LOG.info("Setting non proxy hosts to {}", noProxy)
+        System.setProperty("http.nonProxyHosts", "localhost|127.0.0.1|10.254.0.1|*.local|*.adeo.no|*.nav.no|*.aetat.no|*.devillo.no|*.oera.no")
+        System.setProperty("http.proxyHost", "webproxy.nais")
+        System.setProperty("http.proxyPort", "8088")
+        System.setProperty("https.proxyHost", "webproxy.nais")
+        System.setProperty("https.proxyPort", "8088")
 
-        System.setProperty("http.nonProxyHosts", noProxy)
-        System.setProperty("http.proxyHost", url.host)
-        System.setProperty("http.proxyPort", url.port.toString())
-        System.setProperty("https.proxyHost", url.host)
-        System.setProperty("https.proxyPort", url.port.toString())
+        LOG.info("http.nonProxyHosts: {}", java.lang.System.getProperty("http.nonProxyHosts"))
+        LOG.info("http.proxyHost: {}", java.lang.System.getProperty("http.proxyHost"))
+        LOG.info("http.proxyPort: {}", java.lang.System.getProperty("http.proxyPort"))
+        LOG.info("https.proxyPort: {}", java.lang.System.getProperty("https.proxyPort"))
+        LOG.info("https.proxyPort: {}", java.lang.System.getProperty("https.proxyPort"))
+        LOG.info("http.nonProxyHosts: {}", java.lang.System.getProperty("http.nonProxyHosts"))
+
     } else {
         LOG.info("Web proxy settings disabled. Skipping.")
     }
