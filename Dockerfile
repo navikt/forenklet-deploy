@@ -9,7 +9,7 @@ WORKDIR /source
 COPY --from=node-builder /source/build /source/src/main/resources/static
 RUN mvn package -DskipTests
 
-FROM docker.adeo.no:5000/bekkci/nais-java-app
+FROM docker.adeo.no:5000/pus/nais-java-app
 COPY --from=maven-builder /source/target /app
 
 EXPOSE 8800
