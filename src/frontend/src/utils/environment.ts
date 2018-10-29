@@ -1,5 +1,5 @@
-import {DeployType, Environment} from '../models/environment';
-import {logError} from "./log";
+import { DeployType, Environment } from '../models/environment';
+import { logError } from './log';
 
 const environments: Environment[] = [
     {
@@ -57,7 +57,7 @@ export function getEnvironmentByName(enviromentName: string): Environment {
         return {
             name: enviromentName,
             deployType: DeployType.NONE
-        }
+        };
     }
     return env;
 
