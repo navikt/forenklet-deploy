@@ -42,5 +42,8 @@ export function getEnvironments(): Environment[] {
 }
 
 export function getEnvironmentByName(enviromentName: string): Environment {
-    return environmentMap[enviromentName];
+    return environmentMap[enviromentName] || {
+        name: enviromentName,
+        deployType: DeployType.NONE
+    };
 }
