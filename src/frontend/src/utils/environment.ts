@@ -1,4 +1,5 @@
 import { DeployType, Environment } from '../models/environment';
+import { logError } from './log';
 
 const environments: Environment[] = [
     {
@@ -27,6 +28,14 @@ const environments: Environment[] = [
         promotesTo: 'p'
     },
     {
+        name: 'q1',
+        deployType: DeployType.NONE,
+    },
+    {
+        name: 'q7',
+        deployType: DeployType.NONE,
+    },
+    {
         name: 'p',
         deployType: DeployType.NONE
     }
@@ -42,5 +51,14 @@ export function getEnvironments(): Environment[] {
 }
 
 export function getEnvironmentByName(enviromentName: string): Environment {
-    return environmentMap[enviromentName];
+    const env = environmentMap[enviromentName];
+    if (!env) {
+        logError(`Environment ${enviromentName} not supported! Returning unsupported environment!`);
+        return {
+            name: enviromentName,
+            deployType: DeployType.NONE
+        };
+    }
+    return env;
+
 }
