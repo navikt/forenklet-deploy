@@ -2,12 +2,12 @@ package no.nav.fo.forenkletdeploy.commits
 
 import no.nav.fo.forenkletdeploy.ApplicationConfig
 import no.nav.fo.forenkletdeploy.consumer.getRestUriForRepo
-import no.nav.fo.forenkletdeploy.service.ITeam
+import no.nav.fo.forenkletdeploy.service.Team
 import no.nav.fo.forenkletdeploy.service.getLinkUriForCommit
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
-class MockTeam : ITeam(
+class MockTeam : Team(
         id = "mock",
         displayName = "mock",
         configUrl = "mock",

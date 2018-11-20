@@ -1,7 +1,6 @@
 package no.nav.fo.forenkletdeploy.service
 
 import no.nav.fo.forenkletdeploy.ApplicationConfig
-import no.nav.fo.forenkletdeploy.Commit
 import no.nav.fo.forenkletdeploy.consumer.TeamConfigConsumer
 import org.springframework.stereotype.Service
 import javax.inject.Inject
@@ -18,7 +17,7 @@ constructor(
                     ?.getApplicationConfigs(teamConfigConsumer) ?: emptyList()
 }
 
-abstract class ITeam constructor(
+abstract class Team constructor(
         val id: String,
         val displayName: String,
         val configUrl: String,
@@ -28,18 +27,18 @@ abstract class ITeam constructor(
         val ignoredApplications: List<String> = emptyList(),
         var extraApps: List<ApplicationConfig> = emptyList(),
         val environments: List<String> = listOf("T6", "Q6", "Q0", "P"),
-        val customizer: ITeamCustomizer? = null
+        val customizer: TeamCustomizer? = null
 ) {
     fun getApplicationConfigs(configConsumer: TeamConfigConsumer): List<ApplicationConfig> =
             configConsumer.hentTeamConfig(uri = configUrl, useAuth = true)
                     .entries
-                    .map { ApplicationConfig(name = it.key, gitUrl = it.value.gitUrl, team = this@ITeam) }
+                    .map { ApplicationConfig(name = it.key, gitUrl = it.value.gitUrl, team = this@Team) }
                     .filter { !ignoredApplications.contains(it.name) }
                     .union(extraApps)
                     .toList()
 }
 
-class FOTeam : ITeam(
+class FOTeam : Team(
         id = "fo",
         displayName = "Forenklet Oppfølging",
         configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json",
@@ -48,7 +47,7 @@ class FOTeam : ITeam(
         environments = listOf("Q6", "Q0", "P")
 )
 
-class TeamSoknad : ITeam(
+class TeamSoknad : Team(
         id = "sd",
         displayName = "Team søknad",
         configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/team_soknad/config.json",
@@ -66,14 +65,14 @@ class TeamSoknad : ITeam(
     }
 }
 
-class TeamOppfolging : ITeam(
+class TeamOppfolging : Team(
         id = "teamoppfolging",
         displayName = "Team Oppfølging",
         configUrl = "http://stash.devillo.no/projects/OPP/repos/team-oppfolging/raw/applikasjonsportefolje/config.json",
         jenkinsFolder = "teamoppfolging"
 )
 
-class TeamPAMAasmund : ITeam(
+class TeamPAMAasmund : Team(
         id = "teampamaasmund",
         displayName = "Team PAM Aasmund",
         configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamaasmund.json",
@@ -84,7 +83,7 @@ class TeamPAMAasmund : ITeam(
         customizer = TeamPAMAasmundCustomizer()
 )
 
-class TeamPAMTuan : ITeam(
+class TeamPAMTuan : Team(
         id = "teampamtuan",
         displayName = "Team PAM Tuan",
         configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamtuan.json",
@@ -93,7 +92,7 @@ class TeamPAMTuan : ITeam(
         provideVersion = true
 )
 
-class TeamPAMJ : ITeam(
+class TeamPAMJ : Team(
         id = "teampamj",
         displayName = "Team PAM J",
         configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamj.json",
@@ -102,7 +101,7 @@ class TeamPAMJ : ITeam(
         provideVersion = true
 )
 
-class TeamVEDFP : ITeam(
+class TeamVEDFP : Team(
         id = "teamforeldrepenger",
         displayName = "Team Foreldrepenger",
         configUrl = "https://raw.githubusercontent.com/navikt/team-vedtak/master/applikasjonsportefolje/config.json",

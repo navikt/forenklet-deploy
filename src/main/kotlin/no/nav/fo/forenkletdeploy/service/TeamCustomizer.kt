@@ -3,15 +3,16 @@ package no.nav.fo.forenkletdeploy.service
 import no.nav.fo.forenkletdeploy.ApplicationConfig
 import no.nav.fo.forenkletdeploy.Commit
 
-interface ITeamCustomizer {
+interface TeamCustomizer {
     fun filterCommits(commits: List<Commit>, applicationConfig: ApplicationConfig): List<Commit> = commits
 }
 
-class TeamPAMAasmundCustomizer : ITeamCustomizer {
+class TeamPAMAasmundCustomizer : TeamCustomizer {
     enum class KANDIDATSOK(val appname: String) {
         ARBEIDSGIVER("pam-kandidatsok"),
         VEILEDER("pam-kandidatsok-veileder")
     }
+
     override fun filterCommits(commits: List<Commit>, applicationConfig: ApplicationConfig): List<Commit> =
             when {
                 applicationConfig.name == KANDIDATSOK.ARBEIDSGIVER.appname ->

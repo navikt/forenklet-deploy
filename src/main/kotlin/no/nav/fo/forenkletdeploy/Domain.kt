@@ -1,9 +1,9 @@
 package no.nav.fo.forenkletdeploy
 
-import no.nav.fo.forenkletdeploy.service.ITeam
+import no.nav.fo.forenkletdeploy.service.Team
 import java.time.ZonedDateTime
 
-data class ApplicationConfig(val name: String, val gitUrl: String, val team: ITeam)
+data class ApplicationConfig(val name: String, val gitUrl: String, val team: Team)
 data class Team(val id: String, val displayName: String, val jenkinsFolder: String, val jenkinsUrl: String, val provideVersion: Boolean, val environments: List<String>)
 
 data class VeraDeploy(
@@ -42,10 +42,11 @@ data class JiraIssueFields(
         val summary: String,
         val status: JiraIssueStatus
 )
+
 data class JiraIssue(val id: String, val key: String, val fields: JiraIssueFields)
 
 data class TeamAppConfig(
         val gitUrl: String
 )
 
-class TeamAppConfigs: HashMap<String, TeamAppConfig>()
+class TeamAppConfigs : HashMap<String, TeamAppConfig>()

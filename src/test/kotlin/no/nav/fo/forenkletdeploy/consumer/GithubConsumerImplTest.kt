@@ -1,10 +1,10 @@
 package no.nav.fo.forenkletdeploy.consumer
 
 import no.nav.fo.forenkletdeploy.ApplicationConfig
-import no.nav.fo.forenkletdeploy.service.ITeam
+import no.nav.fo.forenkletdeploy.service.Team
 import org.junit.Test
 
-class MockTeam : ITeam(
+class MockTeam : Team(
         id = "mock",
         displayName = "mock",
         configUrl = "mock",
