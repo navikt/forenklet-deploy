@@ -1,8 +1,9 @@
 package no.nav.fo.forenkletdeploy
 
+import no.nav.fo.forenkletdeploy.service.ITeam
 import java.time.ZonedDateTime
 
-data class ApplicationConfig(val name: String, val gitUrl: String)
+data class ApplicationConfig(val name: String, val gitUrl: String, val team: ITeam)
 data class Team(val id: String, val displayName: String, val jenkinsFolder: String, val jenkinsUrl: String, val provideVersion: Boolean, val environments: List<String>)
 
 data class VeraDeploy(

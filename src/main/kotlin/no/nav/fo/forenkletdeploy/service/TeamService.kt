@@ -1,6 +1,7 @@
 package no.nav.fo.forenkletdeploy.service
 
 import no.nav.fo.forenkletdeploy.ApplicationConfig
+import no.nav.fo.forenkletdeploy.Commit
 import no.nav.fo.forenkletdeploy.consumer.TeamConfigConsumer
 import org.springframework.stereotype.Service
 import javax.inject.Inject
@@ -14,7 +15,7 @@ constructor(
 
     fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
             allTeams.find { it.id.equals(teamId, ignoreCase = true) }
-                    ?.getApplicationConfigs(teamConfigConsumer)?: emptyList()
+                    ?.getApplicationConfigs(teamConfigConsumer) ?: emptyList()
 }
 
 abstract class ITeam constructor(
@@ -25,19 +26,20 @@ abstract class ITeam constructor(
         val jenkinsUrl: String = "http://bekkci.devillo.no",
         val provideVersion: Boolean = false,
         val ignoredApplications: List<String> = emptyList(),
-        val extraApps: List<ApplicationConfig> = emptyList(),
-        val environments: List<String> = listOf("T6", "Q6", "Q0", "P")
+        var extraApps: List<ApplicationConfig> = emptyList(),
+        val environments: List<String> = listOf("T6", "Q6", "Q0", "P"),
+        val customizer: ITeamCustomizer? = null
 ) {
     fun getApplicationConfigs(configConsumer: TeamConfigConsumer): List<ApplicationConfig> =
             configConsumer.hentTeamConfig(uri = configUrl, useAuth = true)
                     .entries
-                    .map { ApplicationConfig( name = it.key, gitUrl = it.value.gitUrl ) }
+                    .map { ApplicationConfig(name = it.key, gitUrl = it.value.gitUrl, team = this@ITeam) }
                     .filter { !ignoredApplications.contains(it.name) }
                     .union(extraApps)
                     .toList()
 }
 
-class FOTeam: ITeam(
+class FOTeam : ITeam(
         id = "fo",
         displayName = "Forenklet Oppfølging",
         configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json",
@@ -46,39 +48,43 @@ class FOTeam: ITeam(
         environments = listOf("Q6", "Q0", "P")
 )
 
-class TeamSoknad: ITeam(
+class TeamSoknad : ITeam(
         id = "sd",
         displayName = "Team søknad",
         configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/team_soknad/config.json",
         jenkinsFolder = "team_soknad",
-        extraApps = arrayListOf(
-                ApplicationConfig( name = "soknad-kontantstotte", gitUrl = "https://github.com/navikt/soknad-kontantstotte.git" ),
-                ApplicationConfig( name = "soknad-aap-utland", gitUrl = "https://github.com/navikt/soknad-aap-utland.git" ),
-                ApplicationConfig( name = "soknad-kontantstotte-api", gitUrl = "https://github.com/navikt/soknad-kontantstotte-api.git" ),
-                ApplicationConfig( name = "soknad-html-generator", gitUrl = "https://github.com/navikt/soknad-html-generator.git" ),
-                ApplicationConfig( name = "soknad-kontantstotte-proxy", gitUrl = "https://github.com/navikt/soknad-kontantstotte-proxy.git" )
-        ),
         environments = listOf("T6", "Q0", "P")
-)
+) {
+    init {
+        extraApps = arrayListOf(
+                ApplicationConfig(name = "soknad-kontantstotte", gitUrl = "https://github.com/navikt/soknad-kontantstotte.git", team = this),
+                ApplicationConfig(name = "soknad-aap-utland", gitUrl = "https://github.com/navikt/soknad-aap-utland.git", team = this),
+                ApplicationConfig(name = "soknad-kontantstotte-api", gitUrl = "https://github.com/navikt/soknad-kontantstotte-api.git", team = this),
+                ApplicationConfig(name = "soknad-html-generator", gitUrl = "https://github.com/navikt/soknad-html-generator.git", team = this),
+                ApplicationConfig(name = "soknad-kontantstotte-proxy", gitUrl = "https://github.com/navikt/soknad-kontantstotte-proxy.git", team = this)
+        )
+    }
+}
 
-class TeamOppfolging: ITeam(
+class TeamOppfolging : ITeam(
         id = "teamoppfolging",
         displayName = "Team Oppfølging",
         configUrl = "http://stash.devillo.no/projects/OPP/repos/team-oppfolging/raw/applikasjonsportefolje/config.json",
         jenkinsFolder = "teamoppfolging"
 )
 
-class TeamPAMAasmund: ITeam(
+class TeamPAMAasmund : ITeam(
         id = "teampamaasmund",
         displayName = "Team PAM Aasmund",
         configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamaasmund.json",
         jenkinsFolder = "teamaasmund",
         jenkinsUrl = "https://jenkins-pam.adeo.no",
         provideVersion = true,
-        environments = listOf("Q6", "Q0", "P")
+        environments = listOf("Q6", "Q0", "P"),
+        customizer = TeamPAMAasmundCustomizer()
 )
 
-class TeamPAMTuan: ITeam(
+class TeamPAMTuan : ITeam(
         id = "teampamtuan",
         displayName = "Team PAM Tuan",
         configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamtuan.json",
@@ -87,7 +93,7 @@ class TeamPAMTuan: ITeam(
         provideVersion = true
 )
 
-class TeamPAMJ: ITeam(
+class TeamPAMJ : ITeam(
         id = "teampamj",
         displayName = "Team PAM J",
         configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamj.json",
@@ -96,7 +102,7 @@ class TeamPAMJ: ITeam(
         provideVersion = true
 )
 
-class TeamVEDFP: ITeam(
+class TeamVEDFP : ITeam(
         id = "teamforeldrepenger",
         displayName = "Team Foreldrepenger",
         configUrl = "https://raw.githubusercontent.com/navikt/team-vedtak/master/applikasjonsportefolje/config.json",
