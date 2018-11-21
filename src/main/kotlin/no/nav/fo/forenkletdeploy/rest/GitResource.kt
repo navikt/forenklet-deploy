@@ -20,14 +20,13 @@ constructor(
     @GetMapping("/{application}")
     fun getCommitsForApplication(@PathVariable("application") application: String, @RequestParam("fromVersion") fromVersion: String, @RequestParam("toVersion") toVersion: String): List<Commit> {
         val appConfig = appByName(application)
-
-        return gitService.getCommitsForRelease(
+        val commits = gitService.getCommitsForRelease(
                 application = appConfig,
                 fromVersion = fromVersion,
                 toVersion = toVersion
-            )
+        )
+        return appConfig.team.customizer?.filterCommits(commits, appConfig) ?: commits
     }
-
 
     private fun appByName(application: String): ApplicationConfig {
         return applicationService.getAppByName(application) ?: throw RuntimeException("Kunne ikke finne '$application' blandt konfigurerte applikasjoner.")

@@ -17,14 +17,14 @@ constructor(
 ) {
 
     fun getAllApplications(): List<Try<ApplicationConfig>> {
-        return teamService.allTeams.flatMapParallell{getAppsForTeam(it)}
+        return teamService.allTeams.flatMapParallell { getAppsForTeam(it) }
     }
 
     fun getAppByName(name: String): ApplicationConfig? = getAllApplications()
             .map { it.orNull() }
             .firstOrNull { it != null && it.name.equals(name, ignoreCase = true) }
 
-    private fun getAppsForTeam(team: ITeam): List<Try<ApplicationConfig>> {
+    private fun getAppsForTeam(team: Team): List<Try<ApplicationConfig>> {
         return Try.invoke { teamService.getAppsForTeam(team.id) }
                 .map { applicationConfigs -> applicationConfigs.map { Try.just(it) } }
                 .getOrElse { singletonList(Try.raise(it)) }
