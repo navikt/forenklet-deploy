@@ -22,7 +22,7 @@ abstract class Team constructor(
         val displayName: String,
         val configUrl: String,
         val jenkinsFolder: String,
-        val jenkinsUrl: String = "http://bekkci.devillo.no",
+        val jenkinsUrl: String = "https://ci.adeo.no",
         val provideVersion: Boolean = false,
         val ignoredApplications: List<String> = emptyList(),
         var extraApps: List<ApplicationConfig> = emptyList(),

@@ -21,7 +21,7 @@ function PromoteJenkinsAnchor(props: OwnProps & StateProps) {
 
     const buildName = environment === 'p' ? '-release-' : `-promotering-${environment}-`;
     const jenkinsFolder = valgtTeam ? valgtTeam.jenkinsFolder : '';
-    const jenkinsUrl = valgtTeam ? valgtTeam.jenkinsUrl : 'http://bekkci.devillo.no';
+    const jenkinsUrl = valgtTeam ? valgtTeam.jenkinsUrl : 'https://ci.adeo.no';
     let linkUrl = `${jenkinsUrl}/job/${jenkinsFolder}/job/${application}/job/${buildName}/`;
     const version = props.version;
     const provideVersion = valgtTeam != null ? valgtTeam.provideVersion : false;
