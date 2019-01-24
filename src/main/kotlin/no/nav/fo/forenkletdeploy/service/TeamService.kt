@@ -106,5 +106,5 @@ class TeamVEDFP : Team(
         displayName = "Team Foreldrepenger",
         configUrl = "https://raw.githubusercontent.com/navikt/team-vedtak/master/applikasjonsportefolje/config.json",
         jenkinsFolder = "teamforeldrepenger",
-        environments = listOf("T10", "Q10", "Q7", "Q1", "Q0", "P")
+        environments = listOf("T10", "T4", "Q1", "Q0", "P")
 )
