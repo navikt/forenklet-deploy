@@ -44,7 +44,7 @@ class FOTeam : Team(
         configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json",
         jenkinsFolder = "forenklet_oppfolging",
         ignoredApplications = arrayListOf("badkitty", "veilarbdemo"),
-        environments = listOf("Q6", "Q0", "P")
+        environments = listOf("Q0", "P")
 )
 
 class TeamSoknad : Team(
