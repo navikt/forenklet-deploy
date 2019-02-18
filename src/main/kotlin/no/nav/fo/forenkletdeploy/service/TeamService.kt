@@ -79,7 +79,7 @@ class TeamPAMAasmund : Team(
         jenkinsFolder = "teamaasmund",
         jenkinsUrl = "https://jenkins-pam.adeo.no",
         provideVersion = true,
-        environments = listOf("Q6", "Q0", "P"),
+        environments = listOf("Q0", "P"),
         customizer = TeamPAMAasmundCustomizer()
 )
 
