@@ -10,7 +10,7 @@ class TeamService @Inject
 constructor(
         val teamConfigConsumer: TeamConfigConsumer
 ) {
-    val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamOppfolging(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ(), TeamVEDFP())
+    val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamOppfolging(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ(), TeamVEDFP(), WARPFO())
 
     fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
             allTeams.find { it.id.equals(teamId, ignoreCase = true) }
@@ -25,17 +25,25 @@ abstract class Team constructor(
         val jenkinsUrl: String = "https://ci.adeo.no",
         val provideVersion: Boolean = false,
         val ignoredApplications: List<String> = emptyList(),
+        val includeOnlyApplications: List<String> = emptyList(),
         var extraApps: List<ApplicationConfig> = emptyList(),
         val environments: List<String> = listOf("T6", "Q6", "Q0", "P"),
         val customizer: TeamCustomizer? = null
 ) {
-    fun getApplicationConfigs(configConsumer: TeamConfigConsumer): List<ApplicationConfig> =
-            configConsumer.hentTeamConfig(uri = configUrl, useAuth = true)
-                    .entries
-                    .map { ApplicationConfig(name = it.key, gitUrl = it.value.gitUrl, team = this@Team) }
-                    .filter { !ignoredApplications.contains(it.name) }
-                    .union(extraApps)
-                    .toList()
+    fun getApplicationConfigs(configConsumer: TeamConfigConsumer): List<ApplicationConfig> {
+
+        var config = configConsumer.hentTeamConfig(uri = configUrl, useAuth = true)
+                .entries
+                .map { ApplicationConfig(name = it.key, gitUrl = it.value.gitUrl, team = this@Team) }
+                .filter { !ignoredApplications.contains(it.name) }
+                .union(extraApps)
+                .toList()
+
+        if (includeOnlyApplications.isNotEmpty()) {
+            config = config.filter { includeOnlyApplications.contains(it.name) }
+        }
+        return config
+    }
 }
 
 class FOTeam : Team(
@@ -107,4 +115,21 @@ class TeamVEDFP : Team(
         configUrl = "https://raw.githubusercontent.com/navikt/team-vedtak/master/applikasjonsportefolje/config.json",
         jenkinsFolder = "teamforeldrepenger",
         environments = listOf("T10", "T4", "Q1", "Q0", "P")
+)
+
+class WARPFO : Team(
+        id = "warp",
+        displayName = "WARP",
+        jenkinsFolder = "forenklet_oppfolging",
+        environments = listOf("Q0", "P"),
+        configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json",
+        includeOnlyApplications = listOf(
+                "tiltakinfo",
+                "veilarbtiltakinfo",
+                "jobbsokerkompetanse",
+                "veilarbjobbsokerkompetanse",
+                "veientilarbeid",
+                "veiledearbeidssoker",
+                "veiviserarbeidssoker"
+        )
 )
