@@ -42,7 +42,7 @@ Spørsmål knyttet til koden eller prosjektet kan rettes til Team Pus.
 
 For eksterne kontakt en av følgende:
 
-* Steffen Hageland (steffen.hagelan@nav.no)
-* Jan Berge Ommedal (jan.berge.ommedal@nav.no)
+* Matias Vinjevoll (matias.vinjevoll@nav.no)
+* Peder Korsveien (peder.korsveien@nav.no)
 
 For NAV-ansatte kan henvendelser sendes via slack i kanalen #pus
