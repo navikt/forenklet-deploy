@@ -17,7 +17,6 @@
         <mainclass>no.nav.fo.forenkletdeploy.MainKt</mainclass>
         <ehcache.version>3.4.0</ehcache.version>
         <javax.cache.version>1.1.0</javax.cache.version>
-        <unleash.version>3.0.0</unleash.version>
         <javax.rs.version>2.0-m16</javax.rs.version>
         <kotlin.version>1.2.40</kotlin.version>
         <annotations.version>16.0.1</annotations.version>
@@ -59,13 +58,6 @@
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
             <version>${javax.cache.version}</version>
-        </dependency>
-
-        <!-- 3. party tools -->
-        <dependency>
-            <groupId>no.finn.unleash</groupId>
-            <artifactId>unleash-client-java</artifactId>
-            <version>${unleash.version}</version>
         </dependency>
 
         <!-- logging -->
