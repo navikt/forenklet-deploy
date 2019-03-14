@@ -10,7 +10,7 @@ class TeamService @Inject
 constructor(
         val teamConfigConsumer: TeamConfigConsumer
 ) {
-    val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamOppfolging(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ(), TeamVEDFP(), WARPFO())
+    val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ(), TeamVEDFP(), WARPFO())
 
     fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
             allTeams.find { it.id.equals(teamId, ignoreCase = true) }
@@ -72,13 +72,6 @@ class TeamSoknad : Team(
         )
     }
 }
-
-class TeamOppfolging : Team(
-        id = "teamoppfolging",
-        displayName = "Team Oppfølging",
-        configUrl = "http://stash.devillo.no/projects/OPP/repos/team-oppfolging/raw/applikasjonsportefolje/config.json",
-        jenkinsFolder = "teamoppfolging"
-)
 
 class TeamPAMAasmund : Team(
         id = "teampamaasmund",
