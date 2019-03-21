@@ -29,6 +29,9 @@ open class StashConsumerImpl: StashConsumer {
     @Cacheable("stashcommits")
     override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> =
             try {
+
+                val TOKEN = System.getenv("FD_STASH_TOKEN") ?: System.getProperty("FD_STASH_TOKEN")
+
                 val url = "${getRestUriForRepo(application)}/commits"
                 LOG.info("Henter commits for ${application.name} ($fromTag -> $toTag) via $url")
                 withClient(url)
@@ -36,6 +39,7 @@ open class StashConsumerImpl: StashConsumer {
                         .queryParam("until", tagRef(toTag))
                         .queryParam("limit", LIMIT)
                         .request()
+                        .header("Authorization", "Bearer $TOKEN")
                         .get(StashCommits::class.java)
                         .values
             } catch (e: Throwable) {
