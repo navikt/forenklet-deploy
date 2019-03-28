@@ -22,6 +22,8 @@ open class StashConsumerImpl: StashConsumer {
     val LOG = LoggerFactory.getLogger(this.javaClass)
     val LIMIT = 1000
 
+    val TOKEN = System.getenv("FD_STASH_TOKEN") ?: System.getProperty("FD_STASH_TOKEN")
+
     override fun ping() {
         LOG.info(withClient("http://stash.devillo.no/rest/api/1.0/projects/").request().get(String::class.java))
     }
@@ -29,9 +31,6 @@ open class StashConsumerImpl: StashConsumer {
     @Cacheable("stashcommits")
     override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<StashCommit> =
             try {
-
-                val TOKEN = System.getenv("FD_STASH_TOKEN") ?: System.getProperty("FD_STASH_TOKEN")
-
                 val url = "${getRestUriForRepo(application)}/commits"
                 LOG.info("Henter commits for ${application.name} ($fromTag -> $toTag) via $url")
                 withClient(url)
@@ -66,6 +65,7 @@ open class StashConsumerImpl: StashConsumer {
                 withClient(url)
                         .queryParam("limit", LIMIT)
                         .request()
+                        .header("Authorization", "Bearer $TOKEN")
                         .get(StashTags::class.java)
                         .values
             } catch (e: Throwable) {

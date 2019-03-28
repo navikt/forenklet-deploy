@@ -32,7 +32,7 @@ abstract class Team constructor(
 ) {
     fun getApplicationConfigs(configConsumer: TeamConfigConsumer): List<ApplicationConfig> {
 
-        var config = configConsumer.hentTeamConfig(uri = configUrl, useAuth = true)
+        var config = configConsumer.hentTeamConfig(uri = configUrl)
                 .entries
                 .map { ApplicationConfig(name = it.key, gitUrl = it.value.gitUrl, team = this@Team) }
                 .filter { !ignoredApplications.contains(it.name) }

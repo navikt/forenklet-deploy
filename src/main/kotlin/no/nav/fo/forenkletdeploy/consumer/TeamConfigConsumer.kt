@@ -13,34 +13,34 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 interface TeamConfigConsumer {
-    fun hentTeamConfig(uri: String, useAuth: Boolean = false): TeamAppConfigs
+    fun hentTeamConfig(uri: String): TeamAppConfigs
 }
 
 @Service
 @Profile("!mock")
-open class TeamConfigConsumerImpl: TeamConfigConsumer {
-    val TOKEN = Utils.getRequiredProperty("GITHUB_JENKINSPUS_TOKEN")
+open class TeamConfigConsumerImpl : TeamConfigConsumer {
+    val GITHUB_TOKEN = "token ${Utils.getRequiredProperty("GITHUB_JENKINSPUS_TOKEN")}"
+    val STASH_TOKEN = "Bearer ${Utils.getRequiredProperty("FD_STASH_TOKEN")}"
 
     @Cacheable("teamconfig")
-    override fun hentTeamConfig(uri: String, useAuth: Boolean): TeamAppConfigs {
-        val json = if (useAuth) getConfigWithAuth(uri) else getConfigNoAuth(uri)
+    override fun hentTeamConfig(uri: String): TeamAppConfigs {
+        val json = getConfigWithAuth(uri)
         return fromJson(json, TeamAppConfigs::class.java)
     }
 
-    private fun getConfigWithAuth(uri: String) =
-            withClient(uri)
-                    .request()
-                    .header("Authorization", "token $TOKEN")
-                    .get(String::class.java)
-
-    private fun getConfigNoAuth(uri: String) =
-            withClient(uri).request().get(String::class.java)
+    private fun getConfigWithAuth(uri: String): String {
+        val token = if (uri.contains("github")) { GITHUB_TOKEN } else STASH_TOKEN
+        return withClient(uri)
+                .request()
+                .header("Authorization", token)
+                .get(String::class.java)
+    }
 }
 
 @Service
 @Profile("mock")
-class MockTeamConfigConsumer: TeamConfigConsumer {
-    override fun hentTeamConfig(uri: String, useAuth: Boolean): TeamAppConfigs {
+class MockTeamConfigConsumer : TeamConfigConsumer {
+    override fun hentTeamConfig(uri: String): TeamAppConfigs {
         val faker = Faker(Random(stringToSeed(uri)))
         val numApps = faker.number().numberBetween(3, 10)
         val teamApps = TeamAppConfigs()
