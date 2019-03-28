@@ -8,6 +8,11 @@ const environments: Environment[] = [
         promotesTo: 'q10'
     },
     {
+        name: 't4',
+        deployType: DeployType.PROMOTE,
+        promotesTo: 'q1'
+    },
+    {
         name: 't6',
         deployType: DeployType.PROMOTE,
         promotesTo: 'q6'
