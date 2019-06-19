@@ -17,7 +17,7 @@ spec:
     cpuThresholdPercentage: 50
   port: 8800
   ingresses:
-    - forenklet-deploy.nais.oera-q.local
+    - https://forenklet-deploy.nais.oera-q.local
   vault:
     enabled: true
   healthcheck:
