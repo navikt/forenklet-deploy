@@ -20,7 +20,7 @@ interface GithubConsumer {
 open class GithubConsumerImpl : GithubConsumer {
     val LOG = LoggerFactory.getLogger(this.javaClass)
     val LIMIT = 1000
-    val TOKEN = Utils.getRequiredProperty("GITHUB_JENKINSPUS_TOKEN")
+    val TOKEN = Utils.getRequiredProperty("GITHUB_TOKEN")
 
     override fun ping() {
         LOG.info(Utils.withClient("https://api.github.com/user")

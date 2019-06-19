@@ -19,7 +19,7 @@ interface TeamConfigConsumer {
 @Service
 @Profile("!mock")
 open class TeamConfigConsumerImpl: TeamConfigConsumer {
-    val TOKEN = Utils.getRequiredProperty("GITHUB_JENKINSPUS_TOKEN")
+    val TOKEN = Utils.getRequiredProperty("GITHUB_TOKEN")
 
     @Cacheable("teamconfig")
     override fun hentTeamConfig(uri: String, useAuth: Boolean): TeamAppConfigs {

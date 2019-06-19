@@ -1,0 +1,36 @@
+# jeg vil ikke ha hjelp fra pus
+# ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: forenklet-deploy
+  namespace: default
+  labels:
+    team: pus
+spec:
+  image: navikt/forenklet-deploy
+  team: pus
+  webproxy: true
+  replicas:
+    min: 2
+    max: 2
+    cpuThresholdPercentage: 50
+  port: 8800
+  ingresses:
+    - forenklet-deploy.nais.oera-q.local
+  vault:
+    enabled: true
+  healthcheck:
+    liveness:
+      path: internal/isAlive
+      initialDelay: 60
+    readiness:
+      path: internal/isReady
+      initialDelay: 60
+  resources:
+      requests: # Ressursene applikasjonen blir instansiert med
+          cpu: 800m
+          memory: 1024Mi
+      limits:
+          cpu: 2000m # Hvis applikasjonen overgår denne grensen vil cpu tilgangen bli kvalt.
+          memory: 1536Mi # Overgår den derimot minne grensen vil den bli slettet ummidelbart.
