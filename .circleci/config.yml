@@ -36,13 +36,16 @@ orbs:
 
       build_and_push_docker_image:
         parameters:
+          dockerfile_path:
+            type: string
+            default: "."
           image_tag:
             type: string
         steps:
           - run:
               name: Bygg docker image
               command: |
-                docker build -t navikt/$CIRCLE_PROJECT_REPONAME .
+                docker build -t navikt/$CIRCLE_PROJECT_REPONAME <<parameters.dockerfile_path>>
                 docker tag navikt/$CIRCLE_PROJECT_REPONAME navikt/$CIRCLE_PROJECT_REPONAME:<<parameters.image_tag>>
           - run:
               name: Push docker image
@@ -119,6 +122,7 @@ orbs:
           - run: npm run build
           - set_version_and_tag_repo
           - build_and_push_docker_image:
+              dockerfile_path: /root/project/
               image_tag: $VERSION
 
 workflows:
