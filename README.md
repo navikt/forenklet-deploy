@@ -1,6 +1,6 @@
 # FO: Forenklet deploy
 
-[![CircleCI](https://circleci.com/gh/navikt/fo-forenklet-deploy/tree/master.svg?style=svg)](https://circleci.com/gh/navikt/fo-forenklet-deploy/tree/master)
+[![CircleCI](https://circleci.com/gh/navikt/forenklet-deploy.svg?style=svg)](https://circleci.com/gh/navikt/forenklet-deploy)
 
 En applikasjon som viser oversikt over versjoner av et team sine applikasjoner, per miljø.
 Applikasjonen henter ut data fra ulike baksystemet og presenterer endringene mellom ulike
