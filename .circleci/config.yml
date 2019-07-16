@@ -25,12 +25,16 @@ orbs:
               key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
 
       check_npm_cache:
+        parameters:
+          package_lock_path:
+            type: string
+            default: package-lock.json
         steps:
           - restore_cache:
-              key: npm-v1-{{ .Branch }}-{{ checksum "/root/project/web/package-lock.json" }}
+              key: npm-v1-{{ .Branch }}-{{ checksum "/root/project/<<parameters.package_lock_path>>" }}
           - run: npm ci
           - save_cache:
-              key: npm-v1-{{ .Branch }}-{{ checksum "/root/project/web/package-lock.json" }}
+              key: npm-v1-{{ .Branch }}-{{ checksum "/root/project/<<parameters.package_lock_path>>" }}
               paths:
                 - /root/.npm
 
@@ -64,10 +68,15 @@ orbs:
               path: target/surefire-reports
 
       test-frontend:
+        parameters:
+          package_lock_path:
+            type: string
+            default: package-lock.json
         executor: pus-pipeline
         steps:
           - checkout
-          - check_npm_cache
+          - check_npm_cache:
+              package_lock_path: <<parameters.package_lock_path>>
           - run: npm run test
           - run:
               name: Install JUnit coverage reporter
@@ -116,4 +125,5 @@ workflows:
           context: pus
       - pus/test-frontend:
           context: pus
+          package_lock_path: /src/frontend/package-lock.json
 
