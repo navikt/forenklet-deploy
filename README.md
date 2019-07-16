@@ -38,7 +38,7 @@ Slik at man kan få verifisert frontend-endringer funksjonelt før man merger.
 
 ## Henvendelser
 
-Spørsmål knyttet til koden eller prosjektet kan rettes til Team Pus.
+Spørsmål knyttet til koden eller prosjektet kan rettes til PUS.
 
 For eksterne kontakt en av følgende:
 
