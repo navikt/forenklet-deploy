@@ -112,5 +112,8 @@ workflows:
   version: 2
   commit:
     jobs:
-      - pus/test-backend
-      - pus/test-frontend
+      - pus/test-backend:
+          context: pus
+      - pus/test-frontend:
+          context: pus
+
