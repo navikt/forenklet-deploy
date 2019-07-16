@@ -18,23 +18,19 @@ orbs:
           - restore_cache:
               keys:
                 - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
-          - run: mvn -B -q -s settings.xml dependency:go-offline
+          - run: mvn -B -s settings.xml dependency:go-offline
           - save_cache:
               paths:
                 - ~/.m2
               key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
 
       check_npm_cache:
-        parameters:
-          package_lock_path:
-            type: string
-            default: package-lock.json
         steps:
           - restore_cache:
-              key: npm-v1-{{ .Branch }}-{{ checksum "/root/project/<<parameters.package_lock_path>>" }}
+              key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
           - run: npm ci
           - save_cache:
-              key: npm-v1-{{ .Branch }}-{{ checksum "/root/project/<<parameters.package_lock_path>>" }}
+              key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
               paths:
                 - /root/.npm
 
@@ -53,8 +49,17 @@ orbs:
               command: |
                 echo $DOCKER_PASSWORD | docker login --username $DOCKER_LOGIN --password-stdin
                 docker push navikt/$CIRCLE_PROJECT_REPONAME
-                echo "Pushet versjon <<parameters.docker_image_tag>> av $CIRCLE_PROJECT_REPONAME"
+                echo "Pushet versjon <<parameters.image_tag>> av $CIRCLE_PROJECT_REPONAME"
                 echo "https://cloud.docker.com/u/navikt/repository/docker/navikt/$CIRCLE_PROJECT_REPONAME"
+
+      set_version_and_tag_repo:
+        steps:
+          - run:
+              name: Sett versjon
+              command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
+          - run:
+              name: Tag git repo
+              command: node /tag-repo.js $CIRCLE_PROJECT_REPONAME $VERSION
 
     jobs:
 
@@ -63,37 +68,22 @@ orbs:
         steps:
           - checkout
           - check_mvn_cache
-          - run: mvn -q -B verify
+          - run: mvn -B verify
           - store_test_results:
               path: target/surefire-reports
 
       test-frontend:
         parameters:
-          package_lock_path:
+          package_json_path:
             type: string
-            default: package-lock.json
+            default: "."
+        working_directory: /root/project/<<parameters.package_json_path>>
         executor: pus-pipeline
         steps:
-          - checkout
-          - check_npm_cache:
-              package_lock_path: <<parameters.package_lock_path>>
+          - checkout:
+              path: /root/project/
+          - check_npm_cache
           - run: npm run test
-          - run:
-              name: Install JUnit coverage reporter
-              command: npm i jest-junit
-          - run:
-              name: Create jest.config.js
-              command: |
-                echo '{ reporters: ["default", "jest-junit"] }' > jest.config.js
-          - run:
-              name: Run tests with JUnit as reporter
-              command: jest --ci --runInBand --reporters=default --reporters=jest-junit
-              environment:
-                JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
-          - store_test_results:
-              path: reports/junit
-          - store_artifacts:
-              path: reports/junit
 
       deploy-backend:
         executor: pus-pipeline
@@ -102,20 +92,34 @@ orbs:
           - setup_remote_docker
           - add_ssh_keys
           - check_mvn_cache
-          - run: mvn -B -q -s settings.xml package -B -q
+          - run: mvn -B -s settings.xml package
           - store_test_results:
               path: target/surefire-reports
-          - run:
-              name: Sett versjon
-              command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
-          - run:
-              name: Tag git repo
-              command: node /tag-repo.js $CIRCLE_PROJECT_REPONAME $VERSION
+          - set_version_and_tag_repo
           - build_and_push_docker_image:
               image_tag: $VERSION
           - run:
               name: Oppdater pto-iac
               command: node /update-iac.js $VERSION
+
+      deploy-frontend:
+        parameters:
+          package_json_path:
+            type: string
+            default: "."
+        working_directory: /root/project/<<parameters.package_json_path>>
+        executor: pus-pipeline
+        steps:
+          - checkout:
+              path: /root/project/
+          - setup_remote_docker
+          - add_ssh_keys
+          - check_npm_cache
+          - run: npm run test
+          - run: npm run build
+          - set_version_and_tag_repo
+          - build_and_push_docker_image:
+              image_tag: $VERSION
 
 workflows:
   version: 2
@@ -123,7 +127,24 @@ workflows:
     jobs:
       - pus/test-backend:
           context: pus
+          filters:
+            branches:
+              ignore: master
       - pus/test-frontend:
           context: pus
-          package_lock_path: /src/frontend/package-lock.json
+          package_json_path: src/frontend/
+          filters:
+            branches:
+              ignore: master
+      - pus/deploy-backend:
+          context: pus
+          filters:
+            branches:
+              only: master
+      - pus/deploy-frontend:
+          context: pus
+          package_json_path: src/frontend/
+          filters:
+            branches:
+              only: master
 
