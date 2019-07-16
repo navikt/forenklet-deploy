@@ -36,16 +36,13 @@ orbs:
 
       build_and_push_docker_image:
         parameters:
-          dockerfile_path:
-            type: string
-            default: "."
           image_tag:
             type: string
         steps:
           - run:
               name: Bygg docker image
               command: |
-                docker build -t navikt/$CIRCLE_PROJECT_REPONAME <<parameters.dockerfile_path>>
+                docker build -t navikt/$CIRCLE_PROJECT_REPONAME .
                 docker tag navikt/$CIRCLE_PROJECT_REPONAME navikt/$CIRCLE_PROJECT_REPONAME:<<parameters.image_tag>>
           - run:
               name: Push docker image
@@ -64,6 +61,13 @@ orbs:
               name: Tag git repo
               command: node /tag-repo.js $CIRCLE_PROJECT_REPONAME $VERSION
 
+      build-frontend:
+        steps:
+            - checkout
+            - check_npm_cache
+            - run: npm run test
+            - run: npm run build
+
     jobs:
 
       test-backend:
@@ -76,15 +80,9 @@ orbs:
               path: target/surefire-reports
 
       test-frontend:
-        parameters:
-          package_json_path:
-            type: string
-            default: "."
-        working_directory: /root/project/<<parameters.package_json_path>>
         executor: pus-pipeline
         steps:
-          - checkout:
-              path: /root/project/
+          - checkout
           - check_npm_cache
           - run: npm run test
 
@@ -106,24 +104,21 @@ orbs:
               command: node /update-iac.js $VERSION
 
       deploy-frontend:
-        parameters:
-          package_json_path:
-            type: string
-            default: "."
-        working_directory: /root/project/<<parameters.package_json_path>>
         executor: pus-pipeline
         steps:
-          - checkout:
-              path: /root/project/
+          - checkout
           - setup_remote_docker
           - add_ssh_keys
-          - check_npm_cache
-          - run: npm run test
-          - run: npm run build
+          - build-frontend
           - set_version_and_tag_repo
           - build_and_push_docker_image:
-              dockerfile_path: /root/project/
               image_tag: $VERSION
+
+      build-frontend:
+        executor: pus-pipeline
+        steps:
+          - build-frontend
+
 
 workflows:
   version: 2
@@ -136,18 +131,18 @@ workflows:
               ignore: master
       - pus/test-frontend:
           context: pus
-          package_json_path: src/frontend/
           filters:
             branches:
               ignore: master
-      - pus/deploy-backend:
+      - pus/build-frontend:
           context: pus
           filters:
             branches:
               only: master
-      - pus/deploy-frontend:
+      - pus/deploy-backend:
+          requires:
+            - pus/build-frontend
           context: pus
-          package_json_path: src/frontend/
           filters:
             branches:
               only: master

@@ -1,16 +1,14 @@
 *.iml
 *.log
 *.gz
-.idea
-.idea/*
+.idea/
 !.idea/runConfigurations/
 APP_LOG_HOME_IS_UNDEFINED/
 
-src/frontend/node_modules/
-src/frontend/build/
-src/frontend/coverage/
-src/frontend/public/index.css*
+node_modules/
+build/
+coverage/
+public/index.css*
 
 target/
-node_modules/
 static/
