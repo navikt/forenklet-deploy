@@ -172,6 +172,11 @@
     <build>
         <sourceDirectory>backend/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>backend/src/test/kotlin</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>backend/src/main/resources</directory>
+            </resource>
+        </resources>
         <finalName>forenklet-deploy</finalName>
         <plugins>
             <plugin>
