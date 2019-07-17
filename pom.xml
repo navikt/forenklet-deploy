@@ -176,6 +176,10 @@
             <resource>
                 <directory>backend/src/main/resources</directory>
             </resource>
+            <resource>
+                <directory>build</directory>
+                <targetPath>static</targetPath>
+            </resource>
         </resources>
         <finalName>forenklet-deploy</finalName>
         <plugins>
