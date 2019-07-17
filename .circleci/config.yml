@@ -9,7 +9,7 @@ orbs:
 
     commands:
 
-      check_mvn_cache:
+      oppdater_mvn_cache:
         steps:
           - run:
               name: Last ned settings.xml
@@ -24,7 +24,7 @@ orbs:
                 - ~/.m2
               key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
 
-      check_npm_cache:
+      oppdater_npm_cache:
         steps:
           - restore_cache:
               key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
@@ -34,7 +34,7 @@ orbs:
               paths:
                 - /root/.npm
 
-      build_and_push_docker_image:
+      bygg_og_push_docker_image:
         parameters:
           image_tag:
             type: string
@@ -52,7 +52,7 @@ orbs:
                 echo "Pushet versjon <<parameters.image_tag>> av $CIRCLE_PROJECT_REPONAME"
                 echo "https://cloud.docker.com/u/navikt/repository/docker/navikt/$CIRCLE_PROJECT_REPONAME"
 
-      set_version_and_tag_repo:
+      sett_versjon_og_tag_repo:
         steps:
           - run:
               name: Sett versjon
@@ -61,12 +61,42 @@ orbs:
               name: Tag git repo
               command: node /tag-repo.js $CIRCLE_PROJECT_REPONAME $VERSION
 
-      build-frontend:
+      oppdater_iac_repo:
+        parameters:
+          version:
+            type: string
+        steps:
+          - run:
+              name: Oppdater pto-iac
+              command: node /update-iac.js <<parameters.version>>
+
+      bygg-frontend:
         steps:
             - checkout
-            - check_npm_cache
+            - oppdater_npm_cache
+            - run: npm run lint
             - run: npm run test
             - run: npm run build
+
+      bygg-backend:
+        steps:
+          - checkout
+          - oppdater_mvn_cache
+          - run: mvn -B -s settings.xml package
+          - store_test_results:
+              path: target/surefire-reports
+
+      deploy-backend:
+        steps:
+          - checkout
+          - setup_remote_docker
+          - add_ssh_keys
+          - bygg-backend
+          - sett_versjon_og_tag_repo
+          - bygg_og_push_docker_image:
+              image_tag: $VERSION
+          - oppdater_iac_repo:
+              version: $VERSION
 
     jobs:
 
@@ -74,7 +104,7 @@ orbs:
         executor: pus-pipeline
         steps:
           - checkout
-          - check_mvn_cache
+          - oppdater_mvn_cache
           - run: mvn -B verify
           - store_test_results:
               path: target/surefire-reports
@@ -83,25 +113,15 @@ orbs:
         executor: pus-pipeline
         steps:
           - checkout
-          - check_npm_cache
+          - oppdater_npm_cache
+          - run: npm run lint
           - run: npm run test
 
       deploy-backend:
         executor: pus-pipeline
         steps:
-          - checkout
-          - setup_remote_docker
-          - add_ssh_keys
-          - check_mvn_cache
-          - run: mvn -B -s settings.xml package
-          - store_test_results:
-              path: target/surefire-reports
-          - set_version_and_tag_repo
-          - build_and_push_docker_image:
-              image_tag: $VERSION
-          - run:
-              name: Oppdater pto-iac
-              command: node /update-iac.js $VERSION
+          - deploy-backend
+
 
       deploy-frontend:
         executor: pus-pipeline
@@ -109,15 +129,18 @@ orbs:
           - checkout
           - setup_remote_docker
           - add_ssh_keys
-          - build-frontend
-          - set_version_and_tag_repo
-          - build_and_push_docker_image:
+          - bygg-frontend
+          - sett_versjon_og_tag_repo
+          - bygg_og_push_docker_image:
               image_tag: $VERSION
+          - oppdater_iac_repo:
+              version: $VERSION
 
-      build-frontend:
+      deploy-frontend-med-backend:
         executor: pus-pipeline
         steps:
-          - build-frontend
+          - bygg-frontend
+          - deploy-backend
 
 
 workflows:
@@ -134,14 +157,7 @@ workflows:
           filters:
             branches:
               ignore: master
-      - pus/build-frontend:
-          context: pus
-          filters:
-            branches:
-              only: master
-      - pus/deploy-backend:
-          requires:
-            - pus/build-frontend
+      - pus/deploy-frontend-med-backend:
           context: pus
           filters:
             branches:
