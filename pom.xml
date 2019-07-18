@@ -181,6 +181,11 @@
                 <targetPath>static</targetPath>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>/backend/src/test/resources</directory>
+            </testResource>
+        </testResources>
         <finalName>forenklet-deploy</finalName>
         <plugins>
             <plugin>
