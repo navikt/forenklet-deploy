@@ -1,5 +1,4 @@
-# jeg vil ikke ha hjelp fra pus
-# ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
+# ref https://raw.githubusercontent.com/nais/naiserator/master/examples/nais-max.yaml
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
@@ -8,8 +7,7 @@ metadata:
   labels:
     team: pus
 spec:
-  image: navikt/forenklet-deploy
-  team: pus
+  image: navikt/forenklet-deploy:{{version}}
   webproxy: true
   replicas:
     min: 2
@@ -18,6 +16,7 @@ spec:
   port: 8800
   ingresses:
     - https://forenklet-deploy.nais.oera-q.local
+    - https://fd.dev-sbs.nais.io
   vault:
     enabled: true
   healthcheck:

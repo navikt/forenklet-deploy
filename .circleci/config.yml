@@ -1,15 +1,6 @@
 version: 2.1
 orbs:
-  pus: navikt/pus-orb@0.0.3
-
-jobs:
-  deploy-forenklet-deploy:
-    executor: pus/pus-pipeline
-    steps:
-      - pus/bygg-frontend
-      - pus/bygg-backend
-      - pus/bygg-og-push-docker-image
-      - run: node /update-iac.js $VERSION default
+  pus: navikt/pus-orb@0.0.5
 
 workflows:
   version: 2
@@ -25,7 +16,9 @@ workflows:
           filters:
             branches:
               ignore: master
-      - deploy-forenklet-deploy:
+      - pus/deploy-backend-med-frontend:
+          cluster: dev-sbs
+          filepath: ./nais.yaml
           context: pus
           filters:
             branches:
