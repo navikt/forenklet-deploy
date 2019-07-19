@@ -39,7 +39,7 @@ const mapStateToProps = (state: AppState): StateProps => ({
 
 const mapDispatchToProps = (dispatch: AsyncDispatch): TeamVelgerDispatchProps => ({
     doChangeValgtTeam: (team: string) => {
-        location.search = `team=${team}`;
+        window.location.search = `team=${team}`;
         dispatch(velgTeam(team));
         dispatch(getAllDeploys(team));
     }

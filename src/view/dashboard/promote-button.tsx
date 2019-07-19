@@ -18,7 +18,7 @@ function PromoteButton({application, environment, disabled}: PromoteButtonProps)
     }
 
     if (disabled) {
-        return <Knapp disabled>Ingen endringer</Knapp>;
+        return <Knapp type='standard' disabled>Ingen endringer</Knapp>;
     }
 
     return (

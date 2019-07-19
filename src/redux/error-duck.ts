@@ -23,7 +23,7 @@ export interface HideErrorAction {
     type: errorActionNames.HIDE_ERROR;
 }
 
-type ErrorAction =
+export type ErrorAction =
     | DisplayErrorAction
     | HideErrorAction;
 

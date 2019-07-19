@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import ReactTable from 'react-table';
-import { JiraIssue } from '../../models/jira-issue';
-import { AppState } from '../../redux/reducer';
-import { selectIssuesForApplication } from '../../redux/releasenote-duck';
-import { onlyUniqueIssues } from '../../redux/jira-issue-duck';
-import { Undertittel } from 'nav-frontend-typografi';
-import { getUrlForIssue } from './promote-utils';
+import {JiraIssue} from '../../models/jira-issue';
+import {AppState} from '../../redux/reducer';
+import {selectIssuesForApplication} from '../../redux/releasenote-duck';
+import {onlyUniqueIssues} from '../../redux/jira-issue-duck';
+import {Undertittel} from 'nav-frontend-typografi';
+import {getUrlForIssue} from './promote-utils';
 
 interface OwnProps {
     applications: string[];
@@ -34,12 +34,12 @@ export class IssuesTable extends React.Component<OwnProps & StateProps> {
         }, {
             Header: 'Status',
             id: 'status',
-            accessor: (issue: JiraIssue) =>  issue.fields.status.name,
+            accessor: (issue: JiraIssue) => issue.fields.status.name,
             width: 200
         }, {
             Header: 'Tildelt',
             id: 'tildelt',
-            accessor: (issue: JiraIssue) =>  issue.fields.assignee ? issue.fields.assignee.displayName : 'Ikke tildelt',
+            accessor: (issue: JiraIssue) => issue.fields.assignee ? issue.fields.assignee.displayName : 'Ikke tildelt',
             width: 250
         }, {
             Header: 'Tittel',
@@ -56,7 +56,7 @@ export class IssuesTable extends React.Component<OwnProps & StateProps> {
                 <ReactTable
                     columns={columns}
                     data={uniqueIssues}
-                    defaultSorted={[{ id: 'status' }, { id: 'tildelt' }]}
+                    defaultSorted={[{id: 'status', desc: true}, {id: 'tildelt', desc: true}]}
                     defaultPageSize={defaultPageSize}
                     showPagination={showPagination}
                     previousText={'Forrige'}

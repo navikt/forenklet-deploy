@@ -2,7 +2,7 @@ import { AppState } from './reducer';
 import { Action, Dispatch } from 'redux';
 
 export interface ApplicationFilterState {
-    filter: string;
+    filter?: string;
 }
 
 const initialState: ApplicationFilterState = {
@@ -15,7 +15,7 @@ enum actionNames {
 
 export interface ChangeFilter {
     type: actionNames.CHANGE;
-    filter: string;
+    filter?: string;
 }
 
 type ApplicationFilterActions =
@@ -28,10 +28,11 @@ export function changefilter(filter: string) {
 }
 
 export function selectFilter(state: AppState): string {
-    return state.applicationFilter.filter;
+    return state.applicationFilter.filter as string;
 }
 
 export function filterFunction(name: string, filter: string) {
+    // eslint-disable-next-line
     const searchString = filter.replace(/[\-\[\]\/{}()+.\\^$|]/g, '\\$&')
         .replace(/\*/g, '.*')
         .replace(/\?/g, '.')

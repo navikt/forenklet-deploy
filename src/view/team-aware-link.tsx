@@ -38,4 +38,4 @@ const mapStateToProps = (state: AppState): LinkStateProps => ({
 const connectedTeamAwareAnchor = connect(mapStateToProps)(TeamAwareAnchor);
 const connectedTeamAwareLink = connect(mapStateToProps)(TeamAwareLink);
 
-export { connectedTeamAwareAnchor as TeamAwareAnchor, connectedTeamAwareLink as TeamAwareLink};
+export { connectedTeamAwareAnchor as TeamAwareAnchor, connectedTeamAwareLink as TeamAwareLink };

@@ -61,7 +61,7 @@ export function selectTeams(state: AppState): Team[] {
     return state.team.teams;
 }
 
-export default function teamReducer(state: TeamState = initialState, action: TeamActions) {
+export default function teamReducer(state: TeamState = initialState, action: TeamActions): TeamState {
     switch (action.type) {
         case actionNames.LOADING:
             return {...state, loading: true};

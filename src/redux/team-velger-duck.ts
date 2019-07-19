@@ -4,12 +4,12 @@ import { Environment } from '../models/environment';
 import { getEnvironments } from '../utils/environment';
 
 export interface ValgtTeamState {
-    teamId: string;
+    teamId?: string;
 }
 
 export interface VelgTeam {
     type: actionNames.TEAM_VALGT;
-    teamId: string;
+    teamId?: string;
 }
 
 const initialState: ValgtTeamState = {
@@ -29,7 +29,7 @@ export function velgTeam(teamId: string): VelgTeam {
 }
 
 export function selectValgtTeamId(state: AppState): string {
-    return state.valgtTeam.teamId;
+    return state.valgtTeam.teamId as string;
 }
 
 export function selectValgtTeam(state: AppState): Team | undefined {

@@ -7,11 +7,11 @@ import { AsyncDispatch } from './redux-utils';
 import { selectMiljoerForValgtTeam } from './team-velger-duck';
 import { Environment } from '../models/environment';
 
-export interface PromoteState {
+export type PromoteState = {
     fromEnvironment: string;
     toEnvironment: string;
     openApplication: string;
-}
+} | undefined;
 
 const initialState: PromoteState = {
     fromEnvironment: '',
@@ -35,7 +35,7 @@ export interface OpenApplication {
     application: string;
 }
 
-type ViewActions =
+export type ViewActions =
     | SetEnvironments
     | OpenApplication
     ;
@@ -43,9 +43,9 @@ type ViewActions =
 export default function PromoteReducer(state: PromoteState = initialState, action: ViewActions): PromoteState {
     switch(action.type) {
         case actionNames.SET_ENVIRONMENTS:
-            return { ...state, fromEnvironment: action.fromEnvironment, toEnvironment: action.toEnvironment };
+            return { ...state, fromEnvironment: action.fromEnvironment, toEnvironment: action.toEnvironment } as PromoteState;
         case actionNames.OPEN_APPLICATION:
-            return { ...state, openApplication: action.application };
+            return { ...state, openApplication: action.application } as PromoteState;
         default:
             return state;
     }
@@ -88,7 +88,7 @@ function isValidEnvironment(environments: Environment[], environmentName: string
 
 export function selectFromEnvironment(state: AppState): string {
     const environments = selectMiljoerForValgtTeam(state);
-    if (isValidEnvironment(environments, state.promotering.fromEnvironment)) {
+    if (state.promotering && isValidEnvironment(environments, state.promotering.fromEnvironment)) {
         return state.promotering.fromEnvironment;
     } else {
         return environments[0].name;
@@ -97,7 +97,7 @@ export function selectFromEnvironment(state: AppState): string {
 
 export function selectToEnvironment(state: AppState): string {
     const environments = selectMiljoerForValgtTeam(state);
-    if (isValidEnvironment(environments, state.promotering.toEnvironment)) {
+    if (state.promotering && isValidEnvironment(environments, state.promotering.toEnvironment)) {
         return state.promotering.toEnvironment;
     } else {
         return environments[environments.length - 1].name;

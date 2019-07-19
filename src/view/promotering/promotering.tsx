@@ -4,7 +4,13 @@ import { Sidetittel } from 'nav-frontend-typografi';
 import NavFrontendSpinner from 'nav-frontend-spinner';
 import { AppState } from '../../redux/reducer';
 import { ReleaseWithCommits } from '../../models/release';
-import { setEnvironments, getInformationForPromotion, openApplication, selectFromEnvironment, selectToEnvironment } from '../../redux/promote-duck';
+import {
+    setEnvironments,
+    getInformationForPromotion,
+    openApplication,
+    selectFromEnvironment,
+    selectToEnvironment
+} from '../../redux/promote-duck';
 import Miljovelger from './miljovelger';
 import { selectAllReleasesWithCommitsForEnvironments } from '../../redux/releasenote-duck';
 import PromoteReleases from './promote-releases';
@@ -79,14 +85,16 @@ function mapStateToProps(state: AppState): StateProps {
     const toEnv = selectToEnvironment(state);
     const releases = selectAllReleasesWithCommitsForEnvironments(state, fromEnv, toEnv);
 
+    const openApp = state.promotering ? state.promotering.openApplication : '';
+
     return {
         valgtFromEnv: fromEnv,
         valgtToEnv: toEnv,
         isLoading: state.commit.loading || state.deploy.loading || state.jira.loading,
         noErrors: !state.commit.error,
         releases,
-        openApplication: state.promotering.openApplication,
-        showAll: state.view.showAll
+        openApplication: openApp,
+        showAll: state.view.showAll as boolean
     };
 }
 

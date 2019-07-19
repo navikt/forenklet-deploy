@@ -79,7 +79,7 @@ export function getIssues(issueIds: string[]): ThunkAction<any, any, any, any> {
 
         Promise.all(issuesPromises)
             .then((issues: JiraIssue[][]) => {
-                issues.map((i: JiraIssue[]) => {
+                issues.forEach((i: JiraIssue[]) => {
                     dispatch({ type: actionNames.FETCH_SUCCESS, issues: i });
                 });
             });

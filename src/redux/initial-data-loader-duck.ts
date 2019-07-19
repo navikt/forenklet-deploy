@@ -2,8 +2,8 @@ import * as queryString from 'query-string';
 import { Team } from '../models/team';
 
 function getTeamFromUrl(): string {
-    const valgtTeamIUrl = queryString.parse(location.search).team;
-    return valgtTeamIUrl ? valgtTeamIUrl: '';
+    const valgtTeamIUrl = queryString.parse(window.location.search).team;
+    return valgtTeamIUrl ? valgtTeamIUrl as string : '';
 }
 
 function erGyldigTeam(teamFromUrl: string, teams: Team[]): boolean {
