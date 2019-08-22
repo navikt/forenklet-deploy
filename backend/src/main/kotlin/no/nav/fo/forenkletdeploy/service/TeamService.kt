@@ -10,7 +10,7 @@ class TeamService @Inject
 constructor(
         val teamConfigConsumer: TeamConfigConsumer
 ) {
-    val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ(), TeamVEDFP(), WARPFO())
+    val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ(), TeamVEDFP(), POA())
 
     fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
             allTeams.find { it.id.equals(teamId, ignoreCase = true) }
@@ -110,19 +110,19 @@ class TeamVEDFP : Team(
         environments = listOf("T10", "T4", "Q1", "Q0", "P")
 )
 
-class WARPFO : Team(
-        id = "warp",
-        displayName = "WARP",
+class POA : Team(
+        id = "POA",
+        displayName = "POA",
         jenkinsFolder = "forenklet_oppfolging",
         environments = listOf("Q0", "P"),
         configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json",
         includeOnlyApplications = listOf(
-                "tiltakinfo",
-                "veilarbtiltakinfo",
                 "jobbsokerkompetanse",
                 "veilarbjobbsokerkompetanse",
                 "veientilarbeid",
                 "veiledearbeidssoker",
-                "veiviserarbeidssoker"
+                "veiviserarbeidssoker",
+                "arbeidssokerregistrering",
+                "veilarbregistrering"
         )
 )
