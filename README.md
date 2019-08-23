@@ -10,7 +10,7 @@ Målet for applikasjonen er å gi en oversikt over hva som blir rullet ut til en
 spesielt når man har en stor applikasjonsportefølje (f.eks. mange microservices) og i
 tillegg flere test-miljøer man bruker.
 
-Applikasjonen blir til en hver tid deployet til et test-miljø i heroku og kan testes ut
+Applikasjonen blir til en hver tid deployet til et testmiljø i heroku og kan testes ut
 ved å besøke https://forenklet-deploy-staging.herokuapp.com/
 
 ## Utvikling
