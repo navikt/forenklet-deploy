@@ -7,7 +7,7 @@ metadata:
   labels:
     team: pus
 spec:
-  image: navikt/forenklet-deploy:{{version}}
+  image: docker.pkg.github.com/navikt/forenklet-deploy/forenklet-deploy:{{version}}
   webproxy: true
   replicas:
     min: 2
