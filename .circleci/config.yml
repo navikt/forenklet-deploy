@@ -19,7 +19,7 @@ workflows:
       - pus/deploy-backend-med-frontend:
           cluster: dev-sbs
           filepath: ./nais.yaml
-          configRepo: pto-config
+          configrepo: pto-config
           context: pus
           filters:
             branches:
