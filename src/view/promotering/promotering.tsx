@@ -85,7 +85,7 @@ function mapStateToProps(state: AppState): StateProps {
     const toEnv = selectToEnvironment(state);
     const releases = selectAllReleasesWithCommitsForEnvironments(state, fromEnv, toEnv);
 
-    const openApp = state.promotering ? state.promotering.openApplication : '';
+    const openApp = state.promotering.openApplication ? state.promotering.openApplication : '';
 
     return {
         valgtFromEnv: fromEnv,

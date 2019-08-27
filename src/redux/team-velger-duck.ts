@@ -44,7 +44,7 @@ export function selectMiljoerForValgtTeam(state: AppState): Environment[] {
     return [];
 }
 
-export default function valgtTeamReducer(state: ValgtTeamState = initialState, action: TeamVelgerActions) {
+export default function valgtTeamReducer(state: ValgtTeamState = initialState, action: TeamVelgerActions): ValgtTeamState {
     switch (action.type) {
         case actionNames.TEAM_VALGT:
             return {...state, teamId: action.teamId};
