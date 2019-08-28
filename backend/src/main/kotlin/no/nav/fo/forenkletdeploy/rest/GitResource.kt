@@ -2,11 +2,9 @@ package no.nav.fo.forenkletdeploy.rest
 
 import no.nav.fo.forenkletdeploy.ApplicationConfig
 import no.nav.fo.forenkletdeploy.Commit
-import no.nav.fo.forenkletdeploy.GitTag
 import no.nav.fo.forenkletdeploy.service.ApplicationService
 import no.nav.fo.forenkletdeploy.service.GitService
 import org.springframework.web.bind.annotation.*
-
 import javax.inject.Inject
 
 @RequestMapping("/api/commit")

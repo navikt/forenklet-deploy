@@ -24,9 +24,16 @@ constructor(
             try {
                 veraConsumer.getDeploysForApp(app)
                         .map {
-                            VeraDeploy(it.id, it.application, it.deployed_timestamp, it.version,
+                            VeraDeploy(
+                                    it.id,
+                                    it.application,
+                                    it.deployed_timestamp,
+                                    it.version,
                                     it.environment,
-                                    it.deployer, it.environmentClass, it.replaced_timestamp)}
+                                    it.deployer,
+                                    it.environmentClass,
+                                    it.replaced_timestamp)
+                        }
                         .filter { gyldigeMiljoer.contains(it.environment) }
             } catch (e: Throwable) {
                 LOG.error("Kunne ikke hente deploys for $app", e)

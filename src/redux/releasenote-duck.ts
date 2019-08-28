@@ -13,7 +13,7 @@ import { AsyncDispatch } from './redux-utils';
 import { errorActionNames } from './error-duck';
 import { logError } from '../utils/log';
 
-function getApplicationsWithChanges(state: AppState, fromEnv: string = 'q6', toEnv: string = 'p'): string[] {
+function getApplicationsWithChanges(state: AppState, fromEnv: string = 'q0', toEnv: string = 'p'): string[] {
     return selectApplicationsWithChangesForEnvironments(state, [getEnvironmentByName(fromEnv), getEnvironmentByName(toEnv)])
         .filter((application) => application.hasChanges)
         .map((application) => application.name);
@@ -37,7 +37,7 @@ export function commitToIssues(commit: Commit): Issue[] {
     return getIssuesFromMessage(commit.message);
 }
 
-export function getInfoForReleaseNote(fromEnv: string = 'q6', toEnv: string = 'p') {
+export function getInfoForReleaseNote(fromEnv: string = 'q0', toEnv: string = 'p') {
     return (dispatch: AsyncDispatch, getState: () => AppState) => {
         const state = getState();
         dispatch(clearCommits());
