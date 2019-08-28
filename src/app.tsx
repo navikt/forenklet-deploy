@@ -6,6 +6,8 @@ import Routing from './routing';
 import InitialDataLoader from './view/initial-data-loader';
 import Header from './view/header';
 
+import './index.less'
+
 const store = getStore();
 
 function App() {
