@@ -36,7 +36,7 @@
     </appender>
 
     <root level="${ROOT_LOG_LEVEL:-INFO}">-->
-        <if condition='isNull("APP_NAME")'>
+        <if condition='isNull("NAIS_APP_NAME")'>
             <then>
                 <appender-ref ref="stdout_text"/>
             </then>
