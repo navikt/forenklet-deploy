@@ -1,5 +1,5 @@
 export interface ViewState {
-    showAll: boolean;
+    showAll?: boolean;
 }
 
 const initialState: ViewState = {
@@ -12,7 +12,7 @@ enum actionNames {
 
 export interface ChangeShowAll {
     type: actionNames.CHANGE_SHOW_ALL;
-    showAll: boolean;
+    showAll?: boolean;
 }
 
 type ViewActions =

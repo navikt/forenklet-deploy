@@ -1,17 +1,6 @@
-@nodeModulesPath: './../../';
-@coreModulePath: './../../';
-
-@import '../node_modules/nav-frontend-core/less/core';
-@import '../node_modules/nav-frontend-knapper-style/src/index';
-@import '../node_modules/nav-frontend-skjema-style/src/index';
-@import '../node_modules/nav-frontend-lenker-style/src/lenker-style';
-@import '../node_modules/nav-frontend-spinner-style/src/spinner-style';
-@import '../node_modules/nav-frontend-typografi-style/src/index';
-@import '../node_modules/nav-frontend-etiketter-style/src/index';
-@import '../node_modules/nav-frontend-chevron-style/src/index';
-@import '../node_modules/nav-frontend-ekspanderbartpanel-style/src/index';
-@import '../node_modules/nav-frontend-paneler-style/src/index';
-@import (less) '../node_modules/react-table/react-table.css';
+@import '~nav-frontend-core/less/core';
+@import '~nav-frontend-lenker-style/src/lenker-mixins';
+@import (less) '~react-table/react-table.css';
 
 @import 'view/index';
 
@@ -22,7 +11,7 @@ html, body, #root {
 }
 
 a {
-  .lenke
+  .lenke-mixin()
 }
 
 .content__wrapper {

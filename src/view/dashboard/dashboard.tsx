@@ -75,7 +75,7 @@ const mapStateToProps = (state: AppState): StateProps => ({
     isLoadingData: selectIsLoadingDeploys(state),
     applications: selectApplicationsWithChanges(state),
     environments: selectMiljoerForValgtTeam(state),
-    showAll: state.view.showAll,
+    showAll: state.view.showAll as boolean,
     filter: selectFilter(state),
 });
 

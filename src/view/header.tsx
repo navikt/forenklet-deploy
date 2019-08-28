@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Action } from 'redux';
 import { Undertittel } from 'nav-frontend-typografi';
 import TeamVelger from './team-velger';
 import ApplicationFilter from './application-filter';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { Action, Dispatch } from 'redux';
 import { AppState } from '../redux/reducer';
 import { selectErrors } from '../redux/error-duck';
 import { changeShowAll } from '../redux/view-duck';
@@ -16,10 +16,10 @@ interface HeaderStateProps {
 }
 
 interface HeaderDispatchProps {
-    doChangeShowAll: (showAll: boolean) => void;
+    dispatch: (showAll: boolean) => void;
 }
 
-function Header({errors, showAll, doChangeShowAll}: HeaderStateProps & HeaderDispatchProps) {
+function Header({errors, showAll, dispatch}: HeaderStateProps & HeaderDispatchProps) {
     const errorElements = errors.map((e) => <div key={e}>{e}</div>);
     return (
         <div className="header">
@@ -27,7 +27,7 @@ function Header({errors, showAll, doChangeShowAll}: HeaderStateProps & HeaderDis
                 <div>
                     <Undertittel className="logo"><TeamAwareAnchor href="/">Forenklet
                         Deploy</TeamAwareAnchor></Undertittel>
-                    <Checkbox onChange={() => doChangeShowAll(!showAll)} label="Vis alle" checked={showAll}/>
+                    <Checkbox onChange={() => dispatch(!showAll)} label="Vis alle" checked={showAll}/>
                     {errorElements.length > 0 && <div className="header__error">{errorElements}</div>}
                 </div>
                 <div className="right-side">
@@ -45,11 +45,11 @@ function Header({errors, showAll, doChangeShowAll}: HeaderStateProps & HeaderDis
 
 const mapStateToProps = (state: AppState): HeaderStateProps => ({
     errors: selectErrors(state),
-    showAll: state.view.showAll
+    showAll: state.view.showAll as boolean
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Action>): HeaderDispatchProps => ({
-    doChangeShowAll: (showAll: boolean) => dispatch(changeShowAll(showAll))
+    dispatch: (showAll: boolean) => dispatch(changeShowAll(showAll))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

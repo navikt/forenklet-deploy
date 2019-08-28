@@ -1,16 +1,16 @@
-import { clearCommits, getCommitsForApplication } from './commit-duck';
-import { commitToIssues, getInfoForReleaseNote } from './releasenote-duck';
-import { Commit } from '../models/commit';
-import { getIssues } from './jira-issue-duck';
-import { AppState } from './reducer';
-import { AsyncDispatch } from './redux-utils';
-import { selectMiljoerForValgtTeam } from './team-velger-duck';
-import { Environment } from '../models/environment';
+import {clearCommits, getCommitsForApplication} from './commit-duck';
+import {commitToIssues, getInfoForReleaseNote} from './releasenote-duck';
+import {Commit} from '../models/commit';
+import {getIssues} from './jira-issue-duck';
+import {AppState} from './reducer';
+import {AsyncDispatch} from './redux-utils';
+import {selectMiljoerForValgtTeam} from './team-velger-duck';
+import {Environment} from '../models/environment';
 
-export interface PromoteState {
+export type PromoteState = {
     fromEnvironment: string;
     toEnvironment: string;
-    openApplication: string;
+    openApplication?: string;
 }
 
 const initialState: PromoteState = {
@@ -35,28 +35,46 @@ export interface OpenApplication {
     application: string;
 }
 
-type ViewActions =
+export type ViewActions =
     | SetEnvironments
     | OpenApplication
     ;
 
-export default function PromoteReducer(state: PromoteState = initialState, action: ViewActions): PromoteState {
-    switch(action.type) {
+function getSavedState(): PromoteState {
+    const savedState = window.localStorage ? localStorage.getItem('promotering') : null;
+    return savedState && JSON.parse(savedState);
+}
+
+function saveState<T>(state: T) {
+    if (window.localStorage) {
+        localStorage.setItem('promotering', JSON.stringify(state));
+    }
+}
+
+function reducer(state: PromoteState = initialState, action: ViewActions): PromoteState {
+    switch (action.type) {
         case actionNames.SET_ENVIRONMENTS:
-            return { ...state, fromEnvironment: action.fromEnvironment, toEnvironment: action.toEnvironment };
+            return {...state, fromEnvironment: action.fromEnvironment, toEnvironment: action.toEnvironment};
         case actionNames.OPEN_APPLICATION:
-            return { ...state, openApplication: action.application };
+            return {...state, openApplication: action.application};
         default:
             return state;
     }
 }
 
+export default function PromoteReducer(state: PromoteState | undefined, action: ViewActions): PromoteState {
+    const stateToUse = state ? state : getSavedState();
+    const nextState = reducer(stateToUse, action);
+    saveState(nextState);
+    return nextState;
+}
+
 export function setEnvironments(fromEnvironment: string, toEnvironment: string): SetEnvironments {
-    return { type: actionNames.SET_ENVIRONMENTS, fromEnvironment, toEnvironment };
+    return {type: actionNames.SET_ENVIRONMENTS, fromEnvironment, toEnvironment};
 }
 
 export function openApplication(app: string): OpenApplication {
-    return { type: actionNames.OPEN_APPLICATION, application: app };
+    return {type: actionNames.OPEN_APPLICATION, application: app};
 }
 
 export function getInformationForPromotion() {
@@ -88,7 +106,7 @@ function isValidEnvironment(environments: Environment[], environmentName: string
 
 export function selectFromEnvironment(state: AppState): string {
     const environments = selectMiljoerForValgtTeam(state);
-    if (isValidEnvironment(environments, state.promotering.fromEnvironment)) {
+    if (state.promotering && isValidEnvironment(environments, state.promotering.fromEnvironment)) {
         return state.promotering.fromEnvironment;
     } else {
         return environments[0].name;
@@ -97,7 +115,7 @@ export function selectFromEnvironment(state: AppState): string {
 
 export function selectToEnvironment(state: AppState): string {
     const environments = selectMiljoerForValgtTeam(state);
-    if (isValidEnvironment(environments, state.promotering.toEnvironment)) {
+    if (state.promotering && isValidEnvironment(environments, state.promotering.toEnvironment)) {
         return state.promotering.toEnvironment;
     } else {
         return environments[environments.length - 1].name;

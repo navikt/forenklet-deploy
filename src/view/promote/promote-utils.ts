@@ -2,7 +2,7 @@ export interface Issue {
     name: string;
     uri: string;
 }
-
+// eslint-disable-next-line
 export const matchPattern = /\[?([a-zA-Z]{1,8}\d*\-\d+)[ :\-\]]?/g;
 
 export function getUrlForIssue(issue: string): string {
