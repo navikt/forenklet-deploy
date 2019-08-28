@@ -31,22 +31,22 @@ open class GithubConsumerImpl : GithubConsumer {
     }
 
     @Cacheable("githubcommits")
-    override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<GithubCommit> =
-            try {
-                val useFromTag = if (fromTag == "null") "1" else fromTag
-                val useToTag = if (toTag == "null") "HEAD" else toTag
-
-                val url = "${getApiUriForGithubRepo(application)}/compare/$useFromTag...$useToTag"
-                LOG.info("Henter commits for ${application.name} ($fromTag -> $toTag) via $url")
-                Utils.withClient(url)
-                        .request()
-                        .header("Authorization", "token ${TOKEN}")
-                        .get(GithubCommits::class.java)
-                        .commits
-            } catch (e: Throwable) {
-                LOG.error("Feil ved henting av commits for ${application.name}", e)
-                throw e
-            }
+    override fun getCommits(application: ApplicationConfig, fromTag: String, toTag: String): List<GithubCommit> {
+        val useFromTag = if (fromTag == "null") "1" else fromTag
+        val useToTag = if (toTag == "null") "HEAD" else toTag
+        val url = "${getApiUriForGithubRepo(application)}/compare/$useFromTag...$useToTag"
+        return try {
+            LOG.info("Henter commits for ${application.name} fra tag $fromTag til tag $toTag via $url")
+            Utils.withClient(url)
+                    .request()
+                    .header("Authorization", "token ${TOKEN}")
+                    .get(GithubCommits::class.java)
+                    .commits
+        } catch (e: Throwable) {
+            LOG.error("Feil ved henting av commits for ${application.name} fra tag ${fromTag} til tag ${toTag} via ${url}", e)
+            throw e
+        }
+    }
 }
 
 fun getApiUriForGithubRepo(application: ApplicationConfig): String {
@@ -65,7 +65,7 @@ class MockGithubConsumer : GithubConsumer {
         return (1..numCommits).map {
             val person = GithubCommitPerson(
                     name = faker.gameOfThrones().character(),
-                    date = getMinutesAgo(faker.number().numberBetween(it*10, (it+1)*10)),
+                    date = getMinutesAgo(faker.number().numberBetween(it * 10, (it + 1) * 10)),
                     email = faker.internet().safeEmailAddress()
             )
             val id = faker.code().imei()
