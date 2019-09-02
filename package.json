@@ -13,6 +13,7 @@
     "build": "npm-run-all -p build:*"
   },
   "dependencies": {
+    "@types/yamljs": "^0.2.30",
     "babel-polyfill": "^6.26.0",
     "caniuse-db": "^1.0.30000989",
     "classnames": "^2.2.6",
@@ -57,7 +58,8 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "tslint": "^5.19.0",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.0.0",
+    "yamljs": "^0.3.0"
   },
   "homepage": "/",
   "devDependencies": {
