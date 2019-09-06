@@ -1,13 +1,12 @@
 package no.nav.fo.forenkletdeploy.util
 
-import no.nav.fo.forenkletdeploy.ApplicationConfig
 import org.glassfish.jersey.client.ClientConfig
 import org.slf4j.LoggerFactory
-
-import javax.ws.rs.client.ClientBuilder
-import javax.ws.rs.client.WebTarget
 import java.io.IOException
 import java.io.InputStream
+import java.util.concurrent.TimeUnit
+import javax.ws.rs.client.ClientBuilder
+import javax.ws.rs.client.WebTarget
 
 object Utils {
     private val objectMapper = createObjectMapper()
@@ -16,6 +15,17 @@ object Utils {
     fun getRequiredProperty(propName: String): String {
         val systemOrEnvProp = System.getenv(propName) ?: System.getProperty(propName)
         return systemOrEnvProp ?: throw IllegalStateException("Missing $propName")
+    }
+
+    fun withSecureClient(uri: String): WebTarget {
+        logger.info("client: {}", uri)
+        val client = ClientBuilder.newBuilder()
+                .withConfig(ClientConfig().register(JsonProvider::class.java))
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build()
+
+        return client.target(uri)
     }
 
     fun withClient(uri: String): WebTarget {
@@ -43,5 +53,5 @@ object Utils {
 
     fun stringToSeed(text: String): Long =
             text.map { it.toLong() }
-                    .fold(11L) { acc, i -> (acc * 31 ) + i }
+                    .fold(11L) { acc, i -> (acc * 31) + i }
 }
