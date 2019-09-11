@@ -56,7 +56,8 @@ class PTO : Team(
 ) {
     init {
         extraApps = arrayListOf(
-                ApplicationConfig(name = "veilarbportefoljeflatefs", gitUrl = "https://github.com/navikt/veilarbportefoljeflatefs", team = this)
+                ApplicationConfig(name = "veilarbportefoljeflatefs", gitUrl = "https://github.com/navikt/veilarbportefoljeflatefs", team = this),
+                ApplicationConfig(name = "veilarbveileder", gitUrl = "https://github.com/navikt/veilarbveileder", team = this)
         )
     }
 }
