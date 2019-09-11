@@ -10,7 +10,7 @@ class TeamService @Inject
 constructor(
         val teamConfigConsumer: TeamConfigConsumer
 ) {
-    val allTeams = arrayListOf(FOTeam(), TeamSoknad(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ(), TeamVEDFP(), POA())
+    val allTeams = arrayListOf(PTO(), TeamSoknad(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ(), TeamVEDFP(), POA())
 
     fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
             allTeams.find { it.id.equals(teamId, ignoreCase = true) }
@@ -46,14 +46,20 @@ abstract class Team constructor(
     }
 }
 
-class FOTeam : Team(
-        id = "fo",
-        displayName = "Forenklet Oppfølging",
+class PTO : Team(
+        id = "pto",
+        displayName = "Produktteam Oppfølging",
         configUrl = "https://raw.githubusercontent.com/navikt/jenkins-dsl-scripts/master/forenklet_oppfolging/config.json",
         jenkinsFolder = "forenklet_oppfolging",
         ignoredApplications = arrayListOf("badkitty", "veilarbdemo"),
         environments = listOf("Q0", "P")
-)
+) {
+    init {
+        extraApps = arrayListOf(
+                ApplicationConfig(name = "veilarbportefoljeflatefs", gitUrl = "https://github.com/navikt/veilarbportefoljeflatefs", team = this)
+        )
+    }
+}
 
 class TeamSoknad : Team(
         id = "sd",
