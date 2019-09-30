@@ -57,7 +57,11 @@ class PTO : Team(
     init {
         extraApps = arrayListOf(
                 ApplicationConfig(name = "veilarbportefoljeflatefs", gitUrl = "https://github.com/navikt/veilarbportefoljeflatefs", team = this),
-                ApplicationConfig(name = "veilarbveileder", gitUrl = "https://github.com/navikt/veilarbveileder", team = this)
+                ApplicationConfig(name = "veilarbveileder", gitUrl = "https://github.com/navikt/veilarbveileder", team = this),
+                ApplicationConfig(name = "veilarbportefolje", gitUrl = "https://github.com/navikt/veilarbportefolje", team = this),
+                ApplicationConfig(name = "veilarbpersonflatefs", gitUrl = "https://github.com/navikt/veilarbpersonflatefs", team = this),
+                ApplicationConfig(name = "aktivitetsplan", gitUrl = "https://github.com/navikt/aktivitetsplan", team = this),
+                ApplicationConfig(name = "veilarbvisittkortfs", gitUrl = "https://github.com/navikt/veilarbvisittkortfs", team = this)
         )
     }
 }
