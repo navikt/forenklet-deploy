@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  pus: navikt/pus-orb@0.0.16
+  pus: navikt/pus-orb@0.0.28
 
 workflows:
   version: 2
@@ -16,7 +16,7 @@ workflows:
           filters:
             branches:
               ignore: master
-      - pus/deploy-backend-med-frontend:
+      - pus/bygg-og-deploy-backend-med-frontend:
           cluster: dev-sbs
           filepath: ./nais.yaml
           configrepo: pto-config
