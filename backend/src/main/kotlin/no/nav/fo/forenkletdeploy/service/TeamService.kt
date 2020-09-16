@@ -10,7 +10,7 @@ class TeamService @Inject
 constructor(
         val teamConfigConsumer: TeamConfigConsumer
 ) {
-    val allTeams = arrayListOf(PTO(), TeamSoknad(), TeamPAMAasmund(), TeamPAMTuan(), TeamPAMJ(), TeamVEDFP(), POA())
+    val allTeams = arrayListOf(PTO(), TeamSoknad(), TeamVEDFP(), POA())
 
     fun getAppsForTeam(teamId: String): List<ApplicationConfig> =
             allTeams.find { it.id.equals(teamId, ignoreCase = true) }
@@ -83,34 +83,6 @@ class TeamSoknad : Team(
         )
     }
 }
-
-class TeamPAMAasmund : Team(
-        id = "teampamaasmund",
-        displayName = "Team PAM Aasmund",
-        configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamaasmund.json",
-        jenkinsFolder = "teamaasmund",
-        jenkinsUrl = "https://jenkins-pam.adeo.no",
-        provideVersion = true,
-        environments = listOf("Q0", "P")
-)
-
-class TeamPAMTuan : Team(
-        id = "teampamtuan",
-        displayName = "Team PAM Tuan",
-        configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamtuan.json",
-        jenkinsFolder = "teamtuan",
-        jenkinsUrl = "https://jenkins-pam.adeo.no",
-        provideVersion = true
-)
-
-class TeamPAMJ : Team(
-        id = "teampamj",
-        displayName = "Team PAM J",
-        configUrl = "https://raw.githubusercontent.com/navikt/pam-scripts/master/applikasjonsportefolje/config-teamj.json",
-        jenkinsFolder = "teamj",
-        jenkinsUrl = "https://jenkins-pam.adeo.no",
-        provideVersion = true
-)
 
 class TeamVEDFP : Team(
         id = "teamforeldrepenger",
